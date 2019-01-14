@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    username: root
+    password: sunjiamin
+    url: jdbc:mysql://localhost:3306/db_it_human_resources?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #配置数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      filter: stat,wall,log4j2  # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      initial-size: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000 # 配置获取连接等待超时的时间
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000  #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000  #配置一个连接在池中最小生存的时间，单位是毫秒
+
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+      # 驼峰命名法自动变成 - 吗？
+      stat-view-servlet:
+        login-username: admin
+        login-password: 123456
+      web-stat-filter:
+        url-pattern: /*
+        exclusions: "*.js,*.css,/druid/*" #yaml单引号对特殊字符转译，双引号不转译
+        #      validationQuery: SELECT 1 FROM DUAL
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml  # 告诉Mapper所对应的xml文件位置
+  type-aliases-package: com.sonkabin.bean # 给包中的类注册别名后，在xml文件中可以直接使用类名
+
+
+
