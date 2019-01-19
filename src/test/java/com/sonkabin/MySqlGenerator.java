@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@SuppressWarnings(value = "nocheck")
 public class MySqlGenerator {
 
     /**
@@ -104,7 +105,7 @@ public class MySqlGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setTablePrefix("tb_");
-        strategy.setRestControllerStyle(true);
+        strategy.setRestControllerStyle(false);
 
         strategy.setExclude(null);
 //        strategy.setInclude("user");

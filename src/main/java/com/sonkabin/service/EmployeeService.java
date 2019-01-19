@@ -3,6 +3,8 @@ package com.sonkabin.service;
 import com.sonkabin.entity.Employee;
 import com.sonkabin.utils.Message;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -14,7 +16,7 @@ import com.sonkabin.utils.Message;
 public interface EmployeeService{
     Employee selectOne(String empId, String pwd);
 
-    Message login(String empId, String password);
+    void login(String empId, String password);
 
-    Message logout();
+    List<Employee> getEmps();
 }

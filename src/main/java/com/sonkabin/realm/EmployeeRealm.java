@@ -2,6 +2,7 @@ package com.sonkabin.realm;
 
 import com.sonkabin.entity.Employee;
 import com.sonkabin.service.EmployeeService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -42,7 +43,7 @@ public class EmployeeRealm extends AuthorizingRealm {
         }
 
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(empId,pwd,salt,getName());
-
+        SecurityUtils.getSubject().getSession().setAttribute("loginEmp", employee);
         return authenticationInfo;
     }
 }

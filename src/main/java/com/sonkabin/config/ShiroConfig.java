@@ -70,12 +70,17 @@ public class ShiroConfig {
 
         //使用LinkedHashMap，因为使用了FIRST MATCH WINS
         Map<String,String> filterChainDefinitions = new LinkedHashMap<>();
-        filterChainDefinitions.put("/", "anon");
+        filterChainDefinitions.put("/","anon");
+        filterChainDefinitions.put("/index.html","anon");
         filterChainDefinitions.put("/login.html","anon");
-        filterChainDefinitions.put("/static/**", "anon");
+        filterChainDefinitions.put("/css/**", "anon");
+        filterChainDefinitions.put("/fonts/**", "anon");
+        filterChainDefinitions.put("/icons-reference/**", "anon");
+        filterChainDefinitions.put("/js/**", "anon");
+        filterChainDefinitions.put("/vendor/**", "anon");
         filterChainDefinitions.put("/login", "anon");
         filterChainDefinitions.put("/error", "anon");
-        filterChainDefinitions.put("/druid/**","anon");//放行druid
+        filterChainDefinitions.put("/druid/**","anon"); // 放行druid
         filterChainDefinitions.put("/logout", "logout");
         //  /**表示任何请求/以及其子路径的都会触发filter chain
         filterChainDefinitions.put("/**", "authc");

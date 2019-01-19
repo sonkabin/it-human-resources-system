@@ -1,29 +1,31 @@
 package com.sonkabin.controller;
 
 
-import com.sonkabin.utils.Message;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.sonkabin.entity.Employee;
 import com.sonkabin.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 /**
  *
  * @author sonkabin
  * @since 2019-01-13
  */
-@RestController
+@Controller
 //@RequestMapping("/employee")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/hello")
-    public Message test(){
-        return Message.success();
+    @GetMapping("/emps")
+    public String getEmps(Model model){
+        List<Employee> emps = employeeService.getEmps();
+        model.addAttribute("emps", emps);
+        return "admin/emp";
     }
 }
 

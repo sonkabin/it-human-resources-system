@@ -31,9 +31,10 @@ spring:
         url-pattern: /*
         exclusions: "*.js,*.css,/druid/*" #yaml单引号对特殊字符转译，双引号不转译
         #      validationQuery: SELECT 1 FROM DUAL
+  thymeleaf:
+    cache: false
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml  # 告诉Mapper所对应的xml文件位置
   type-aliases-package: com.sonkabin.bean # 给包中的类注册别名后，在xml文件中可以直接使用类名
-
 
 
