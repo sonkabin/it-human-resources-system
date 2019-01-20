@@ -1,6 +1,7 @@
 package com.sonkabin.service;
 
 import com.sonkabin.entity.Role;
+import com.sonkabin.utils.Message;
 
 /**
  * <p>
@@ -12,4 +13,5 @@ import com.sonkabin.entity.Role;
  */
 public interface RoleService{
 
- }
+    Message getRoles();
+}

@@ -32,19 +32,13 @@ public class EmployeeRealm extends AuthorizingRealm {
         String empId = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
 
-        Employee employee = employeeService.selectOne(empId);
+        ByteSource salt = ByteSource.Util.bytes(empId); // 盐值
+        String pwd = MD5Util.calculatePwd(password, empId);
+        Employee employee = employeeService.selectOne(empId ,pwd);
         if(employee == null){
             throw new AuthenticationException();
         }
-        String id = employee.getId().toString();
-
-        ByteSource salt = ByteSource.Util.bytes(id); // 盐值
-        String pwd = MD5Util.calculatePwd(password, id);
-        if (!pwd.equals(employee.getPassword())) {
-            throw new AuthenticationException();
-        }
-
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(id,pwd,salt,getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(empId,pwd,salt,getName());
         SecurityUtils.getSubject().getSession().setAttribute("loginEmp", employee);
         return authenticationInfo;
     }

@@ -13,11 +13,13 @@ import com.sonkabin.utils.Message;
  * @since 2019-01-13
  */
 public interface EmployeeService{
-    Employee selectOne(String empId);
+    Employee selectOne(String empId, String pwd);
 
     void login(String empId, String password);
 
     Message getEmps(EmployeeDTO employeeDTO);
 
     Message resetPwd(Integer id);
+
+    Message saveEmployee(Employee employee);
 }

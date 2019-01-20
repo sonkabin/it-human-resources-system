@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -33,6 +35,7 @@ public class Employee implements Serializable {
 
     private Integer age;
 
+    @DateTimeFormat (pattern = "yyyy-MM-dd")
     private LocalDate birth;
 
     private String phone;

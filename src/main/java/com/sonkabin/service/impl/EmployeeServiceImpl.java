@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * <p>
  * 服务实现类
@@ -33,9 +36,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public Employee selectOne(String empId) {
+    public Employee selectOne(String empId, String pwd) {
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Employee::getEmpId, empId);
+        wrapper.eq(Employee::getEmpId, empId).eq(Employee::getPassword, pwd);
         return employeeMapper.selectOne(wrapper);
     }
 
@@ -74,14 +77,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Message resetPwd(Integer id) {
-        Employee employee = new Employee();
-        employee.setId(id);
+        Employee employee = employeeMapper.selectById(id);
         //重置密码
-        String pwd = MD5Util.calculatePwd("123456", id.toString());
+        String pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
         employee.setPassword(pwd);
         employeeMapper.updateById(employee);
-        Message msg = Message.success();
-        return msg;
+        return Message.success();
+    }
+
+    @Override
+    public Message saveEmployee(Employee employee) {
+        LocalDateTime now = LocalDateTime.now();
+        employee.setGmtCreate(now);
+        employee.setGmtModified(now);
+        // 计算年龄
+        LocalDate birth = employee.getBirth();
+        int age = now.getYear() - birth.getYear() + 1;
+        employee.setAge(age);
+        // 计算密码
+        String pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
+        employee.setPassword(pwd);
+        employeeMapper.insert(employee);
+        return Message.success();
     }
 
 }

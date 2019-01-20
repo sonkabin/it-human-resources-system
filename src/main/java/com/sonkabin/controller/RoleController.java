@@ -1,11 +1,11 @@
 package com.sonkabin.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
 import com.sonkabin.service.RoleService;
+import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -13,9 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2019-01-13
  */
 @RestController
-@RequestMapping("/role")
+//@RequestMapping("/role")
 public class RoleController {
     @Autowired
-    private RoleService RoleService;
+    private RoleService roleService;
+
+    @GetMapping("/roles")
+    public Message getRoles () {
+        return roleService.getRoles();
+    }
 }
 
