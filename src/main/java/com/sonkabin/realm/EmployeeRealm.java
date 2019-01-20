@@ -2,6 +2,7 @@ package com.sonkabin.realm;
 
 import com.sonkabin.entity.Employee;
 import com.sonkabin.service.EmployeeService;
+import com.sonkabin.utils.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -30,19 +31,20 @@ public class EmployeeRealm extends AuthorizingRealm {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String empId = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
-        //MD5加密
-        String hashAlgorithmName = "MD5";
-        ByteSource salt = ByteSource.Util.bytes(empId);//盐值
-        int hashIterations = 1024;
-        SimpleHash simpleHash  = new SimpleHash(hashAlgorithmName, password, salt, hashIterations);
-        String pwd = simpleHash.toString();
 
-        Employee employee = employeeService.selectOne(empId,pwd);
+        Employee employee = employeeService.selectOne(empId);
         if(employee == null){
             throw new AuthenticationException();
         }
+        String id = employee.getId().toString();
 
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(empId,pwd,salt,getName());
+        ByteSource salt = ByteSource.Util.bytes(id); // 盐值
+        String pwd = MD5Util.calculatePwd(password, id);
+        if (!pwd.equals(employee.getPassword())) {
+            throw new AuthenticationException();
+        }
+
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(id,pwd,salt,getName());
         SecurityUtils.getSubject().getSession().setAttribute("loginEmp", employee);
         return authenticationInfo;
     }

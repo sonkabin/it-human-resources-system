@@ -17,6 +17,7 @@ public class MvcConfig {
                 // 使跳转到模板下面的login.html，因为在shiro中配置了规则
                 registry.addViewController("/login.html").setViewName("login");
                 registry.addViewController("/admin.html").setViewName("admin/index");
+                registry.addViewController("/manageEmp.html").setViewName("admin/emp");
             }
         };
     }

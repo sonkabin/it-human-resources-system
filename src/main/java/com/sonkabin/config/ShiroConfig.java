@@ -73,6 +73,7 @@ public class ShiroConfig {
         filterChainDefinitions.put("/","anon");
         filterChainDefinitions.put("/index.html","anon");
         filterChainDefinitions.put("/login.html","anon");
+        filterChainDefinitions.put("/custom/**", "anon");
         filterChainDefinitions.put("/css/**", "anon");
         filterChainDefinitions.put("/fonts/**", "anon");
         filterChainDefinitions.put("/icons-reference/**", "anon");
@@ -85,7 +86,8 @@ public class ShiroConfig {
         //  /**表示任何请求/以及其子路径的都会触发filter chain
         filterChainDefinitions.put("/**", "authc");
         //要放入ShiroFilterFactoryBean才行
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitions);
+        // 暂时关闭登陆
+//        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitions);
         return shiroFilterFactoryBean;
     }
 
