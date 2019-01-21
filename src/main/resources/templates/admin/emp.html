@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </section>
-            <!-- Modal-->
+            <!-- 新增与修改模态框-->
             <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="empAddModalLabel"
                  aria-hidden="true" class="modal fade text-left">
                 <div role="document" class="modal-dialog  modal-lg">
@@ -184,34 +184,34 @@
                             <form class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">员工编号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly  value="1001">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly  value="1001" id="empId">
                                     <label class="col-sm-2 col-form-label">员工姓名</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="sonkabin">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="sonkabin" id="empName">
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">性别</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="男">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="男" id="sex">
                                     <label class="col-sm-2 col-form-label">身份证号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="339005199402064444">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="339005199402064444" id="idCard">
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">年龄</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="26">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="26" id="age">
                                     <label class="col-sm-2 col-form-label">生日</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="1994-2-12">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="1994-2-12" id="detail-birth">
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">邮箱</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="example@email.com">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="example@email.com" id="email">
                                     <label class="col-sm-2 col-form-label">手机号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="15878965412">
+                                    <input type="text" class="form-control-plaintext col-sm-4" readonly value="15878965412" id="phone">
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">教育信息</label>
+                                <div class="form-group row" id="education">
+                                    <label class="col-sm-2 col-form-label" >教育信息</label>
                                     <input type="text" class="form-control-plaintext col-sm-10" readonly value="本科:xx大学">
                                     <input type="text" class="form-control-plaintext col-sm-10 offset-sm-2" readonly value="硕士:xx大学">
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="skills">
                                     <label class="col-sm-2 col-form-label">技能信息</label>
                                     <input type="text" class="form-control-plaintext col-sm-2" readonly value="Java:8">
                                     <input type="text" class="form-control-plaintext col-sm-2" readonly value="Java:8">
@@ -264,7 +264,7 @@
         initTable()
     })
 
-
+    // 重置密码
     $(document).on('click', '.reset-btn', function () {
         var empName = $(this).attr('reset-name')
         var id = $(this).attr('reset-id')
@@ -272,14 +272,14 @@
             $.ajax({
                 url: baseUrl + '/resetPwd/' + id,
                 method: 'put',
-                success: function (result) {
-
+                success: function () {
+                    toastr.success('重置员工[' + empName + ']密码成功', '提示', {timeOut: 1000})
                 }
             })
         }
     })
 
-    // 新增角色的两个方法
+    // 新增角色
     $('#emp-add-btn').click(function () {
         // 获取角色
         $.ajax({
@@ -294,6 +294,7 @@
         $('#empAddModalLabel').text('新增员工')
         $('#save-btn').text('保存')
     })
+    // 保存和修改
     $('#save-btn').click(function () {
         if ($(this)[0].innerHTML === '保存'){
             $.ajax({
@@ -305,7 +306,6 @@
                 }
             })
         } else {
-            console.log($(this).attr('edit-id'))
             $.ajax({
                 url: baseUrl + '/emp/' + $(this).attr('edit-id'),
                 method: 'PUT',
@@ -327,10 +327,49 @@
             url: baseUrl + '/emp/' + id,
             method: 'GET',
             success: function (result) {
-                var data = result.info
+                var employee = result.info.employee
+                $('#empId').val(employee.empId)
+                $('#empName').val(employee.empName)
+                $('#sex').val(employee.sex==1?'男':'女')
+                $('#idCard').val(employee.idCard)
+                $('#age').val(employee.age)
+                $('#detail-birth').val(employee.birth)
+                $('#email').val(employee.email)
+
+                // 教育信息
+                $('#education').empty()
+                $('#education').append('<label class="col-sm-2 col-form-label" >教育信息</label>')
+                if (employee.education != null) {
+                    var edus = employee.education.split(';')
+                    for (var i in edus) {
+                        var input = $('<input type="text" class="form-control-plaintext col-sm-10" readonly>').val(edus[i])
+                        if (i != 0) {
+                            input.addClass('offset-sm-2')
+                        }
+                        $('#education').append(input)
+                    }
+                }
+
+                // 技能信息
+                $('#skills').empty()
+                $('#skills').append('<label class="col-sm-2 col-form-label">技能信息</label>')
+                if (employee.skills != null) {
+                    var skills = employee.skills.split(';')
+                    for (var i in skills) {
+                        var input = $('<input type="text" class="form-control-plaintext col-sm-3" readonly>').val(skills[i])
+                        if (i % 3 == 0 && i != 0) {
+                            input.addClass('offset-sm-2')
+                        }
+                        $('#skills').append(input)
+                    }
+                }
+
+                // todo 培训信息
+                // todo 项目信息
+
+                $('#detailModal').modal()
             }
         })
-        $('#detailModal').modal()
     })
 
     $(document).on('click', '.edit-btn', function () {
@@ -360,6 +399,7 @@
         $('#save-btn').attr('edit-id', id);
     })
 
+    // 构建角色的option
     function build_roles(roles) {
         $('#role-select').empty()
         $.each(roles, function (index, item) {
