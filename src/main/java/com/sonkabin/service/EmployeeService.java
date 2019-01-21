@@ -26,4 +26,6 @@ public interface EmployeeService{
     Message getEmpById(Integer id);
 
     Message getEmpWithRoleById(Integer id);
+
+    Message updateEmployee(Employee employee);
 }

@@ -22,7 +22,7 @@ public class EmployeeController {
 
     @ResponseBody
     @GetMapping("/emps")
-    public Message getEmps(EmployeeDTO employeeDTO){
+    public Message getEmployees(EmployeeDTO employeeDTO){
         return employeeService.getEmps(employeeDTO);
     }
 
@@ -34,7 +34,7 @@ public class EmployeeController {
 
     @ResponseBody
     @GetMapping("/emp/{id}")
-    public Message getEmp (@PathVariable("id") Integer id) {
+    public Message getEmployee (@PathVariable("id") Integer id) {
         return employeeService.getEmpById(id);
     }
 
@@ -42,6 +42,12 @@ public class EmployeeController {
     @GetMapping("/empWithRole/{id}")
     public Message getEmpWithRole (@PathVariable("id") Integer id) {
         return employeeService.getEmpWithRoleById(id);
+    }
+
+    @ResponseBody
+    @PutMapping("/emp/{id}")
+    public Message updateEmployee (Employee employee) {
+        return employeeService.updateEmployee(employee);
     }
 
     @ResponseBody

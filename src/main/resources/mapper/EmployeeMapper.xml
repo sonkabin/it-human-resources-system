@@ -10,13 +10,14 @@
         <result property="phone" column="phone"></result>
         <result property="email" column="email"></result>
         <result property="idCard" column="id_card"></result>
+        <result property="status" column="status"></result>
         <association property="role" javaType="com.sonkabin.entity.Role">
             <id property="id" column="rid"/>
             <result property="roleName" column="role_name"/>
         </association>
     </resultMap>
     <select id="getEmpWithRoleById" resultMap="empWithRoleResultMap">
-        SELECT e.id, e.emp_id, e.emp_name, e.birth, e.phone, e.email, e.id_card, r.id rid, r.role_name
+        SELECT e.id, e.emp_id, e.emp_name,e.sex, e.birth, e.phone, e.email, e.id_card,e.status, r.id rid, r.role_name
         FROM tb_employee e
         LEFT OUTER JOIN tb_role r ON e.role_id = r.id
         WHERE e.id = #{id}

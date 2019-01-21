@@ -15,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author sonkabin
- * @since 2019-01-13
+ * @since 2019-01-21
  */
 @TableName("tb_employee")
 public class Employee implements Serializable {
@@ -31,7 +31,7 @@ public class Employee implements Serializable {
 
     private String password;
 
-    private Boolean sex;
+    private Integer sex;
 
     private Integer age;
 
@@ -50,7 +50,7 @@ public class Employee implements Serializable {
 
     private String train;
 
-    private Boolean status;
+    private Integer status;
 
     private String skills;
 
@@ -102,11 +102,11 @@ public class Employee implements Serializable {
         this.password = password;
     }
 
-    public Boolean getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(Boolean sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -174,11 +174,11 @@ public class Employee implements Serializable {
         this.train = train;
     }
 
-    public Boolean getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

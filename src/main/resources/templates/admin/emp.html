@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
     <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
     <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
 </head>
 <body>
 
@@ -147,11 +148,11 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2  col-form-label">账号状态</label>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input radio-template" type="radio" name="sex" value="1">
+                                        <input class="form-check-input radio-template" type="radio" name="status" value="1" checked>
                                         <label class="form-check-label">启用</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input radio-template" type="radio" name="sex" value="0">
+                                        <input class="form-check-input radio-template" type="radio" name="status" value="0">
                                         <label class="form-check-label" >禁用</label>
                                     </div>
                                 </div>
@@ -246,6 +247,7 @@
 <script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
 <script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
 <script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
 <!-- Main File-->
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
@@ -284,26 +286,38 @@
             url: baseUrl + '/roles',
             method: 'GET',
             success: function (result) {
-                $('#role-select').empty()
-                var roles = result.info.roles
-                $.each(roles, function (index, item) {
-                    var option = $('<option></option>').val(item.id).append(item.roleName)
-                    $('#role-select').append(option)
-                })
+                build_roles(result.info.roles)
                 // $('#role-select')
                 $('#myModal').modal()
             }
         })
+        $('#empAddModalLabel').text('新增员工')
+        $('#save-btn').text('保存')
     })
     $('#save-btn').click(function () {
-        $.ajax({
-            url: baseUrl + '/emp',
-            method: 'POST',
-            data: $('#add-form').serialize(),
-            success: function (result) {
-                initTable()
-            }
-        })
+        if ($(this)[0].innerHTML === '保存'){
+            $.ajax({
+                url: baseUrl + '/emp',
+                method: 'POST',
+                data: $('#add-form').serialize(),
+                success: function (result) {
+                    initTable()
+                }
+            })
+        } else {
+            console.log($(this).attr('edit-id'))
+            $.ajax({
+                url: baseUrl + '/emp/' + $(this).attr('edit-id'),
+                method: 'PUT',
+                data: $('#add-form').serialize(),
+                success: function () {
+                    toastr.success('更新成功', '提示', {timeOut: 1000})
+                    initTable()
+                }
+            })
+
+        }
+
         $('#myModal').modal('hide')
     })
 
@@ -325,11 +339,34 @@
             url: baseUrl + '/empWithRole/' + id,
             method: 'GET',
             success: function (result) {
-                var data = result.info
+                build_roles(result.info.roles)
+                var employee = result.info.employee
+                // 表单回显
+                $('#myModal input[name=empId]').val(employee.empId)
+                $('#myModal input[name=empName]').val(employee.empName)
+                $('#myModal input[name=sex]').val([employee.sex])
+                $('#myModal input[name=birth]').val(employee.birth)
+                $('#myModal input[name=email]').val(employee.email)
+                $('#myModal input[name=phone]').val(employee.phone)
+                $('#myModal input[name=idCard]').val(employee.idCard)
+                $('#myModal input[name=status]').val([employee.status])
+                $('#role-select').val([employee.role.id])
+                $('#myModal').modal()
             }
         })
-        $('#myModal').modal()
+        $('#empAddModalLabel').text('修改员工信息')
+        $('#save-btn').text('更新')
+        // 为按钮绑定id
+        $('#save-btn').attr('edit-id', id);
     })
+
+    function build_roles(roles) {
+        $('#role-select').empty()
+        $.each(roles, function (index, item) {
+            var option = $('<option></option>').val(item.id).append(item.roleName)
+            $('#role-select').append(option)
+        })
+    }
 
     function initTable() {
         $('#emp-table').bootstrapTable('destroy')
@@ -446,6 +483,10 @@
         language: 'zh-CN',
         minView: 2 // 选到天就结束
     });
+
+    $('#myModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+    })
 </script>
 </body>
 </html>

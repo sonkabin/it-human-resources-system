@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.EmployeeDTO;
 import com.sonkabin.entity.Employee;
+import com.sonkabin.entity.Role;
 import com.sonkabin.mapper.EmployeeMapper;
 import com.sonkabin.mapper.RoleMapper;
 import com.sonkabin.service.EmployeeService;
@@ -20,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -113,7 +115,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Message getEmpWithRoleById(Integer id) {
         Employee employee = employeeMapper.getEmpWithRoleById(id);
-        return Message.success().put("employee", employee);
+        List<Role> roles = roleMapper.selectList(null);
+        return Message.success().put("employee", employee).put("roles", roles);
+    }
+
+    @Override
+    public Message updateEmployee(Employee employee) {
+        if (employee.getBirth() != null) {
+            employee.setAge(LocalDate.now().getYear() - employee.getBirth().getYear() + 1);
+        }
+        employeeMapper.updateById(employee);
+        return Message.success();
     }
 
 }
