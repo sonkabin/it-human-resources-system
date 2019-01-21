@@ -33,6 +33,18 @@ public class EmployeeController {
     }
 
     @ResponseBody
+    @GetMapping("/emp/{id}")
+    public Message getEmp (@PathVariable("id") Integer id) {
+        return employeeService.getEmpById(id);
+    }
+
+    @ResponseBody
+    @GetMapping("/empWithRole/{id}")
+    public Message getEmpWithRole (@PathVariable("id") Integer id) {
+        return employeeService.getEmpWithRoleById(id);
+    }
+
+    @ResponseBody
     @PutMapping("/resetPwd/{id}")
     public Message resetPwd (@PathVariable("id") Integer id) {
         return employeeService.resetPwd(id);

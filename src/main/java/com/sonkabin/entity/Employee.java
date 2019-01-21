@@ -60,6 +60,15 @@ public class Employee implements Serializable {
 
     private LocalDateTime gmtModified;
 
+    private transient  Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public Integer getId() {
         return id;

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.EmployeeDTO;
 import com.sonkabin.entity.Employee;
 import com.sonkabin.mapper.EmployeeMapper;
+import com.sonkabin.mapper.RoleMapper;
 import com.sonkabin.service.EmployeeService;
 import com.sonkabin.utils.MD5Util;
 import com.sonkabin.utils.Message;
@@ -33,6 +34,8 @@ import java.time.LocalDateTime;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
 
     @Override
@@ -99,6 +102,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(pwd);
         employeeMapper.insert(employee);
         return Message.success();
+    }
+
+    @Override
+    public Message getEmpById(Integer id) {
+        Employee employee = employeeMapper.selectById(id);
+        return Message.success().put("employee", employee);
+    }
+
+    @Override
+    public Message getEmpWithRoleById(Integer id) {
+        Employee employee = employeeMapper.getEmpWithRoleById(id);
+        return Message.success().put("employee", employee);
     }
 
 }

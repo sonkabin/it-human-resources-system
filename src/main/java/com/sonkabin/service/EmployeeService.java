@@ -22,4 +22,8 @@ public interface EmployeeService{
     Message resetPwd(Integer id);
 
     Message saveEmployee(Employee employee);
+
+    Message getEmpById(Integer id);
+
+    Message getEmpWithRoleById(Integer id);
 }
