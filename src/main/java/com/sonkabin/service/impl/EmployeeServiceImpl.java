@@ -86,6 +86,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //重置密码
         String pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
         employee.setPassword(pwd);
+        employee.setGmtModified(LocalDateTime.now());
         employeeMapper.updateById(employee);
         return Message.success();
     }
@@ -124,6 +125,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.getBirth() != null) {
             employee.setAge(LocalDate.now().getYear() - employee.getBirth().getYear() + 1);
         }
+        employee.setGmtModified(LocalDateTime.now());
         employeeMapper.updateById(employee);
         return Message.success();
     }

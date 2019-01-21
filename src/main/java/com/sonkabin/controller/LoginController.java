@@ -25,6 +25,8 @@ public class LoginController {
         Employee loginEmp = (Employee) session.getAttribute("loginEmp");
         if (loginEmp.getRoleId() == 4){ // 是管理员
             return "redirect:/admin.html";
+        } else if (loginEmp.getRoleId() == 1) {
+            return "redirect:/employee.html";
         }
         return "";
     }

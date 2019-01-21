@@ -7,7 +7,10 @@ import com.sonkabin.service.EmployeeService;
 import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -54,6 +57,13 @@ public class EmployeeController {
     @PutMapping("/resetPwd/{id}")
     public Message resetPwd (@PathVariable("id") Integer id) {
         return employeeService.resetPwd(id);
+    }
+
+    @GetMapping("/person")
+    public String getPersonInfo (HttpSession session, Model model) {
+        Employee employee = (Employee) session.getAttribute("loginEmp");
+        model.addAttribute("employee", employee);
+        return "employee/personManage.html";
     }
 }
 

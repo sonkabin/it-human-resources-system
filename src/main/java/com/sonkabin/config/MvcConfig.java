@@ -18,6 +18,16 @@ public class MvcConfig {
                 registry.addViewController("/login.html").setViewName("login");
                 registry.addViewController("/admin.html").setViewName("admin/index");
                 registry.addViewController("/manageEmp.html").setViewName("admin/emp");
+
+                // 员工视图
+                registry.addViewController("/employee.html").setViewName("employee/index");
+//                registry.addViewController("/personManage.html").setViewName("employee/personManage");
+                registry.addViewController("/skillManage.html").setViewName("employee/skillManage");
+                registry.addViewController("/careerManage.html").setViewName("employee/careerManage");
+                registry.addViewController("/accountManage.html").setViewName("employee/accountManage");
+                registry.addViewController("/trainManage.html").setViewName("employee/trainManage");
+                registry.addViewController("/projectInformation.html").setViewName("employee/projectInformation");
+                registry.addViewController("/messageManage.html").setViewName("employee/messageManage");
             }
         };
     }
