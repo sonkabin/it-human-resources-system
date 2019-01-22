@@ -270,7 +270,7 @@
         var id = $(this).attr('reset-id')
         if (confirm('确定要重置员工[' + empName + ']的密码吗?')) {
             $.ajax({
-                url: baseUrl + '/resetPwd/' + id,
+                url: baseUrl + '/setPassword/' + id,
                 method: 'put',
                 success: function () {
                     toastr.success('重置员工[' + empName + ']密码成功', '提示', {timeOut: 1000})

@@ -23,16 +23,13 @@ public class LoginController {
     public String login(@RequestParam("empId")String empId, @RequestParam("password")String password, HttpSession session){
         employeeService.login(empId, password);
         Employee loginEmp = (Employee) session.getAttribute("loginEmp");
-        if (loginEmp.getRoleId() == 4){ // 是管理员
+        Integer id = loginEmp.getRoleId();
+        if (id == 4){ // 管理员
             return "redirect:/admin.html";
-        } else if (loginEmp.getRoleId() == 1) {
+        } else if (id == 1 || id == 2) { // 员工和项目经理跳转到同一页面，项目模块需要单独处理
             return "redirect:/employee.html";
         }
         return "";
     }
 
-    @GetMapping("/logout")
-    public Message logout(){
-        return null;
-    }
 }

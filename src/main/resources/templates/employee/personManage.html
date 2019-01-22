@@ -158,7 +158,6 @@
             var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
             div.append(xl).append(label).append(school).append(btn)
             $('#education').append(div)
-            // $('#education').append(xl).append(label).append(school).append(btn)
         }
         $('#education').append('<a id="add-new-edu-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_edu()">添加教育信息</a>')
     })
@@ -221,7 +220,10 @@
     }
 
     $(document).on('click', '.edu-close', function () {
-
+        // console.log($(this))
+        var pNode = $(this).parent()
+        // console.log(pNode)
+        pNode.remove()
     })
 
     $("#birth").datetimepicker({

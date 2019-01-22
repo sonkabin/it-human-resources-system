@@ -81,10 +81,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Message resetPwd(Integer id) {
+    public Message setPassword(Integer id, String oldPwd, String newPwd) {
         Employee employee = employeeMapper.selectById(id);
-        //重置密码
-        String pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
+        String pwd = "";
+        if (oldPwd == null) { // 为null表示是重置密码
+            pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
+        } else {
+            // 计算旧密码的值
+            String password = MD5Util.calculatePwd(oldPwd, employee.getEmpId());
+            if (password.equals(employee.getPassword())) { // 计算值与数据库一致
+                pwd = MD5Util.calculatePwd(newPwd, employee.getEmpId()); // 设为新密码
+            } else { // 计算值不一致，直接返回
+                return Message.fail().put("msg", "原密码输入错误");
+            }
+        }
         employee.setPassword(pwd);
         employee.setGmtModified(LocalDateTime.now());
         employeeMapper.updateById(employee);

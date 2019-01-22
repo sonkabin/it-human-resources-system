@@ -129,7 +129,7 @@
             </ul>
         </li>
         <li th:class="${activeUrl=='trainManage.html' ? 'active' : ''}"><a href="/trainManage.html"> <i class="icon-padnote"></i>培训管理 </a></li>
-        <li th:class="${activeUrl=='projectInformation.html' ? 'active' : ''}"><a href="/projectInformation.html"> <i class="fa fa-bar-chart"></i>项目信息 </a></li>
+        <li th:class="${activeUrl=='projectInformation.html' ? 'active' : ''}"><a href="#" th:href="${session.loginEmp.roleId} == 1 ? '/projectInformation.html' : '/project.html'"> <i class="fa fa-bar-chart"></i>[[${session.loginEmp.roleId} == 1 ? '项目信息' : '项目管理']] </a></li>
         <li th:class="${activeUrl=='messageManage.html' ? 'active' : ''}"><a href="/messageManage.html"> <i class="fa fa-bar-chart"></i>消息管理 </a></li>
     </ul>
 </nav>

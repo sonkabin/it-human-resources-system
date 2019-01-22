@@ -54,9 +54,10 @@ public class EmployeeController {
     }
 
     @ResponseBody
-    @PutMapping("/resetPwd/{id}")
-    public Message resetPwd (@PathVariable("id") Integer id) {
-        return employeeService.resetPwd(id);
+    @PutMapping("/setPassword/{id}")
+    public Message setPassword (@PathVariable("id") Integer id, @RequestParam(value = "oldPassword", required = false) String oldPwd,
+                                @RequestParam(value = "newPassword", required = false) String newPwd) {
+        return employeeService.setPassword(id, oldPwd, newPwd);
     }
 
     @GetMapping("/person")
