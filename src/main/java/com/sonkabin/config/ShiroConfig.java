@@ -86,8 +86,7 @@ public class ShiroConfig {
         //  /**表示任何请求/以及其子路径的都会触发filter chain
         filterChainDefinitions.put("/**", "authc");
         //要放入ShiroFilterFactoryBean才行
-        // 暂时关闭登陆
-//        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitions);
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitions);
         return shiroFilterFactoryBean;
     }
 

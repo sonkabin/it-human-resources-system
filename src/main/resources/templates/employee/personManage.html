@@ -60,6 +60,7 @@
                                 </div>
                                 <div class="card-body">
                                     <form class="form-horizontal" id="edit-form">
+                                        <input type="hidden" name="id" th:value="${employee.id}" id="edit-id">
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label">员工编号</label>
                                             <input type="text" class="form-control-plaintext col-sm-9" readonly th:value="${employee.empId}">
@@ -148,13 +149,16 @@
         $('#education').empty()
         $('#education').append('<label class="col-sm-2  col-form-label" >教育信息</label>')
         for (var i in edus) {
+
+            var select = build_education_select()
+
             var array = edus[i].split(":")
-            var xl = $('<input type="text" class="col-sm-4 form-control-plaintext" readonly>').val(array[0])
-            if (i != 0) {
-                xl.addClass('offset-sm-2')
+            var xl = select.val([array[0]])
+            if (i == 0) {
+                xl.removeClass('offset-sm-2')
             }
             var label = $('<label class="col-form-label">学校</label>')
-            var school = $('<input type="text" class="col-sm-4 form-control-plaintext" readonly>').val(array[1])
+            var school = $('<input type="text" class="col-sm-4 form-control school">').val(array[1])
             var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
             $('#education').append(xl).append(label).append(school).append(btn)
         }
@@ -164,21 +168,45 @@
 <script type="text/javascript">
 
     $('#save-btn').click(function () {
-        // $.ajax({
-        //     url: baseUrl + '/',
-        //     method: 'PUT',
-        //     data: $('#edit-form').serialize(),
-        //     success: function () {
-        //
-        //     }
-        // })
-        toastr.success('信息更新成功', '提示', {timeOut: 1000})
+        var id = $('#edit-id').val()
+        var education = ''
+        var xls = $('.xl option:checked')
+        var schools = $('.school')
+        // console.log($('.school'))
+        for (var i = 0; i < xls.length; i++) {
+            // console.log($(xls[0]).val())
+            var xl = $(xls[i]).val()
+            var school = $(schools[i]).val()
+            education += xl + ':' + school + ';'
+        }
+        // 移除最后一个分号
+        education = education.substr(0, education.length - 1)
+        console.log(education)
+        $.ajax({
+            url: baseUrl + '/emp/' + id,
+            method: 'PUT',
+            data: $('#edit-form').serialize() + '&' + $.param({'education':education}),
+            success: function () {
+                toastr.success('信息更新成功', '提示', {timeOut: 1000})
+            }
+        })
     })
 
     function add_new_edu () {
         var aNode = $('#add-new-edu-btn')
 
-        var select = $('<select class="col-sm-4 offset-sm-2 form-control"></select>')
+        var select = build_education_select()
+        // console.log($('#add-new-edu-btn'))
+
+        var input = $('<input class="col-sm-4 form-control school">')
+        var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
+        aNode.before(select).before('<label class="col-form-label">学校</label>').before(input).before(btn)
+
+    }
+
+    // 拼接下拉框
+    function build_education_select () {
+        var select = $('<select class="col-sm-4 offset-sm-2 form-control xl"></select>')
         var option = $('<option></option>').val('高中及以下').append('高中及以下')
         select.append(option)
         option = $('<option></option>').val('大专').append('大专')
@@ -189,12 +217,7 @@
         select.append(option)
         option = $('<option></option>').val('博士及以上').append('博士及以上')
         select.append(option)
-        // console.log($('#add-new-edu-btn'))
-
-        var input = $('<input class="col-sm-4 form-control">')
-        var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
-        aNode.before(select).before('<label class="col-form-label">学校</label>').before(input).before(btn)
-
+        return select
     }
 
     $(document).on('click', '.edu-close', function () {
