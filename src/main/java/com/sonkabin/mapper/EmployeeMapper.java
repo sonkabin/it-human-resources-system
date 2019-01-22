@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Param;
 public interface EmployeeMapper extends BaseMapper<Employee> {
 
     Employee getEmpWithRoleById(@Param("id") Integer id);
+
+    Employee selectSkill(@Param("id") Integer id);
 }

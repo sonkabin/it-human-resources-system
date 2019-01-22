@@ -62,8 +62,17 @@ public class EmployeeController {
     @GetMapping("/person")
     public String getPersonInfo (HttpSession session, Model model) {
         Employee employee = (Employee) session.getAttribute("loginEmp");
-        model.addAttribute("employee", employee);
-        return "employee/personManage.html";
+        Message msg = employeeService.getEmpById(employee.getId());
+        model.addAttribute("employee", msg.getInfo().get("employee"));
+        return "employee/personManage";
+    }
+
+    @GetMapping("/skills")
+    public String getSkillsInfo (HttpSession session, Model model) {
+        Employee employee = (Employee) session.getAttribute("loginEmp");
+        Message msg = employeeService.getEmployeeSkills(employee.getId());
+        model.addAttribute("employee", msg.getInfo().get("employee"));
+        return "employee/skillManage";
     }
 }
 

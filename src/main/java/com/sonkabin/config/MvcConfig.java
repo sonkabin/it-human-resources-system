@@ -22,7 +22,7 @@ public class MvcConfig {
                 // 员工视图
                 registry.addViewController("/employee.html").setViewName("employee/index");
 //                registry.addViewController("/personManage.html").setViewName("employee/personManage");
-                registry.addViewController("/skillManage.html").setViewName("employee/skillManage");
+//                registry.addViewController("/skillManage.html").setViewName("employee/skillManage");
                 registry.addViewController("/careerManage.html").setViewName("employee/careerManage");
                 registry.addViewController("/accountManage.html").setViewName("employee/accountManage");
                 registry.addViewController("/trainManage.html").setViewName("employee/trainManage");

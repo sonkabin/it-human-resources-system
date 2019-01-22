@@ -28,4 +28,6 @@ public interface EmployeeService{
     Message getEmpWithRoleById(Integer id);
 
     Message updateEmployee(Employee employee);
+
+    Message getEmployeeSkills(Integer id);
 }

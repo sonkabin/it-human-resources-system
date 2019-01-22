@@ -149,18 +149,16 @@
         $('#education').empty()
         $('#education').append('<label class="col-sm-2  col-form-label" >教育信息</label>')
         for (var i in edus) {
-
+            var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
             var select = build_education_select()
-
             var array = edus[i].split(":")
             var xl = select.val([array[0]])
-            if (i == 0) {
-                xl.removeClass('offset-sm-2')
-            }
             var label = $('<label class="col-form-label">学校</label>')
             var school = $('<input type="text" class="col-sm-4 form-control school">').val(array[1])
             var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
-            $('#education').append(xl).append(label).append(school).append(btn)
+            div.append(xl).append(label).append(school).append(btn)
+            $('#education').append(div)
+            // $('#education').append(xl).append(label).append(school).append(btn)
         }
         $('#education').append('<a id="add-new-edu-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_edu()">添加教育信息</a>')
     })
@@ -194,19 +192,21 @@
 
     function add_new_edu () {
         var aNode = $('#add-new-edu-btn')
-
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
         var select = build_education_select()
         // console.log($('#add-new-edu-btn'))
 
         var input = $('<input class="col-sm-4 form-control school">')
         var btn = $('<button type="button" class="close edu-close" ><span>×</span></button>')
-        aNode.before(select).before('<label class="col-form-label">学校</label>').before(input).before(btn)
+        div.append(select).append('<label class="col-form-label">学校</label>').append(input).append(btn)
+        aNode.before(div)
+        // aNode.before(select).before('<label class="col-form-label">学校</label>').before(input).before(btn)
 
     }
 
-    // 拼接下拉框
+    // 拼接教育信息的下拉框
     function build_education_select () {
-        var select = $('<select class="col-sm-4 offset-sm-2 form-control xl"></select>')
+        var select = $('<select class="col-sm-4 form-control xl"></select>')
         var option = $('<option></option>').val('高中及以下').append('高中及以下')
         select.append(option)
         option = $('<option></option>').val('大专').append('大专')

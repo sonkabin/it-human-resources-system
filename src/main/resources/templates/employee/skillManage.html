@@ -50,7 +50,32 @@
                     <li class="breadcrumb-item active">技能信息管理</li>
                 </ul>
             </div>
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">个人技能</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" id="edit-form">
+                                        <input type="hidden" name="id" th:value="${employee.id}" id="edit-id">
 
+                                        <div class="form-group row" id="skills">
+                                            <label class="col-sm-2  col-form-label">技能信息</label>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="card-footer ">
+                                    <button class="btn btn-primary" id="save-btn">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -74,8 +99,41 @@
 <!-- Main File-->
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
-<script type="text/javascript">
+<!-- 拼接技能信息 -->
+<script th:inline="javascript">
+    var skills = [[${employee.skills}]]
+    if (skills != null) {
+        skills = skills.split(';')
+        console.log(skills)
+        jQuery(document).ready(function($){
+            //把这段代码放在这里（在这里面依旧可以用$）;
+            $('#skills').empty()
+            $('#skills').append('<label class="col-sm-2 col-form-label">技能信息</label>')
+            for (var i in skills) {
+                var array = skills[i].split(":")
+                var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+                var label = $('<label class="col-form-label col-sm-1">技能名</label>')
+                var input = $('<input type="text" class="form-control col-sm-2">').val(array[0])
+                var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
+                var select = build_skill_select()
+                select.val([array[1]])
+                div.append(label).append(input).append(label2).append(select)
+                $('#skills').append(div)
+                // $('#skills').append(label).append(input).append(label2).append(select)
+            }
+        })
+    }
 
+</script>
+<script type="text/javascript">
+    function build_skill_select () {
+        var select = $('<select class="col-sm-1 form-control"></select>')
+        for (var i = 1; i < 10; i++) {
+            var option = $('<option></option>').val(i).append(i)
+            select.append(option)
+        }
+        return select
+    }
 </script>
 </body>
 </html>

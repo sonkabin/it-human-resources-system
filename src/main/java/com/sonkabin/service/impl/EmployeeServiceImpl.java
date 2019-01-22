@@ -130,4 +130,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Message.success();
     }
 
+    @Override
+    public Message getEmployeeSkills(Integer id) {
+        Employee employee = employeeMapper.selectSkill(id);
+        return Message.success().put("employee", employee);
+    }
+
 }

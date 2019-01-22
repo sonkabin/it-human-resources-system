@@ -123,7 +123,7 @@
             <a href="#informationDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>个人信息管理</a>
             <ul id="informationDropdown" class="collapse list-unstyled ">
                 <li th:class="${activeUrl=='personManage.html' ? 'active' : ''}"><a href="#" th:href="@{/person}">个人资料管理</a></li>
-                <li th:class="${activeUrl=='skillManage.html' ? 'active' : ''}"><a href="/skillManage.html">技能信息管理</a></li>
+                <li th:class="${activeUrl=='skillManage.html' ? 'active' : ''}"><a href="#" th:href="@{/skills}">技能信息管理</a></li>
                 <li th:class="${activeUrl=='planManage.html' ? 'active' : ''}"><a href="/careerManage.html">职业规划管理</a></li>
                 <li th:class="${activeUrl=='accountManage.html' ? 'active' : ''}"><a href="/accountManage.html">账号设置</a></li>
             </ul>

@@ -23,4 +23,9 @@
         WHERE e.id = #{id}
     </select>
 
+    <select id="selectSkill" resultType="com.sonkabin.entity.Employee">
+        SELECT id, skills FROM tb_employee
+        WHERE id = #{id}
+    </select>
+
 </mapper>
