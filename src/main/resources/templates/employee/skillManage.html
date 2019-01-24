@@ -102,11 +102,13 @@
 <!-- 拼接技能信息 -->
 <script th:inline="javascript">
     var skills = [[${employee.skills}]]
-    if (skills != null) {
-        skills = skills.split(';')
-        // console.log(skills)
-        jQuery(document).ready(function($){
-            //把这段代码放在这里（在这里面依旧可以用$）;
+
+    //把这段代码放在这里（在这里面依旧可以用$）;
+    jQuery(document).ready(function($){
+        if (skills != null) {
+            skills = skills.split(';')
+            // console.log(skills)
+
             $('#skills').empty()
             $('#skills').append('<label class="col-sm-2 col-form-label">技能信息</label>')
             for (var i in skills) {
@@ -122,9 +124,9 @@
                 $('#skills').append(div)
                 // $('#skills').append(label).append(input).append(label2).append(select)
             }
-            $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
-        })
-    }
+        }
+        $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
+    })
 
 </script>
 <script type="text/javascript">

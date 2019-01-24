@@ -60,6 +60,7 @@ public class EmployeeController {
         return employeeService.setPassword(id, oldPwd, newPwd);
     }
 
+
     @GetMapping("/person")
     public String getPersonInfo (HttpSession session, Model model) {
         Employee employee = (Employee) session.getAttribute("loginEmp");

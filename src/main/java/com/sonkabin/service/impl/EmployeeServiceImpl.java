@@ -43,7 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee selectOne(String empId, String pwd) {
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Employee::getEmpId, empId).eq(Employee::getPassword, pwd);
+        wrapper.eq(Employee::getEmpId, empId).eq(Employee::getPassword, pwd).eq(Employee::getStatus, 1);
         return employeeMapper.selectOne(wrapper);
     }
 

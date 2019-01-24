@@ -321,6 +321,7 @@
         $('#myModal').modal('hide')
     })
 
+    // 查看员工详细信息
     $(document).on('click', '.detail-btn', function () {
         var id = $(this).attr('detail-id')
         $.ajax({
@@ -372,6 +373,7 @@
         })
     })
 
+    // 编辑员工信息
     $(document).on('click', '.edit-btn', function () {
         var id = $(this).attr('edit-id')
         $.ajax({
