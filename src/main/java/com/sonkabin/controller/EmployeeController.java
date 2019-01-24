@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
  * @since 2019-01-13
  */
 @Controller
-//@RequestMapping("/employee")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;

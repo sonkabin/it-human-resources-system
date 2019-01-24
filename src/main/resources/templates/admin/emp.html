@@ -279,7 +279,7 @@
         }
     })
 
-    // 新增角色
+    // 新增员工
     $('#emp-add-btn').click(function () {
         // 获取角色
         $.ajax({
@@ -495,10 +495,16 @@
             }, {
                 field: 'gmtCreate',
                 title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
 
             }, {
                 field: 'gmtModified',
-                title: '修改时间'
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
             }, {
                 field: 'id',
                 title: '操作',

@@ -64,7 +64,12 @@
                                         &nbsp;&nbsp;&nbsp;
                                         <div class="form-group">
                                             <label for="search-status" class="form-control-label">项目状态</label>
-                                            <input id="search-status" type="text" class="mr-3 form-control">
+                                            <select name="search-status" id="search-status" class="mr-3 form-control">
+                                                <option value="-1">所有状态</option>
+                                                <option value="0">未启动</option>
+                                                <option value="1">进行中</option>
+                                                <option value="2">已完成</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
@@ -78,7 +83,7 @@
                                     </form>
                                 </div>
                                 <div id="toolbar" class="btn-group">
-                                    <button id="emp-add-btn" type="button" class="btn btn-success">
+                                    <button id="project-add-btn" type="button" class="btn btn-success">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                                     </button>
                                 </div>
@@ -94,6 +99,68 @@
                     </div>
                 </div>
             </section>
+            <!-- 新增与修改模态框-->
+            <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="empAddModalLabel"
+                 aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="projectAddModalLabel" class="modal-title" >新增项目</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="add-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">项目名</label>
+                                    <input name="projectName" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">项目背景</label>
+                                    <!--<input name="background" type="text" class="form-control col-sm-9">-->
+                                    <textarea rows="10" name="background" type="text" class="form-control col-sm-8"></textarea>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">前端所需技能</label>
+                                    <input name="frontEndSkill" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">前端所需人数</label>
+                                    <input name="frontEndNum" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">后端所需技能</label>
+                                    <input name="backEndSkill" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3  col-form-label" >后端所需人数</label>
+                                    <input name="backEndNum" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3  col-form-label">数据库所需技能</label>
+                                    <input name="dbSkill" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3  col-form-label">数据库所需人数</label>
+                                    <input name="dbNum" type="text" class="col-sm-8 form-control">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3  col-form-label">预计开始日期</label>
+                                    <input  name="predictStart" type="text" class="col-sm-8 form-control" readonly id="predict-start">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">预计结束日期</label>
+                                    <input  name="predictEnd" type="text" class="col-sm-8 form-control" readonly id="predict-end">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                            <button type="button" class="btn btn-primary" id="save-btn">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- 引入footer -->
@@ -131,9 +198,22 @@
         initTable()
     })
 
+    $('#project-add-btn').click(function () {
+        // $.ajax({
+        //     url: baseUrl + '/roles',
+        //     method: 'GET',
+        //     success: function (result) {
+        //         $('#myModal').modal()
+        //     }
+        // })
+        $('#myModal').modal()
+        $('#projectAddModalLabel').text('新增项目')
+        $('#save-btn').text('保存')
+    })
+
     function initTable() {
-        $('#emp-table').bootstrapTable('destroy')
-        $('#emp-table').bootstrapTable({
+        $('#project-table').bootstrapTable('destroy')
+        $('#project-table').bootstrapTable({
             url: 'http://localhost:8080/projects',
             method: 'GET',
             toolbar: '#toolbar', //工具按钮用哪个容器
@@ -154,6 +234,7 @@
             showToggle: true, //是否显示详细视图和列表视图的切换按钮
             cardView: false, //是否显示详细视图
             detailView: false, //是否显示父子表
+            cardView: true,
 
             responseHandler: function (res) { // 处理响应数据
                 return res.info
@@ -168,7 +249,7 @@
                     sort: params.sort,      //排序列名
                     sortOrder: params.order, //（desc，asc）
 
-                    // empId: $('#search-emp-id').val(),
+                    status: $('#search-status').val(),
                     // empName: $('#search-emp-name').val()
                 };
                 return temp;
@@ -192,15 +273,11 @@
                 field: 'backEndNum',
                 title: '后端所需人数'
             }, {
-                field: 'dbEndSkill',
+                field: 'dbSkill',
                 title: '数据库所需技术',
             }, {
-                field: 'dbEndNum',
+                field: 'dbNum',
                 title: '数据库所需人数'
-            }, {
-                field: 'email',
-                title: '邮箱',
-                sortable: true
             }, {
                 field: 'status',
                 title: '项目状态',
@@ -220,37 +297,64 @@
                 field: 'startDate',
                 title: '开始日期'
             },  {
-                field: 'endDate',
-                title: '结束日期'
+                field: 'predictEnd',
+                title: '预计结束日期'
             }, {
                 field: 'gmtCreate',
                 title: '创建时间',
-
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
             }, {
                 field: 'gmtModified',
-                title: '修改时间'
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
             }, {
                 field: 'id',
                 title: '操作',
                 formatter: function (value, row) {
+                    // console.log(row)
                     var id = value
                     var result = ''
-                    result += '<button detail-id=' + id + ' class="btn btn-info btn-sm detail-btn">详情</button> '
-                    result += '<button edit-id=' + id + ' class="btn btn-primary btn-sm edit-btn">编辑</button> '
+
+                    if (row.status == 0) {
+                        // 未启动的项目的按钮
+                        result += '<button class="btn btn-info btn-sm detail-btn">准备启动</button> '
+                    } else {
+                        // 进行中、已结束的按钮
+                        result += '<button class="btn btn-info btn-sm detail-btn">人员详情</button> '
+                    }
+                    if (row.status == 1) {
+                        // 进行中的项目可以申请成员和释放成员、加快项目进度的按钮
+                        result += '<button class="btn btn-primary btn-sm">申请成员</button> '
+                        result += '<button class="btn btn-primary btn-sm">释放成员</button> '
+                        result += '<button class="btn btn-primary btn-sm">加快项目进度</button> '
+                    }
+
                     return result
                 }
             }
             ]
         })
     }
-    // $("#birth").datetimepicker({
-    //     format: "yyyy-mm-dd",
-    //     showMeridian: true,
-    //     autoclose: true,
-    //     todayBtn: true,
-    //     language: 'zh-CN',
-    //     minView: 2 // 选到天就结束
-    // });
+    $("#predict-start").datetimepicker({
+        format: "yyyy-mm-dd",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        minView: 2 // 选到天就结束
+    });
+    $("#predict-end").datetimepicker({
+        format: "yyyy-mm-dd",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        minView: 2 // 选到天就结束
+    });
 </script>
 </body>
 </html>
