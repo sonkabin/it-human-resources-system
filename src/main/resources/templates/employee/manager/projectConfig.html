@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::employee-sidebar(activeUrl='projectInformation.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
+                    <li class="breadcrumb-item"><a href="/project.html">项目管理</a></li>
+                    <li class="breadcrumb-item active">项目配置</li>
+                </ul>
+            </div>
+
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">项目配置</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" id="edit-form">
+                                        <input type="hidden" name="id" th:value="${msg.info.project.id}">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">项目名</label>
+                                            <input type="text" class="form-control-plaintext col-sm-9" readonly th:value="${msg.info.project.projectName}">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">项目背景</label>
+                                            <textarea rows="10" type="text" class="form-control-plaintext col-sm-9" readonly th:text="${msg.info.project.background}"></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">前端所需技术</label>
+                                            <textarea rows="2" type="text" class="form-control-plaintext col-sm-9" readonly th:text="${msg.info.project.frontEndSkill}"></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">后端所需技术</label>
+                                            <textarea rows="2" type="text" class="form-control-plaintext col-sm-9" readonly th:text="${msg.info.project.backEndSkill}"></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label">数据库所需技术</label>
+                                            <textarea rows="2" type="text" class="form-control-plaintext col-sm-9" readonly th:text="${msg.info.project.dbSkill}"></textarea>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label" >项目经理</label>
+                                            <input type="text" class="col-sm-9 form-control-plaintext"  th:value="${session.loginEmp.empName}">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label">员工配置</label>
+                                            <div class="form-group row col-sm-10 offset-sm-2">
+                                                <label class="col-sm-3  col-form-label">系统推荐员工</label>
+                                                <label class="col-sm-3  col-form-label offset-sm-3">其他员工</label>
+
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer ">
+                                    <button class="btn btn-primary" id="save-btn">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script th:src="@{/custom/custom.js}"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

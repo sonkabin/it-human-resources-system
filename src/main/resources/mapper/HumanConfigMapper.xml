@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sonkabin.mapper.HumanConfigMapper">
 
+    <select id="selectPortion" parameterType="java.util.List" resultType="java.util.Map">
+      SELECT hc.emp_id empId, SUM(portion) empPortion FROM tb_human_config hc
+      RIGHT JOIN tb_employee e ON hc.emp_id = e.id
+      WHERE hc.status = 1 AND e.id
+      IN
+      <foreach collection="list" item="item" open="(" close=")" separator=",">
+          #{item.id}
+      </foreach>
+      GROUP BY e.id
+    </select>
 </mapper>

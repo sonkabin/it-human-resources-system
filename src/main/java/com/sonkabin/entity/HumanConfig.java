@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -35,7 +35,7 @@ public class HumanConfig implements Serializable {
     /**
      * 此项目工作时间比例
      */
-    private Integer portion;
+    private Integer portion = 0;
 
     /**
      * 项目状态

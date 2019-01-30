@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -22,11 +22,15 @@ public class ProjectHistory implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    private Integer projectId;
+
     private String projectName;
 
     private String background;
 
     private Integer empId;
+
+    private String empName;
 
     private String contribute;
 
@@ -45,6 +49,14 @@ public class ProjectHistory implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
     }
 
     public String getProjectName() {
@@ -111,18 +123,28 @@ public class ProjectHistory implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
     @Override
     public String toString() {
         return "ProjectHistory{" +
-        "id=" + id +
-        ", projectName=" + projectName +
-        ", background=" + background +
-        ", empId=" + empId +
-        ", contribute=" + contribute +
-        ", manageId=" + manageId +
-        ", manageName=" + manageName +
-        ", gmtCreate=" + gmtCreate +
-        ", gmtModified=" + gmtModified +
-        "}";
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", projectName='" + projectName + '\'' +
+                ", background='" + background + '\'' +
+                ", empId=" + empId +
+                ", empName='" + empName + '\'' +
+                ", contribute='" + contribute + '\'' +
+                ", manageId=" + manageId +
+                ", manageName='" + manageName + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }

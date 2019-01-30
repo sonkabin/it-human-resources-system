@@ -83,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Message setPassword(Integer id, String oldPwd, String newPwd) {
         Employee employee = employeeMapper.selectById(id);
-        String pwd = "";
+        String pwd;
         if (oldPwd == null) { // 为null表示是重置密码
             pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
         } else {

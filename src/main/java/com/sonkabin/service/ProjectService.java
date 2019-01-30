@@ -15,4 +15,10 @@ import com.sonkabin.utils.Message;
 public interface ProjectService{
 
  Message getProjects(ProjectDTO projectDTO);
+
+    Message saveProject(Project project);
+
+    Message getHumanDetailByProjectId(Integer id);
+
+    Message calculateHumans(Integer projectId);
 }

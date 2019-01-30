@@ -55,6 +55,8 @@ public class Project implements Serializable {
      */
     private Integer managerId;
 
+    private String managerName;
+
     /**
      * 0表示未启动，1表示进行中，2表示已结束
      */
@@ -233,6 +235,14 @@ public class Project implements Serializable {
 
     public void setGmtModified(LocalDateTime gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getManagerName() {
+        return managerName;
+    }
+
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
     }
 
     @Override

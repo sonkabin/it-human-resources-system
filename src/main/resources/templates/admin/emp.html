@@ -296,28 +296,25 @@
     })
     // 保存和修改
     $('#save-btn').click(function () {
+        var method, url, msg
         if ($(this)[0].innerHTML === '保存'){
-            $.ajax({
-                url: baseUrl + '/emp',
-                method: 'POST',
-                data: $('#add-form').serialize(),
-                success: function (result) {
-                    initTable()
-                }
-            })
+            url = baseUrl + '/emp'
+            method = 'POST'
+            msg = '保存'
         } else {
-            $.ajax({
-                url: baseUrl + '/emp/' + $(this).attr('edit-id'),
-                method: 'PUT',
-                data: $('#add-form').serialize(),
-                success: function () {
-                    toastr.success('更新成功', '提示', {timeOut: 1000})
-                    initTable()
-                }
-            })
-
+            url = baseUrl + '/emp/' + $(this).attr('edit-id')
+            method = 'PUT'
+            msg = '更新'
         }
-
+        $.ajax({
+            url: url,
+            method: method,
+            data: $('#add-form').serialize(),
+            success: function () {
+                toastr.success(msg + '成功', '提示', {timeOut: 1000})
+                initTable()
+            }
+        })
         $('#myModal').modal('hide')
     })
 
