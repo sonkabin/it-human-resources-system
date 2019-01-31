@@ -1,6 +1,9 @@
 package com.sonkabin.service;
 
 import com.sonkabin.entity.HumanConfig;
+import com.sonkabin.utils.Message;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,4 +15,5 @@ import com.sonkabin.entity.HumanConfig;
  */
 public interface HumanConfigService{
 
- }
+    Message saveConfig(List<HumanConfig> configs);
+}

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sonkabin.mapper.HumanConfigMapper">
 
-    <select id="selectPortion" parameterType="java.util.List" resultType="java.util.Map">
+    <select id="selectPortion" parameterType="list" resultType="java.util.Map">
       SELECT hc.emp_id empId, SUM(portion) empPortion FROM tb_human_config hc
       RIGHT JOIN tb_employee e ON hc.emp_id = e.id
       WHERE hc.status = 1 AND e.id
@@ -11,5 +11,13 @@
           #{item.id}
       </foreach>
       GROUP BY e.id
+    </select>
+
+    <select id="insertBatch" parameterType="list">
+        INSERT INTO tb_human_config(project_id, emp_id, portion, status, gmt_create, gmt_modified)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.projectId}, #{item.empId}, #{item.portion}, #{item.status}, #{item.gmtCreate}, #{item.gmtModified})
+        </foreach>
     </select>
 </mapper>

@@ -40,7 +40,7 @@ public class ProjectController {
         return projectService.getHumanDetailByProjectId(id);
     }
 
-    // todo 返回项目启动之前计算分配的人员和所有人员，供项目经理进行人员微调
+    // 返回项目启动之前计算分配的人员和所有人员，供项目经理进行人员微调
     @GetMapping("/calculate/{id}")
     public String calculateHumans (@PathVariable("id")Integer projectId, Model model) {
         Message msg = projectService.calculateHumans(projectId);
@@ -48,9 +48,6 @@ public class ProjectController {
         return "employee/manager/projectConfig";
     }
 
-    // todo 项目启动
-//    @PutMapping("/project/{id}")
-//    public Message startProject (@PathVariable("id") Integer projectId)
 
 
 }

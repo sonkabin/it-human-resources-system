@@ -18,4 +18,6 @@ import java.util.Map;
 public interface HumanConfigMapper extends BaseMapper<HumanConfig> {
 
     List<Map<String, Object>> selectPortion(List<Employee> employees);
+
+    void insertBatch(List<HumanConfig> configs);
 }

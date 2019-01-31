@@ -151,10 +151,12 @@ public class ProjectServiceImpl implements ProjectService {
         for (int i = 0; i < size; i++) {
             available[i] = 0;
             indexes[i] = i; // 初始化索引
-            String skills = employees.get(i).getSkills();
-            // 新增的员工技能信息未填写完整，可能为null
-            if (!StringUtils.isEmpty(skills)) {
-                available[i] = MyUtil.score(skills, portions[i]);
+            if (portions[i] > 0) {
+                String skills = employees.get(i).getSkills();
+                // 新增的员工技能信息未填写完整，可能为null
+                if (!StringUtils.isEmpty(skills)) {
+                    available[i] = MyUtil.score(skills, portions[i]);
+                }
             }
         }
 
@@ -184,6 +186,9 @@ public class ProjectServiceImpl implements ProjectService {
             boolean flag = false;
             int index = indexes[j++];
             int portion = portions[index];
+            if (portion <= 0) {
+                continue; // 工作时间小于等于0的人不用考虑
+            }
             String skills = employees.get(index).getSkills();
             String[] skill = skills.split(";");
             for (String s : skill) {
@@ -207,8 +212,21 @@ public class ProjectServiceImpl implements ProjectService {
                 }
             }
         }
-        // 移除候选员工后剩余的员工
-        employees.removeAll(candidates);
-        return Message.success().put("project", project).put("employees", employees).put("candidates", candidates).put("candidatePortions",candidatePortions);
+        // 移除候选员工后剩余的员工，因为需要将portions同步更新，需要自己写移除方法
+//        employees.removeAll(candidates);
+        j = 0;
+        Iterator<Employee> iterator = employees.iterator();
+        while (iterator.hasNext()) {
+            if (candidates.contains(iterator.next()) || portions[j] <= 0) {
+                iterator.remove();
+                portions[j] = portions[j + 1];
+            } else {
+                j++;
+            }
+        }
+        int[] empPortions = new int[j];
+        System.arraycopy(portions, 0, empPortions, 0, j);
+
+        return Message.success().put("project", project).put("employees", employees).put("portions", empPortions).put("candidates", candidates).put("candidatePortions",candidatePortions);
     }
 }
