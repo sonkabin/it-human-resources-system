@@ -3,6 +3,7 @@ package com.sonkabin.controller;
 
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,18 @@ public class HumanConfigController {
     @PostMapping("/config")
     public Message saveConfig (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.saveConfig(configs);
+    }
+
+    @GetMapping("/humanConfigs/{id}")
+    public String getHumanConfigs (@PathVariable("id") Integer projectId, Model model) {
+        Message msg = humanConfigService.getHumanConfigs(projectId);
+        model.addAttribute("info", msg.getInfo());
+        return "employee/manager/dispatcher";
+    }
+
+
+    public Message releaseHuman () {
+        return null;
     }
 }
 

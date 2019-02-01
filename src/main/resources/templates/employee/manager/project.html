@@ -205,7 +205,7 @@
                 </div>
             </div>
 
-            <form id="projectConfig" method="get"></form>
+            <form id="project" method="get"></form>
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -312,7 +312,7 @@
     })
 
     $(document).on('click', '.config-btn', function () {
-        $('#projectConfig').attr('action', '/calculate/' + $(this).attr('project-id')).submit()
+        $('#project').attr('action', '/calculate/' + $(this).attr('project-id')).submit()
     })
 
     $(document).on('click', '.del-project-btn', function () {
@@ -346,10 +346,26 @@
                 $('#myModal').modal()
             }
         })
-        $('#empAddModalLabel').text('修改项目信息')
+        $('#projectAddModalLabel').text('修改项目信息')
         $('#save-btn').text('更新')
         // 为按钮绑定id
         $('#save-btn').attr('edit-id', projectId);
+    })
+
+    $(document).on('click', '.dispatch-btn', function () {
+        $('#project').attr('action', '/humanConfigs/' + $(this).attr('project-id')).submit()
+    })
+
+    $(document).on('click', '.finish-btn', function () {
+        if (confirm('确认完成此项目了吗?')) {
+            $.ajax({
+                url: baseUrl + '/project/finish/' + $(this).attr('project-id'),
+                method: 'PUT',
+                success: function () {
+                    window.location.href = baseUrl + '/project.html'
+                }
+            })
+        }
     })
 
     function initTable() {
@@ -462,18 +478,17 @@
                     if (row.status == 0) {
                         // 未启动的项目的按钮
                         result += '<button class="btn btn-success btn-sm config-btn" project-id='+ id + '>准备启动</button> '
-                        // todo 编辑项目未完成
                         result += '<button class="btn btn-primary btn-sm edit-project-btn" project-id='+ id + '>编辑项目</button> '
                         result += '<button class="btn btn-danger btn-sm del-project-btn" project-id='+ id + '>删除项目</button> '
                     } else if (row.status == 1) {
-                        result += '<button class="btn btn-info btn-sm">已有项目成员</button> '
+                        result += '<button class="btn btn-primary btn-sm dispatch-btn"project-id='+ id + '>成员调动</button> '
                         // 进行中的项目可以申请成员和释放成员、加快项目进度的按钮
-                        result += '<button class="btn btn-primary btn-sm">申请成员</button> '
-                        result += '<button class="btn btn-primary btn-sm">释放成员</button> '
+                        // result += '<button class="btn btn-primary btn-sm">申请成员</button> '
+                        // result += '<button class="btn btn-primary btn-sm">释放成员</button> '
                         result += '<button class="btn btn-primary btn-sm">加快项目进度</button> '
-                        result += '<button class="btn btn-success btn-sm">项目完成</button> '
+                        result += '<button class="btn btn-success btn-sm finish-btn" project-id='+ id + '>项目完成</button> '
                     } else {
-                        result += '<button project-id=' + id + ' class="btn btn-info btn-sm contribute-btn">项目成员贡献</button> '
+                        result += '<button class="btn btn-info btn-sm contribute-btn" project-id=' + id + '>项目成员贡献</button> '
                     }
 
                     return result

@@ -27,4 +27,6 @@ public interface ProjectService{
     Message getProjectInformation(Integer id);
 
     Message updateProjectInformation(Integer id, Project project);
+
+    Message finishProject(Integer id);
 }

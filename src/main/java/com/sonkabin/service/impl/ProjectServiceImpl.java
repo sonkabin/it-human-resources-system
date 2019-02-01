@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.ProjectDTO;
 import com.sonkabin.entity.Employee;
+import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.entity.Project;
 import com.sonkabin.entity.ProjectHistory;
 import com.sonkabin.mapper.EmployeeMapper;
@@ -17,6 +18,7 @@ import com.sonkabin.utils.MyUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -124,6 +126,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
+        wrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(wrapper);
         // 查询员工工作时间比例
         List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
@@ -247,6 +250,26 @@ public class ProjectServiceImpl implements ProjectService {
         project.setId(id);
         project.setGmtModified(LocalDateTime.now());
         projectMapper.updateById(project);
+        return Message.success();
+    }
+
+    @Transactional
+    @Override
+    public Message finishProject(Integer id) {
+        LocalDateTime now = LocalDateTime.now();
+        // 更新项目状态
+        Project project = new Project();
+        project.setId(id);
+        project.setStatus(2);
+        project.setGmtModified(now);
+        projectMapper.updateById(project);
+        // 释放项目人力资源
+        LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(HumanConfig::getProjectId, id);
+        HumanConfig config = new HumanConfig();
+        config.setGmtModified(now);
+        config.setStatus(2);
+        humanConfigMapper.update(config, wrapper);
         return Message.success();
     }
 }

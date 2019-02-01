@@ -87,6 +87,7 @@
                                             <label class="col-sm-2  col-form-label" >项目经理</label>
                                             <input type="text" class="col-sm-9 form-control-plaintext"  th:value="${session.loginEmp.empName}">
                                             <input type="hidden" id="manager-id" th:value="${session.loginEmp.id}">
+                                            <input type="hidden" id="manager-name" th:value="${session.loginEmp.empName}">
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2  col-form-label">员工配置</label>
@@ -190,7 +191,7 @@
                     left:left,
                     right:right
                 },
-                title:['系统推荐员工','其他员工']//标题
+                title:['项目成员','其他员工']//标题
             }
         )
     })
@@ -221,18 +222,20 @@
     })
 
     $('#save-btn').click(function () {
-        if (confirm('确定要以当前人员配置启动吗?')) {
+        // console.log($('#transfer').find('.transferLeft').find('li').find('span').text())
+        if (confirm('确定要以当前人员配置启动项目吗?')) {
             // 收集数据
             var data = []
             var projectId = $('#project-id').val()
             // 项目经理的数据
-            data.push({projectId:projectId,empId:$('#manager-id').val(),portion:100})
+            data.push({projectId:projectId,empId:$('#manager-id').val(),empName:$('#manager-name').val(),portion:100})
             // 项目成员数据
             $('#transfer').find('.transferLeft').find('li').map(function (i, li) {
                 var $input =  $(li).find('input[type="checkbox"]')
                 data.push({
                     projectId:projectId,
                     empId:$input.attr('emp-id'),
+                    empName:$(li).find('span').text(),
                     portion:$(li).find('input[type="text"]').val()
                 })
             })

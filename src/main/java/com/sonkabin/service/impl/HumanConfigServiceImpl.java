@@ -1,5 +1,6 @@
 package com.sonkabin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.entity.Project;
 import com.sonkabin.mapper.HumanConfigMapper;
@@ -46,5 +47,13 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         project.setStartDate(LocalDate.now());
         projectMapper.updateById(project);
         return Message.success();
+    }
+
+    @Override
+    public Message getHumanConfigs(Integer projectId) {
+        LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(HumanConfig::getProjectId, projectId);
+        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
+        return Message.success().put("humanConfigs", humanConfigs);
     }
 }

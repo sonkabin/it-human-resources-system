@@ -16,4 +16,6 @@ import java.util.List;
 public interface HumanConfigService{
 
     Message saveConfig(List<HumanConfig> configs);
+
+    Message getHumanConfigs(Integer projectId);
 }

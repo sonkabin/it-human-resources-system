@@ -66,5 +66,11 @@ public class ProjectController {
         return projectService.updateProjectInformation(id,project);
     }
 
+    @ResponseBody
+    @PutMapping("/project/finish/{id}")
+    public Message finishProject (@PathVariable("id") Integer id) {
+        return projectService.finishProject(id);
+    }
+
 }
 

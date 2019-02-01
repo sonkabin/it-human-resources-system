@@ -32,10 +32,12 @@ public class HumanConfig implements Serializable {
      */
     private Integer empId;
 
+    private String empName;
+
     /**
      * 此项目工作时间比例
      */
-    private Integer portion = 0;
+    private Integer portion;
 
     /**
      * 项目状态
@@ -101,6 +103,14 @@ public class HumanConfig implements Serializable {
 
     public void setGmtModified(LocalDateTime gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
     }
 
     @Override
