@@ -35,8 +35,8 @@ public class ProjectController {
 
     // 获取项目成员贡献数据
     @ResponseBody
-    @GetMapping("/project/{id}")
-    public Message getHumanDetailByProjectId (@PathVariable("id") Integer id) {
+    @GetMapping("/projectContribute/{id}")
+    public Message getHumanContributeDetail (@PathVariable("id") Integer id) {
         return projectService.getHumanDetailByProjectId(id);
     }
 
@@ -48,7 +48,23 @@ public class ProjectController {
         return "employee/manager/projectConfig";
     }
 
+    @ResponseBody
+    @DeleteMapping("/project/{id}")
+    public Message deleteProject (@PathVariable("id") Integer projectId) {
+        return projectService.deleteProject(projectId);
+    }
 
+    @ResponseBody
+    @GetMapping("/project/{id}")
+    public Message getProjectInformation (@PathVariable("id") Integer id) {
+        return projectService.getProjectInformation(id);
+    }
+
+    @ResponseBody
+    @PutMapping("/project/{id}")
+    public Message updateProjectInformation (@PathVariable("id") Integer id, Project project) {
+        return projectService.updateProjectInformation(id,project);
+    }
 
 }
 

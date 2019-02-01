@@ -117,7 +117,6 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">项目背景</label>
-                                    <!--<input name="background" type="text" class="form-control col-sm-9">-->
                                     <textarea rows="10" name="background" type="text" class="form-control col-sm-8"></textarea>
                                 </div>
                                 <div class="form-group row">
@@ -264,7 +263,7 @@
             method = 'POST'
             msg = '保存'
         } else {
-            url = baseUrl + '/emp/' + $(this).attr('edit-id')
+            url = baseUrl + '/project/' + $(this).attr('edit-id')
             method = 'PUT'
             msg = '更新'
         }
@@ -283,7 +282,7 @@
     $(document).on('click', '.contribute-btn', function () {
         var id = $(this).attr('project-id')
         $.ajax({
-            url: baseUrl + '/project/' + id,
+            url: baseUrl + '/projectContribute/' + id,
             method: 'GET',
             success: function (result) {
                 var project = result.info.project
@@ -314,6 +313,43 @@
 
     $(document).on('click', '.config-btn', function () {
         $('#projectConfig').attr('action', '/calculate/' + $(this).attr('project-id')).submit()
+    })
+
+    $(document).on('click', '.del-project-btn', function () {
+        if (confirm('确认要删除项目吗?')) {
+            $.ajax({
+                url: baseUrl + '/project/' + $(this).attr('project-id'),
+                method: 'DELETE',
+                success: function () {}
+            })
+        }
+    })
+
+    $(document).on('click', '.edit-project-btn', function () {
+        var projectId = $(this).attr('project-id')
+        $.ajax({
+            url: baseUrl + '/project/' + projectId,
+            method: 'GET',
+            success: function (result) {
+                var project = result.info.project
+                // 表单回显
+                $('#myModal input[name=projectName]').val(project.projectName)
+                $('#myModal textarea[name=background]').text(project.background)
+                $('#myModal input[name=frontEndSkill]').val(project.frontEndSkill)
+                $('#myModal input[name=frontEndNum]').val(project.frontEndNum)
+                $('#myModal input[name=backEndSkill]').val(project.backEndSkill)
+                $('#myModal input[name=backEndNum]').val(project.backEndNum)
+                $('#myModal input[name=dbSkill]').val(project.dbSkill)
+                $('#myModal input[name=dbNum]').val(project.dbNum)
+                $('#myModal input[name=predictStart]').val(project.predictStart)
+                $('#myModal input[name=predictEnd]').val(project.predictEnd)
+                $('#myModal').modal()
+            }
+        })
+        $('#empAddModalLabel').text('修改项目信息')
+        $('#save-btn').text('更新')
+        // 为按钮绑定id
+        $('#save-btn').attr('edit-id', projectId);
     })
 
     function initTable() {
@@ -427,7 +463,8 @@
                         // 未启动的项目的按钮
                         result += '<button class="btn btn-success btn-sm config-btn" project-id='+ id + '>准备启动</button> '
                         // todo 编辑项目未完成
-                        result += '<button class="btn btn-primary btn-sm" project-id='+ id + '>编辑项目</button> '
+                        result += '<button class="btn btn-primary btn-sm edit-project-btn" project-id='+ id + '>编辑项目</button> '
+                        result += '<button class="btn btn-danger btn-sm del-project-btn" project-id='+ id + '>删除项目</button> '
                     } else if (row.status == 1) {
                         result += '<button class="btn btn-info btn-sm">已有项目成员</button> '
                         // 进行中的项目可以申请成员和释放成员、加快项目进度的按钮
@@ -445,6 +482,7 @@
             ]
         })
     }
+
     $("#predict-start").datetimepicker({
         format: "yyyy-mm-dd",
         showMeridian: true,
@@ -458,11 +496,14 @@
         showMeridian: true,
         autoclose: true,
         todayBtn: true,
+        pickerPosition: 'top-right',
         language: 'zh-CN',
         minView: 2 // 选到天就结束
     })
     $('#myModal').on('hidden.bs.modal', function () {
         $('#add-form')[0].reset() // 重置表单
+        // textarea需要自己重置
+        $('#myModal textarea[name=background]').text('')
     })
     $('#contributeModal').on('hidden.bs.modal', function () {
         $('#contribute-form')[0].reset() // 重置表单

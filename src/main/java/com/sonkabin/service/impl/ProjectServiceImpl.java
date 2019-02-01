@@ -229,4 +229,24 @@ public class ProjectServiceImpl implements ProjectService {
 
         return Message.success().put("project", project).put("employees", employees).put("portions", empPortions).put("candidates", candidates).put("candidatePortions",candidatePortions);
     }
+
+    @Override
+    public Message deleteProject(Integer projectId) {
+        projectMapper.deleteById(projectId);
+        return Message.success();
+    }
+
+    @Override
+    public Message getProjectInformation(Integer id) {
+        Project project = projectMapper.selectById(id);
+        return Message.success().put("project", project);
+    }
+
+    @Override
+    public Message updateProjectInformation(Integer id, Project project) {
+        project.setId(id);
+        project.setGmtModified(LocalDateTime.now());
+        projectMapper.updateById(project);
+        return Message.success();
+    }
 }

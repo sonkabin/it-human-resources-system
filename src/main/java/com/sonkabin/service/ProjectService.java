@@ -21,4 +21,10 @@ public interface ProjectService{
     Message getHumanDetailByProjectId(Integer id);
 
     Message calculateHumans(Integer projectId);
+
+    Message deleteProject(Integer projectId);
+
+    Message getProjectInformation(Integer id);
+
+    Message updateProjectInformation(Integer id, Project project);
 }
