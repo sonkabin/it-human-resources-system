@@ -18,4 +18,10 @@ public interface HumanConfigService{
     Message saveConfig(List<HumanConfig> configs);
 
     Message getHumanConfigs(Integer projectId);
+
+    Message releaseHuman(HumanConfig config, String contribute);
+
+    Message getOtherEmployees(Integer projectId);
+
+    Message requireHuman(List<HumanConfig> configs);
 }

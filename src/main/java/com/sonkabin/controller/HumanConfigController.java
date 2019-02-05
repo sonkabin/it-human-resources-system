@@ -25,7 +25,7 @@ public class HumanConfigController {
 
     // 保存项目人员配置，并启动项目
     @ResponseBody
-    @PostMapping("/config")
+    @PostMapping("/humanConfig")
     public Message saveConfig (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.saveConfig(configs);
     }
@@ -37,9 +37,22 @@ public class HumanConfigController {
         return "employee/manager/dispatcher";
     }
 
+    @ResponseBody
+    @PutMapping("/humanConfig/release")
+    public Message releaseHuman (HumanConfig config, @RequestParam("contribute") String contribute) {
+        return humanConfigService.releaseHuman(config, contribute);
+    }
 
-    public Message releaseHuman () {
-        return null;
+    @ResponseBody
+    @GetMapping("/humanConfigs/employees/{id}")
+    public Message getOtherEmployees (@PathVariable("id") Integer projectId) {
+        return humanConfigService.getOtherEmployees(projectId);
+    }
+
+    @ResponseBody
+    @PostMapping("/humanConfig/require")
+    public Message requireHuman (@RequestBody List<HumanConfig> configs) {
+        return humanConfigService.requireHuman(configs);
     }
 }
 
