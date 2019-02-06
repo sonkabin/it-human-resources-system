@@ -40,14 +40,6 @@ public class ProjectController {
         return projectService.getHumanDetailByProjectId(id);
     }
 
-    // 返回项目启动之前计算分配的人员和所有人员，供项目经理进行人员微调
-    @GetMapping("/calculate/{id}")
-    public String calculateHumans (@PathVariable("id")Integer projectId, Model model) {
-        Message msg = projectService.calculateHumans(projectId);
-        model.addAttribute("msg", msg);
-        return "employee/manager/projectConfig";
-    }
-
     @ResponseBody
     @DeleteMapping("/project/{id}")
     public Message deleteProject (@PathVariable("id") Integer projectId) {
@@ -72,5 +64,11 @@ public class ProjectController {
         return projectService.finishProject(id);
     }
 
+    @GetMapping("/project/speedup/{id}")
+    public String speedupProject (@PathVariable("id")Integer projectId, Model model) {
+        Message msg = projectService.getProjectInformation(projectId);
+        model.addAttribute("msg", msg);
+        return "employee/manager/speedup";
+    }
 }
 

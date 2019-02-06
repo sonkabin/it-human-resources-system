@@ -154,8 +154,8 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
                             <button type="button" class="btn btn-primary" id="save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
                         </div>
                     </div>
                 </div>
@@ -356,6 +356,10 @@
         $('#project').attr('action', '/humanConfigs/' + $(this).attr('project-id')).submit()
     })
 
+    $(document).on('click', '.speedup-btn', function () {
+        $('#project').attr('action', '/project/speedup/' + $(this).attr('project-id')).submit()
+    })
+
     $(document).on('click', '.finish-btn', function () {
         if (confirm('确认完成此项目了吗?')) {
             $.ajax({
@@ -481,11 +485,9 @@
                         result += '<button class="btn btn-primary btn-sm edit-project-btn" project-id='+ id + '>编辑项目</button> '
                         result += '<button class="btn btn-danger btn-sm del-project-btn" project-id='+ id + '>删除项目</button> '
                     } else if (row.status == 1) {
-                        result += '<button class="btn btn-primary btn-sm dispatch-btn"project-id='+ id + '>成员调动</button> '
-                        // 进行中的项目可以申请成员和释放成员、加快项目进度的按钮
-                        // result += '<button class="btn btn-primary btn-sm">申请成员</button> '
-                        // result += '<button class="btn btn-primary btn-sm">释放成员</button> '
-                        result += '<button class="btn btn-primary btn-sm">加快项目进度</button> '
+                        // 进行中的项目有成员调动按钮和加快项目进度的按钮
+                        result += '<button class="btn btn-primary btn-sm dispatch-btn" project-id='+ id + '>成员调动</button> '
+                        result += '<button class="btn btn-primary btn-sm speedup-btn" project-id='+ id + '>加快项目进度</button> '
                         result += '<button class="btn btn-success btn-sm finish-btn" project-id='+ id + '>项目完成</button> '
                     } else {
                         result += '<button class="btn btn-info btn-sm contribute-btn" project-id=' + id + '>项目成员贡献</button> '

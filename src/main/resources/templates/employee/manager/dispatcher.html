@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">成员贡献</label>
-                                    <textarea rows="3" name="contribute" type="text" class="form-control col-sm-8"></textarea>
+                                    <textarea rows="3" name="contribute" type="text" class="form-control col-sm-8" id="contribute"></textarea>
                                 </div>
                             </form>
                         </div>
@@ -214,7 +214,8 @@
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
 <script type="text/javascript">
-
+    // count变量的作用：解决嵌套模态框关闭其中一个模态框时滚动条不见的问题
+    var count = 0
     $(document).on('click', '.skill-btn', function () {
         $.ajax({
             url: baseUrl + '/emp/' + $(this).attr('emp-id'),
@@ -242,19 +243,23 @@
         var tr = $(this).parents('tr')
         $('#empId').val(tr.find('input[name="empId"]').val())
         $('#release-form').find('input[name="empName"]').val(tr.find('td:eq(0)').text())
+        count = 1
         $('#releaseModal').modal()
     })
 
     $(document).on('click', '.save-btn', function () {
+        if ($('#contribute').val().trim() == '') {
+            toastr.error('请填写成员贡献', '警告', {timeOut: 2000})
+            return
+        }
         $.ajax({
-            url: baseUrl + '/humanConfig/',
+            url: baseUrl + '/humanConfig/release',
             method: 'PUT',
             data: $('#release-form').serialize()+'&'+$.param({'projectId': $('#project-id').val()}),
             success: function () {
                 window.location.href = baseUrl + '/humanConfigs/' + $('#project-id').val()
             }
         })
-        $('#releaseModal').modal('hide')
     })
 
     $('#require-btn').click(function () {
@@ -273,6 +278,7 @@
                     var btnTd = $('<td></td>').append(skillBtn)
                     $('<tr></tr>').append(checkTd).append(empNameTd).append(portionTd).append(btnTd).appendTo('#require-tbody')
                 }
+                count = 1
                 $('#requireModal').modal()
             }
         })
@@ -315,9 +321,14 @@
         // textarea需要自己重置
         $('#releaseModal textarea[name=contribute]').text('')
     })
+    $('#requireModal').on('hidden.bs.modal', function () {
+        count = 0
+    })
     $('#myModal').on('hidden.bs.modal', function () {
         //添加缺失属性
-        $("body").addClass("modal-open")
+        if (count > 0) {
+            $("body").addClass("modal-open")
+        }
     })
 
 </script>

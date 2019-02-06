@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::employee-sidebar(activeUrl='projectInformation.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
+                    <li class="breadcrumb-item"><a href="/project.html">项目管理</a></li>
+                    <li class="breadcrumb-item active">加快项目进度</li>
+                </ul>
+            </div>
+
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <h3 class="h4">加快项目进度</h3>
+                            </div>
+                            <div class="card-body">
+                                <form class="form-horizontal form-validate">
+                                    <input type="hidden" id="project-id" name="projectId" th:value="${msg.info.project.id}">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">项目开始日期</label>
+                                        <input type="text" class="form-control-plaintext col-sm-2" readonly th:value="${msg.info.project.startDate}">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">原来预计结束日期</label>
+                                        <input type="text" class="form-control-plaintext col-sm-2" readonly th:value="${msg.info.project.predictEnd}" id="predict-date">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label">当前预计结束时期</label>
+                                        <input type="text" class="form-control col-sm-2" id="predict-end-date" readonly>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer ">
+                                <button class="btn btn-primary btn-sm" id="config-btn">人员配置</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">项目组成员</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal">
+
+                                    </form>
+                                </div>
+                                <div class="card-footer ">
+                                    <button class="btn btn-success btn-sm">保存人员配置</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script th:src="@{/custom/custom.js}"></script>
+<script type="text/javascript">
+
+    $('#config-btn').click(function () {
+        var endDate = $('#predict-end-date').val()
+        var predictDate = $('#predict-date').val()
+        if (endDate == '') {
+            toastr.error('请填写预计结束日期', '警告', {timeOut: 2000})
+            return
+        }
+        var end = endDate.split('-')
+        var predict = predictDate.split('-')
+        if (predict[0] < end[0] || predict[1] < end[1] || predict[2] <= end[2]) {
+            toastr.error('预计结束日期不能超过原来预计结束日期', '警告', {timeOut: 2000})
+            return
+        }
+        // console.log(endDate.split('-'))
+        // console.log(predictDate.split('-'))
+
+        $.ajax({
+            url: baseUrl + '/humanConfig/recalculate',
+            method: 'POST',
+            data: {
+                projectId: $('#project-id').val(),
+                endDate: endDate
+            },
+            success: function (result) {
+
+            }
+        })
+    })
+
+    $("#predict-end-date").datetimepicker({
+        format: "yyyy-mm-dd",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        minView: 2 // 选到天就结束
+    })
+</script>
+</body>
+</html>

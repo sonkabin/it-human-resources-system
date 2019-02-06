@@ -1,6 +1,7 @@
 package com.sonkabin.controller;
 
 
+import com.sonkabin.dto.RecalculateDTO;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.sonkabin.service.HumanConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -22,6 +24,14 @@ import java.util.List;
 public class HumanConfigController {
     @Autowired
     private HumanConfigService humanConfigService;
+
+    // 返回项目启动之前计算分配的人员和所有人员，供项目经理进行人员微调
+    @GetMapping("/calculate/{id}")
+    public String calculateHumans (@PathVariable("id")Integer projectId, Model model) {
+        Message msg = humanConfigService.calculateHumans(projectId);
+        model.addAttribute("msg", msg);
+        return "employee/manager/projectConfig";
+    }
 
     // 保存项目人员配置，并启动项目
     @ResponseBody
@@ -54,5 +64,13 @@ public class HumanConfigController {
     public Message requireHuman (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.requireHuman(configs);
     }
+
+    @ResponseBody
+    @PostMapping("/humanConfig/recalculate")
+    public Message recalculate (RecalculateDTO recalculateDTO) {
+        return humanConfigService.recalculate(recalculateDTO);
+    }
+
+
 }
 

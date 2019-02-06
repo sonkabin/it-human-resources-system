@@ -1,5 +1,6 @@
 package com.sonkabin.service;
 
+import com.sonkabin.dto.RecalculateDTO;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
 
@@ -24,4 +25,8 @@ public interface HumanConfigService{
     Message getOtherEmployees(Integer projectId);
 
     Message requireHuman(List<HumanConfig> configs);
+
+    Message recalculate(RecalculateDTO recalculateDTO);
+
+    Message calculateHumans(Integer projectId);
 }
