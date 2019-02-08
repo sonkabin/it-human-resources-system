@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.ProjectDTO;
+import com.sonkabin.dto.ProjectHistoryDTO;
 import com.sonkabin.entity.Employee;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.entity.Project;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -137,5 +139,36 @@ public class ProjectServiceImpl implements ProjectService {
     public Message updateHumanContributeDetail(List<ProjectHistory> projectHistories) {
         projectHistoryMapper.updateBatch(projectHistories);
         return Message.success();
+    }
+
+    // ----------------- 员工开始     ---------------------------
+    @Override
+    public Message getInvolveProjects() {
+        Employee employee = MyUtil.getSessionEmployee("loginEmp");
+        LambdaQueryWrapper<HumanConfig> humanConfigLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        humanConfigLambdaQueryWrapper.eq(HumanConfig::getEmpId, employee.getId()).eq(HumanConfig::getStatus, 1);
+        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(humanConfigLambdaQueryWrapper);
+        List<Integer> ids = new LinkedList<>();
+        humanConfigs.forEach( h -> {
+            ids.add(h.getProjectId());
+        });
+        LambdaQueryWrapper<Project> projectLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        projectLambdaQueryWrapper.in(Project::getId, ids);
+        List<Project> projects = projectMapper.selectList(projectLambdaQueryWrapper);
+        return Message.success().put("humanConfigs", humanConfigs).put("projects", projects);
+    }
+
+    @Override
+    public Message getHistoryProjects(ProjectHistoryDTO projectHistoryDTO) {
+        Page<ProjectHistory> page = new Page<>();
+        page.setSize(projectHistoryDTO.getRows());
+        page.setCurrent(projectHistoryDTO.getPage());
+        Employee employee = MyUtil.getSessionEmployee("loginEmp");
+        LambdaQueryWrapper<ProjectHistory> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ProjectHistory::getEmpId, employee.getId());
+        wrapper.gt(projectHistoryDTO.getStartDate() != null, ProjectHistory::getGmtCreate, projectHistoryDTO.getStartDate());
+        wrapper.le(projectHistoryDTO.getEndDate() != null, ProjectHistory::getGmtCreate, projectHistoryDTO.getEndDate());
+        IPage<ProjectHistory> result = projectHistoryMapper.selectPage(page, wrapper);
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
     }
 }

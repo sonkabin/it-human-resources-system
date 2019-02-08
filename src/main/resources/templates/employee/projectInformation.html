@@ -50,6 +50,64 @@
                 </ul>
             </div>
 
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">当前参与项目信息</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="current-projects">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">历史参与项目信息</h3>
+                                </div>
+                                <br>
+                                <div>
+                                    <!-- search-from -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="start-date" class="form-control-label offset-sm-1">开始日期</label>
+                                            <input id="start-date" name="startDate" type="text" class="col-sm-8 form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="end-date" class="form-control-label offset-sm-1">结束日期</label>
+                                            <input id="end-date" name="endDate" type="text" class="col-sm-8 form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="history-projects">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -74,7 +132,155 @@
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
 <script type="text/javascript">
+    $(function () {
+        initCurrentProjects()
+        initTable()
+    })
 
+    $('#search-btn').click(function () {
+        initTable()
+    })
+    $('#search-reset').click(function () {
+        initTable()
+    })
+
+    function initCurrentProjects() {
+        $('#current-projects').bootstrapTable('destroy')
+        $('#current-projects').bootstrapTable({
+            url: baseUrl + '/current/projects',
+            method: 'GET',
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: true, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                var humanConfigs = res.info.humanConfigs
+                var projects = res.info.projects
+                var infos = []
+                for (var i = 0; i < projects.length; i++) {
+                    var info = {}
+                    info.projectName = projects[i].projectName
+                    info.background = projects[i].background
+                    info.managerName = projects[i].managerName
+                    info.startDate = projects[i].startDate
+                    info.predictEnd = projects[i].predictEnd
+                    info.portion = humanConfigs[i].portion
+                    infos.push(info)
+                }
+                return infos
+            },
+
+            columns: [{
+                field: 'projectName',
+                title: '项目名'
+            }, {
+                field: 'background',
+                title: '项目背景'
+            }, {
+                field: 'managerName',
+                title: '项目经理',
+            }, {
+                field: 'startDate',
+                title: '开始日期'
+            }, {
+                field: 'predictEnd',
+                title: '预计结束日期'
+            }, {
+                field: 'portion',
+                title: '工作时间比例'
+            }
+            ]
+        })
+    }
+
+    function initTable() {
+        $('#history-projects').bootstrapTable('destroy')
+        $('#history-projects').bootstrapTable({
+            url: baseUrl + '/history/projects',
+            method: 'GET',
+            pagination: true, // 是否显示分页
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 5, // 每页的记录行数
+            pageList: [5, 10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            //height: 500,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: true, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    startDate: $('#start-date').val(),
+                    endDate: $('#end-date').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'projectName',
+                title: '项目名'
+            }, {
+                field: 'background',
+                title: '项目背景'
+            }, {
+                field: 'manageName',
+                title: '项目经理',
+            }, {
+                field: 'contribute',
+                title: '本项目所做的贡献',
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }
+            ]
+        })
+    }
+
+    $("#start-date").datetimepicker({
+        format: "yyyy-mm-dd",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        minView: 2 // 选到天就结束
+    })
+    $("#end-date").datetimepicker({
+        format: "yyyy-mm-dd",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        language: 'zh-CN',
+        minView: 2 // 选到天就结束
+    })
 </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.sonkabin.service;
 
 import com.sonkabin.dto.ProjectDTO;
+import com.sonkabin.dto.ProjectHistoryDTO;
 import com.sonkabin.entity.Project;
 import com.sonkabin.entity.ProjectHistory;
 import com.sonkabin.utils.Message;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface ProjectService{
 
- Message getProjects(ProjectDTO projectDTO);
+    Message getProjects(ProjectDTO projectDTO);
 
     Message saveProject(Project project);
 
@@ -32,4 +33,8 @@ public interface ProjectService{
     Message finishProject(Integer id);
 
     Message updateHumanContributeDetail(List<ProjectHistory> projectHistories);
+
+    Message getInvolveProjects();
+
+    Message getHistoryProjects(ProjectHistoryDTO projectHistoryDTO);
 }
