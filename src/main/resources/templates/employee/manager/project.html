@@ -188,6 +188,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">项目经理</label>
                                     <div class="form-group row col-sm-10 offset-sm-2">
+                                        <input type="hidden" id="manager-id">
                                         <input id="managerName" type="text" class="form-control-plaintext col-sm-3" readonly>
                                         <textarea id="managerContribute" class="form-control col-sm-8" cols="2"></textarea>
                                     </div>
@@ -199,7 +200,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
-                            <button type="button" data-dismiss="modal" class="btn btn-primary">更新</button>
+                            <button type="button" class="btn btn-primary" id="update-btn">更新</button>
                         </div>
                     </div>
                 </div>
@@ -242,7 +243,7 @@
         initTable()
     })
 
-    // todo 新增项目还需进一步完善
+    // todo 新增项目还需进一步完善，即技能是可以选择的，而不是输入的
     $('#project-add-btn').click(function () {
         // $.ajax({
         //     url: baseUrl + '/roles',
@@ -289,6 +290,7 @@
                 $('#projectName').val(project.projectName)
                 $('#background').val(project.background)
                 $('#managerName').val(project.managerName)
+                $('#manager-id').val(project.managerId)
 
                 // $('#member').val()
                 var humans = result.info.humans
@@ -299,16 +301,44 @@
                         $('#managerContribute').val(item.contribute)
                     } else {
                         var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+                        var hidden = $('<input type="hidden" name="empId">').val(item.empId)
                         var empInput = $('<input type="text" class="form-control-plaintext col-sm-3" readonly>').val(item.empName)
                         var contributeInput = $('<textarea class="form-control col-sm-8" cols="2"></textarea>').val(item.contribute)
-                        div.append(empInput).append(contributeInput)
+                        div.append(hidden).append(empInput).append(contributeInput)
                         $('#members').append(div)
                     }
                 })
+                $('#update-btn').attr('project-id', id)
                 $('#contributeModal').modal()
             }
         })
 
+    })
+    $('#update-btn').click(function () {
+        var data = []
+        var projectId = $(this).attr('project-id')
+        // 项目经理贡献
+        data.push({projectId:projectId, empId:$('#manager-id').val(), contribute: $('#managerContribute').val()})
+        // 员工贡献
+        $('#members').find('div').map(function (i, div) {
+            data.push({
+                projectId:projectId,
+                empId:$(div).find('input[name="empId"]').val(),
+                contribute:$(div).find('textarea').val()
+            })
+        })
+        // console.log(data)
+        $.ajax({
+            url: baseUrl + '/projectContribute',
+            method: 'PUT',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: "application/json",
+            success: function () {
+                toastr.success('更新成员贡献成功', '提示', {timeOut: 1000})
+            }
+        })
+        $('#contributeModal').modal('hide')
     })
 
     $(document).on('click', '.config-btn', function () {
@@ -320,7 +350,9 @@
             $.ajax({
                 url: baseUrl + '/project/' + $(this).attr('project-id'),
                 method: 'DELETE',
-                success: function () {}
+                success: function () {
+                    toastr.success('删除项目成功', '提示', {timeOut: 1000})
+                }
             })
         }
     })
@@ -505,6 +537,7 @@
         showMeridian: true,
         autoclose: true,
         todayBtn: true,
+        pickerPosition: 'top-right',
         language: 'zh-CN',
         minView: 2 // 选到天就结束
     })

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
     <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
     <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+    <link rel="stylesheet" href="custom/transfer.css" th:href="@{/custom/transfer.css}">
 </head>
 <body>
 
@@ -90,17 +91,53 @@
                                 </div>
                                 <div class="card-body">
                                     <form class="form-horizontal">
-
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label">员工配置</label>
+                                            <div class="form-group row col-sm-10 offset-sm-2">
+                                                <div id="transfer" style="width: 100%;margin: 0 auto;"></div>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="card-footer ">
-                                    <button class="btn btn-success btn-sm">保存人员配置</button>
+                                    <button class="btn btn-success btn-sm" id="save-btn">保存人员配置</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+            <!-- 技能详情模态框-->
+            <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">技能详情</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="col-sm-11">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>技能名</th>
+                                            <th>等级</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="skills">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -124,6 +161,7 @@
 <!-- Main File-->
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
+<script th:src="@{/custom/transfer.js}"></script>
 <script type="text/javascript">
 
     $('#config-btn').click(function () {
@@ -133,9 +171,7 @@
             toastr.error('请填写预计结束日期', '警告', {timeOut: 2000})
             return
         }
-        var end = endDate.split('-')
-        var predict = predictDate.split('-')
-        if (predict[0] < end[0] || predict[1] < end[1] || predict[2] <= end[2]) {
+        if (DateCompare(predictDate, endDate) < 0) {
             toastr.error('预计结束日期不能超过原来预计结束日期', '警告', {timeOut: 2000})
             return
         }
@@ -150,9 +186,93 @@
                 endDate: endDate
             },
             success: function (result) {
-
+                var candidates = result.info.candidates
+                console.log(candidates)
+                var candidatePortions = result.info.candidatePortions
+                var employees = result.info.employees
+                var portions = result.info.empPortions
+                var left = [], right = []
+                for (var i = 0; i < candidates.length; i++) {
+                    var candidate = {}
+                    candidate.id = candidates[i].id
+                    candidate.value = candidates[i].empName
+                    candidate.portion = candidatePortions[i]
+                    left.push(candidate)
+                }
+                for (var i = 0; i < employees.length; i++) {
+                    var employee = {}
+                    employee.id = employees[i].id
+                    employee.value = employees[i].empName
+                    employee.portion = portions[i]
+                    right.push(employee)
+                }
+                $('#transfer').transfer(
+                    {
+                        search:'all',//是否需要搜索框，参数为，'left,right,all'
+                        data:{ //data格式为left:[],right:[]。对象数组
+                            left:left,
+                            right:right
+                        },
+                        title:['推荐员工','其他员工']//标题
+                    }
+                )
             }
         })
+    })
+
+    $(document).on('click', '.skill-btn', function () {
+        $.ajax({
+            url: baseUrl + '/emp/' + $(this).attr('emp-id'),
+            method: 'GET',
+            success: function (result) {
+                $('#skills').empty()
+                var skills = result.info.employee.skills
+                if (skills != null) {
+                    skills = skills.split(';')
+                    for (var i in skills) {
+                        var array = skills[i].split(":")
+                        var skillNameTd = $('<td></td>').append(array[0])
+                        var levelTd = $('<td></td>').append(array[1])
+                        $('<tr></tr>').append(skillNameTd).append(levelTd).appendTo('#skills')
+                    }
+                }
+                $('#myModal').modal()
+            }
+        })
+    })
+
+    $('#save-btn').click(function () {
+        var emps = ''
+        $('#transfer').find('.transferLeft').find('li').map(function (i, li) {
+            var $input =  $(li).find('input[type="checkbox"]')
+            emps += $(li).find('span').text() + ','
+        })
+        emps = emps.substr(0, emps.length - 1)
+        if (confirm('确定要将[' + emps +']加入到项目中吗?')) {
+            // 收集数据
+            var data = []
+            var projectId = $('#project-id').val()
+            // 项目成员数据
+            $('#transfer').find('.transferLeft').find('li').map(function (i, li) {
+                var $input =  $(li).find('input[type="checkbox"]')
+                data.push({
+                    projectId:projectId,
+                    empId:$input.attr('emp-id'),
+                    empName:$(li).find('span').text(),
+                    portion:$(li).find('input[type="text"]').val()
+                })
+            })
+            $.ajax({
+                url: baseUrl + '/humanConfig?endDate=' + $('#predict-end-date').val(),
+                method: 'POST',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                success: function () {
+                    window.location.href = baseUrl + '/humanConfigs/' + projectId
+                }
+            })
+        }
     })
 
     $("#predict-end-date").datetimepicker({

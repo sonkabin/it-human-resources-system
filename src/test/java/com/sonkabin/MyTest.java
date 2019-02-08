@@ -13,7 +13,7 @@ public class MyTest {
         list.add(1);
         list.add(2);
         int size = list.size();
-        int[] a = new int[size];
+        int[] a = {1,2};
         Iterator<Integer> iterator = list.iterator();
         while (iterator.hasNext()) {
 

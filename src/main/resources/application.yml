@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: sunjiamin
-    url: jdbc:mysql://localhost:3306/db_it_human_resources?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/db_it_human_resources?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     #配置数据源
     type: com.alibaba.druid.pool.DruidDataSource

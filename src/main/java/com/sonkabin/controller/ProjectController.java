@@ -3,6 +3,7 @@ package com.sonkabin.controller;
 
 import com.sonkabin.dto.ProjectDTO;
 import com.sonkabin.entity.Project;
+import com.sonkabin.entity.ProjectHistory;
 import com.sonkabin.utils.Message;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.sonkabin.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  *
@@ -38,6 +41,11 @@ public class ProjectController {
     @GetMapping("/projectContribute/{id}")
     public Message getHumanContributeDetail (@PathVariable("id") Integer id) {
         return projectService.getHumanDetailByProjectId(id);
+    }
+    @ResponseBody
+    @PutMapping("/projectContribute")
+    public Message updateHumanContributeDetail (@RequestBody List<ProjectHistory> projectHistories) {
+        return projectService.updateHumanContributeDetail(projectHistories);
     }
 
     @ResponseBody

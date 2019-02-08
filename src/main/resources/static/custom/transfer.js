@@ -1,5 +1,6 @@
 /**
  * Created by Liang on 2017/10/9.
+ * Updated by sonkabin on 2019/2/7
  */
 !(function(factory){
     if (typeof define === "function" && (define.amd || define.cmd) && !jQuery) {
@@ -103,7 +104,7 @@
                                        t.opts.data.right.splice(k,1);
                                    }
                                })
-                               console.log(v)
+                               // console.log(v)
                                t.opts.data.left.push(v);
                            }):isnull=true;
                            break;
@@ -127,7 +128,7 @@
                                    }
                                })
                                t.opts.data.right.push(v);
-                               console.log(v)
+                               // console.log(v)
                            }):isnull=true;
                            break;
                        case 4:

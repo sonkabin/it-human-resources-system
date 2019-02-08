@@ -2,14 +2,8 @@ package com.sonkabin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.sonkabin.dto.RecalculateDTO;
-import com.sonkabin.entity.Employee;
-import com.sonkabin.entity.HumanConfig;
-import com.sonkabin.entity.Project;
-import com.sonkabin.entity.ProjectHistory;
-import com.sonkabin.mapper.EmployeeMapper;
-import com.sonkabin.mapper.HumanConfigMapper;
-import com.sonkabin.mapper.ProjectHistoryMapper;
-import com.sonkabin.mapper.ProjectMapper;
+import com.sonkabin.entity.*;
+import com.sonkabin.mapper.*;
 import com.sonkabin.service.HumanConfigService;
 import com.sonkabin.utils.Message;
 import com.sonkabin.utils.MyUtil;
@@ -41,12 +35,14 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     private ProjectHistoryMapper projectHistoryMapper;
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private SkillMapper skillMapper;
 
     @Override
     public Message calculateHumans(Integer projectId) {
         Project project = projectMapper.selectById(projectId);
 
-        Map<String, Integer> map = calculateWorkload(project, 0);
+        Map<String, Integer> map = calculateWorkload(project);
 
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
@@ -75,10 +71,12 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         calculateCandidates(map, employees, size, portions, indexes, candidates, candidatePortions);
         // 移除候选员工后剩余的员工，因为需要将portions同步更新，需要自己写移除方法
 //        employees.removeAll(candidates);
-        int j = 0;
-        j = removeCandidates(employees, portions, candidates, j);
-        int[] empPortions = new int[j];
-        System.arraycopy(portions, 0, empPortions, 0, j);
+        int j = removeCandidates(employees, portions, candidates);
+        int[] empPortions = null;
+        if (j > 0) {
+            empPortions = new int[j];
+            System.arraycopy(portions, 0, empPortions, 0, j);
+        }
 
         return Message.success().put("project", project).put("employees", employees).put("portions", empPortions).put("candidates", candidates).put("candidatePortions",candidatePortions);
     }
@@ -112,6 +110,44 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             indexes[maxIndex] = temp;
         }
     }
+    private void calculateCandidates(Map<String, Integer> map, List<Employee> employees, int size, int[] portions, int[] indexes, List<Employee> candidates, List<Integer> candidatePortions) {
+        int j = 0;
+        while (map.size() > 0) {
+            if (j == size) { // 防止不能满足条件时出现死循环
+                break;
+            }
+            // 遍历map，移去值小于0的entry
+            Iterator<Map.Entry<String, Integer>> iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Integer> entry = iterator.next();
+                if (entry.getValue() <= 0) {
+                    iterator.remove();
+                }
+            }
+            boolean flag = false;
+            // 获取能力最大值的索引
+            int index = indexes[j++];
+            int portion = portions[index];
+            if (portion <= 0) {
+                continue; // 工作时间小于等于0的人不用考虑
+            }
+            String skills = employees.get(index).getSkills();
+            String[] skill = skills.split(";");
+            for (String s : skill) {
+                String[] info = s.split(":");
+                String skillName = info[0];
+                if (map.containsKey(skillName)) {
+                    flag = true;
+                    map.put(skillName, map.get(skillName) - (int) (MyUtil.getAbility(info[1]) * portion * 1.0 / 100));
+                }
+            }
+            if (flag) {
+                candidates.add(employees.get(index));
+                candidatePortions.add(portion);
+            }
+        }
+    }
+
 
     /**
      * 计算项目所需的工作量
@@ -122,25 +158,24 @@ public class HumanConfigServiceImpl implements HumanConfigService {
      * 7-14        8-19      9-24
      * 项目肯定是越早完成越好，所以贪心算法是适用的
      * 项目工作量=（预计结束时间-现在时间）* 人数 * 5级技能的能力
-     * @param count 增加的工作量，主要是人力资源再分配时使用
      * @return 每项技能所需要的工作量
      */
-    private Map<String, Integer> calculateWorkload(Project project, int count) {
+    private Map<String, Integer> calculateWorkload(Project project) {
         Map<String, Integer> map = new HashMap<>(32);
         String frontEndSkill = project.getFrontEndSkill();
         String[] fess = frontEndSkill.split(",");
         for (String fes : fess) {
-            map.put(fes, MyUtil.getAbility("5") * (project.getFrontEndNum() + count));
+            map.put(fes, MyUtil.getAbility("5") * project.getFrontEndNum());
         }
         String backEndSkill = project.getBackEndSkill();
         String[] bess = backEndSkill.split(",");
         for (String bes : bess) {
-            map.put(bes, MyUtil.getAbility("5") * (project.getBackEndNum() + count));
+            map.put(bes, MyUtil.getAbility("5") * project.getBackEndNum());
         }
         String dbSkill = project.getDbSkill();
         String[] dbss = dbSkill.split(",");
         for (String dbs : dbss) {
-            map.put(dbs, MyUtil.getAbility("5") * (project.getDbNum() + count));
+            map.put(dbs, MyUtil.getAbility("5") * project.getDbNum());
         }
         Employee manager = MyUtil.getSessionEmployee("loginEmp");
         // 移去项目经理的能力值
@@ -170,7 +205,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
 
     @Transactional
     @Override
-    public Message saveConfig(List<HumanConfig> configs) {
+    public Message startProject(List<HumanConfig> configs) {
         LocalDateTime now = LocalDateTime.now();
         configs.forEach((config) -> {
             config.setStatus(1);
@@ -184,6 +219,25 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         project.setStatus(1);
         project.setGmtModified(now);
         project.setStartDate(LocalDate.now());
+        projectMapper.updateById(project);
+        return Message.success();
+    }
+
+    @Transactional
+    @Override
+    public Message saveConfig(List<HumanConfig> configs, LocalDate endDate) {
+        LocalDateTime now = LocalDateTime.now();
+        configs.forEach((config) -> {
+            config.setStatus(1);
+            config.setGmtCreate(now);
+            config.setGmtModified(now);
+        });
+        humanConfigMapper.insertBatch(configs);
+        Integer projectId = configs.get(0).getProjectId();
+        Project project = new Project();
+        project.setId(projectId);
+        project.setGmtModified(now);
+        project.setPredictEnd(endDate);
         projectMapper.updateById(project);
         return Message.success();
     }
@@ -226,14 +280,14 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     public Message getOtherEmployees(Integer projectId) {
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(HumanConfig::getProjectId, projectId).eq(HumanConfig::getStatus, 1);
-        // 当前项目的人员配置
+        // 项目当前的人员配置
         List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
         LambdaQueryWrapper<Employee> employeeLambdaQueryWrapper = new LambdaQueryWrapper<>();
         employeeLambdaQueryWrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
         employeeLambdaQueryWrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(employeeLambdaQueryWrapper);
         // 移除当前项目的人员
-        removeCurrentEmployees(humanConfigs, employees, false, null);
+        removeCurrentEmployees(humanConfigs, employees);
 
         // 查询员工工作时间比例
         List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
@@ -248,28 +302,33 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         // 计算员工剩余工作时间比例
         calculatePortions(humanConf, size, portions, empIndex);
         // 移除剩余工作时间比例小于等于0的员工
-        int j = 0;
         Iterator<Employee> iterator = employees.iterator();
+        int[] copy = new int[size];
+        System.arraycopy(portions, 0, copy, 0, size);
+        int j=0, k=0;
         while (iterator.hasNext()) {
             iterator.next();
-            if (portions[j] <= 0) {
+            int temp = copy[k++];
+            if (temp <= 0) {
                 iterator.remove();
-                portions[j] = portions[j + 1];
             } else {
-                j++;
+                portions[j++] = temp;
             }
         }
-        int[] empPortions = new int[j];
-        System.arraycopy(portions, 0, empPortions, 0, j);
+
+        int[] empPortions = null;
+        if (j > 0) {
+            empPortions = new int[j];
+            System.arraycopy(portions, 0, empPortions, 0, j);
+        }
 
         return Message.success().put("employees", employees).put("portions", empPortions);
     }
 
     /**
      * 移除当前项目的人员
-     * @param flag 为true表示同时移除当前项目成员的工作量
      */
-    private void removeCurrentEmployees(List<HumanConfig> humanConfigs, List<Employee> employees, boolean flag, Map<String, Integer> map) {
+    private void removeCurrentEmployees(List<HumanConfig> humanConfigs, List<Employee> employees) {
         List<HumanConfig> copy = new LinkedList<>(humanConfigs);
         Iterator<Employee> iterator = employees.iterator();
         while (iterator.hasNext()) {
@@ -278,17 +337,6 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             while (humanConfigIterator.hasNext()) {
                 HumanConfig humanConfig = humanConfigIterator.next();
                 if (humanConfig.getEmpId().compareTo(employee.getId()) == 0) {
-                    if (flag) {
-                        String skills = employee.getSkills();
-                        String[] skill = skills.split(";");
-                        for (String i : skill) {
-                            String[] info = i.split(":");
-                            String skillName = info[0]; // 技能名, info[1]为技能等级
-                            if (map.containsKey(skillName)) {
-                                map.put(skillName, map.get(skillName) - (int)(MyUtil.getAbility(info[1])));
-                            }
-                        }
-                    }
                     iterator.remove();
                     humanConfigIterator.remove();
                     break;
@@ -309,20 +357,15 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         return Message.success();
     }
 
+    /*
+    当某一端人员不足时，不会自动解决
+     */
     @Override
     public Message recalculate(RecalculateDTO recalculateDTO) {
         Integer projectId = recalculateDTO.getProjectId();
         Project project = projectMapper.selectById(projectId);
-        // 两个日期之间间隔天数
-        LocalDate predictEnd = project.getPredictEnd();
-        LocalDate endDate = recalculateDTO.getEndDate();
-        long minus = predictEnd.toEpochDay() - endDate.toEpochDay();
-        // 比如：提前10天完成，这10天的工作量分配给某人，某人在现在到结束这个时间段能完成即可
-        // 以每提前一个5天为一份工作量记
-        int count = 0;
-        count += minus / 5;
         // 计算项目工作量
-        Map<String, Integer> map = calculateWorkload(project, count);
+        Map<String, Integer> map = calculateWorkload(project);
 
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(HumanConfig::getProjectId, projectId).eq(HumanConfig::getStatus, 1);
@@ -333,7 +376,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         employeeLambdaQueryWrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(employeeLambdaQueryWrapper);
         // 移除当前项目的人员
-        removeCurrentEmployees(humanConfigs, employees, true, map);
+        removeCurrentEmployees(humanConfigs, employees);
 
         // 查询员工工作时间比例
         List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
@@ -353,69 +396,88 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         int[] indexes = new int[size];
         calculateEmployeeWithSort(employees, size, portions, available, indexes);
 
+        // 两个日期之间间隔天数
+        LocalDate predictEnd = project.getPredictEnd();
+        LocalDate endDate = recalculateDTO.getEndDate();
+        long minus = predictEnd.toEpochDay() - endDate.toEpochDay();
+        // 以每提前一个10天为项目增加一个前台人员和后台人员
+        int num = 0, frontNum = 0, backNum = 0;
+        num += minus / 10;
+        num *= 2;
         // 计算候选人员
         List<Employee> candidates = new LinkedList<>();
         List<Integer> candidatePortions = new LinkedList<>();
-        calculateCandidates(map, employees, size, portions, indexes, candidates, candidatePortions);
-        // 移除候选员工后剩余的员工
-        int j = 0;
-        j = removeCandidates(employees, portions, candidates, j);
-        int[] empPortions = new int[j];
-        System.arraycopy(portions, 0, empPortions, 0, j);
-
-        return Message.success().put("humanConfigs", humanConfigs).put("employees", employees).put("empPortions", empPortions)
-                .put("candidates", candidates).put("candidatePortions", candidatePortions);
-    }
-
-    private int removeCandidates(List<Employee> employees, int[] portions, List<Employee> candidates, int j) {
-        Iterator<Employee> iterator = employees.iterator();
-        while (iterator.hasNext()) {
-            if (candidates.contains(iterator.next()) || portions[j] <= 0) {
-                iterator.remove();
-                portions[j] = portions[j + 1];
-            } else {
-                j++;
-            }
-        }
-        return j;
-    }
-
-    private void calculateCandidates(Map<String, Integer> map, List<Employee> employees, int size, int[] portions, int[] indexes, List<Employee> candidates, List<Integer> candidatePortions) {
-        int j = 0;
-        while (map.size() > 0) {
-            if (j == size) { // 防止不能满足条件时出现死循环
+        LambdaQueryWrapper<Skill> skillLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        skillLambdaQueryWrapper.eq(Skill::getDomain, "前端");
+        List<Skill> frontEndSkills = skillMapper.selectList(skillLambdaQueryWrapper);
+        skillLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        skillLambdaQueryWrapper.eq(Skill::getDomain, "后端");
+        List<Skill> backEndSkills = skillMapper.selectList(skillLambdaQueryWrapper);
+        for (int i = 0; i < size; i++) {
+            if (frontNum + backNum == num) { // 优化
                 break;
             }
-            // 遍历map，移去值小于0的entry
-            Iterator<Map.Entry<String, Integer>> iterator = map.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Integer> entry = iterator.next();
-                if (entry.getValue() <= 0) {
-                    iterator.remove();
-                }
-            }
-            boolean flag = false;
-            int index = indexes[j++];
+            int frontCount = 0;
+            int backCount = 0;
+            int index = indexes[i];
             int portion = portions[index];
             if (portion <= 0) {
                 continue; // 工作时间小于等于0的人不用考虑
             }
             String skills = employees.get(index).getSkills();
-            String[] skill = skills.split(";");
-            for (String s : skill) {
-                String[] info = s.split(":");
-                String skillName = info[0];
-                if (map.containsKey(skillName)) {
-                    flag = true;
-                    map.put(skillName, map.get(skillName) - (int) (MyUtil.getAbility(info[1]) * portion * 1.0 / 100));
+            for (Skill each : frontEndSkills) {
+                if (skills.contains(each.getSkillName())) {
+                    frontCount++;
                 }
             }
-            if (flag) {
+            for (Skill each : backEndSkills) {
+                if (skills.contains(each.getSkillName())) {
+                    backCount++;
+                }
+            }
+            if (frontNum != num /2 && frontCount > backCount) { // 是前端人员
+                frontNum++;
+                candidates.add(employees.get(index));
+                candidatePortions.add(portion);
+            } else if (backNum != num /2 && frontCount <= backCount){ // 后端人员
+                backNum++;
                 candidates.add(employees.get(index));
                 candidatePortions.add(portion);
             }
+
         }
+        // 移除候选员工后剩余的员工
+        int j = removeCandidates(employees, portions, candidates);
+        int[] empPortions = null;
+        if (j > 0) {
+            empPortions = new int[j];
+            System.arraycopy(portions, 0, empPortions, 0, j);
+        }
+
+        return Message.success().put("employees", employees).put("empPortions", empPortions)
+                .put("candidates", candidates).put("candidatePortions", candidatePortions);
     }
 
+    private int removeCandidates(List<Employee> employees, int[] portions, List<Employee> candidates) {
+        Iterator<Employee> iterator = employees.iterator();
+        // 若员工需要全部加入到候选者中，直接返回
+        if (employees.size() == candidates.size()) {
+            return -1;
+        }
+        int len = portions.length;
+        int[] copy = new int[len];
+        System.arraycopy(portions, 0, copy, 0, len);
+        int j = 0, k = 0;
+        while (iterator.hasNext()) {
+            int temp = copy[k++];
+            // 若候选人中包含员工或者工作时间比例小于等于0，需移除
+            if (candidates.contains(iterator.next()) || temp <= 0) {
+                iterator.remove();
+            } else {
+                portions[j++] = temp;
+            }
+        }
+        return j;
+    }
 
 }

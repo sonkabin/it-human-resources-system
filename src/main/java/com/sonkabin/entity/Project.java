@@ -36,19 +36,13 @@ public class Project implements Serializable {
 
     private Integer frontEndNum;
 
-    private String frontEndCur;
-
     private String backEndSkill;
 
     private Integer backEndNum;
 
-    private String backEndCur;
-
     private String dbSkill;
 
     private Integer dbNum;
-
-    private String dbCur;
 
     /**
      * 项目经理id
@@ -125,14 +119,6 @@ public class Project implements Serializable {
         this.frontEndNum = frontEndNum;
     }
 
-    public String getFrontEndCur() {
-        return frontEndCur;
-    }
-
-    public void setFrontEndCur(String frontEndCur) {
-        this.frontEndCur = frontEndCur;
-    }
-
     public String getBackEndSkill() {
         return backEndSkill;
     }
@@ -149,14 +135,6 @@ public class Project implements Serializable {
         this.backEndNum = backEndNum;
     }
 
-    public String getBackEndCur() {
-        return backEndCur;
-    }
-
-    public void setBackEndCur(String backEndCur) {
-        this.backEndCur = backEndCur;
-    }
-
     public String getDbSkill() {
         return dbSkill;
     }
@@ -171,14 +149,6 @@ public class Project implements Serializable {
 
     public void setDbNum(Integer dbNum) {
         this.dbNum = dbNum;
-    }
-
-    public String getDbCur() {
-        return dbCur;
-    }
-
-    public void setDbCur(String dbCur) {
-        this.dbCur = dbCur;
     }
 
     public Integer getManagerId() {
@@ -248,25 +218,23 @@ public class Project implements Serializable {
     @Override
     public String toString() {
         return "Project{" +
-        "id=" + id +
-        ", projectName=" + projectName +
-        ", background=" + background +
-        ", frontEndSkill=" + frontEndSkill +
-        ", frontEndNum=" + frontEndNum +
-        ", frontEndCur=" + frontEndCur +
-        ", backEndSkill=" + backEndSkill +
-        ", backEndNum=" + backEndNum +
-        ", backEndCur=" + backEndCur +
-        ", dbSkill=" + dbSkill +
-        ", dbNum=" + dbNum +
-        ", dbCur=" + dbCur +
-        ", managerId=" + managerId +
-        ", status=" + status +
-        ", predictStart=" + predictStart +
-        ", startDate=" + startDate +
-        ", predictEnd=" + predictEnd +
-        ", gmtCreate=" + gmtCreate +
-        ", gmtModified=" + gmtModified +
-        "}";
+                "id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", background='" + background + '\'' +
+                ", frontEndSkill='" + frontEndSkill + '\'' +
+                ", frontEndNum=" + frontEndNum +
+                ", backEndSkill='" + backEndSkill + '\'' +
+                ", backEndNum=" + backEndNum +
+                ", dbSkill='" + dbSkill + '\'' +
+                ", dbNum=" + dbNum +
+                ", managerId=" + managerId +
+                ", managerName='" + managerName + '\'' +
+                ", status=" + status +
+                ", predictStart=" + predictStart +
+                ", startDate=" + startDate +
+                ", predictEnd=" + predictEnd +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }

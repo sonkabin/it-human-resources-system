@@ -4,6 +4,7 @@ import com.sonkabin.dto.RecalculateDTO;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,7 +17,9 @@ import java.util.List;
  */
 public interface HumanConfigService{
 
-    Message saveConfig(List<HumanConfig> configs);
+    Message startProject(List<HumanConfig> configs);
+
+    Message saveConfig(List<HumanConfig> configs, LocalDate endDate);
 
     Message getHumanConfigs(Integer projectId);
 

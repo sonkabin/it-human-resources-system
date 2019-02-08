@@ -4,6 +4,7 @@ package com.sonkabin.controller;
 import com.sonkabin.dto.RecalculateDTO;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +36,15 @@ public class HumanConfigController {
 
     // 保存项目人员配置，并启动项目
     @ResponseBody
+    @PostMapping("/startProject")
+    public Message startProject (@RequestBody List<HumanConfig> configs) {
+        return humanConfigService.startProject(configs);
+    }
+    // 保存项目人员配置，并启动项目
+    @ResponseBody
     @PostMapping("/humanConfig")
-    public Message saveConfig (@RequestBody List<HumanConfig> configs) {
-        return humanConfigService.saveConfig(configs);
+    public Message saveConfig (@RequestBody List<HumanConfig> configs, @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("endDate") LocalDate endDate) {
+        return humanConfigService.saveConfig(configs, endDate);
     }
 
     @GetMapping("/humanConfigs/{id}")

@@ -8,7 +8,6 @@ import com.sonkabin.entity.Employee;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.entity.Project;
 import com.sonkabin.entity.ProjectHistory;
-import com.sonkabin.mapper.EmployeeMapper;
 import com.sonkabin.mapper.HumanConfigMapper;
 import com.sonkabin.mapper.ProjectHistoryMapper;
 import com.sonkabin.mapper.ProjectMapper;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -102,19 +102,40 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Message finishProject(Integer id) {
         LocalDateTime now = LocalDateTime.now();
-        // 更新项目状态
-        Project project = new Project();
-        project.setId(id);
+        // 1.更新项目状态
+        Project project = projectMapper.selectById(id);
         project.setStatus(2);
         project.setGmtModified(now);
         projectMapper.updateById(project);
-        // 释放项目人力资源
+        // 2.释放项目人力资源
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(HumanConfig::getProjectId, id);
+        wrapper.eq(HumanConfig::getProjectId, id).eq(HumanConfig::getStatus, 1); // 获得当前项目仍占用的人力资源
+        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
         HumanConfig config = new HumanConfig();
         config.setGmtModified(now);
         config.setStatus(2);
         humanConfigMapper.update(config, wrapper);
+        // 3.排除已在贡献表中有的成员
+        LambdaQueryWrapper<ProjectHistory> projectHistoryLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        projectHistoryLambdaQueryWrapper.eq(ProjectHistory::getProjectId, project.getId());
+        List<ProjectHistory> projectHistories = projectHistoryMapper.selectList(projectHistoryLambdaQueryWrapper);
+        Iterator<HumanConfig> iterator = humanConfigs.iterator();
+        while (iterator.hasNext()) {
+            HumanConfig humanConfig = iterator.next();
+            for (ProjectHistory history : projectHistories) {
+                if (humanConfig.getEmpId().compareTo(history.getEmpId())  == 0) {
+                    iterator.remove();
+                }
+            }
+        }
+        // 4.插入成员贡献数据
+        projectHistoryMapper.insertBatch(project, humanConfigs);
+        return Message.success();
+    }
+
+    @Override
+    public Message updateHumanContributeDetail(List<ProjectHistory> projectHistories) {
+        projectHistoryMapper.updateBatch(projectHistories);
         return Message.success();
     }
 }

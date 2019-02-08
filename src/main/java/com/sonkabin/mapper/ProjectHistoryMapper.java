@@ -1,7 +1,12 @@
 package com.sonkabin.mapper;
 
+import com.sonkabin.entity.HumanConfig;
+import com.sonkabin.entity.Project;
 import com.sonkabin.entity.ProjectHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +18,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface ProjectHistoryMapper extends BaseMapper<ProjectHistory> {
 
+    void insertBatch(@Param("project") Project project, @Param("humanConfigs") List<HumanConfig> humanConfigs);
+
+    void updateBatch(@Param("list") List<ProjectHistory> projectHistories);
 }

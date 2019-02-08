@@ -241,15 +241,14 @@
             })
             // console.log(data)
             $.ajax({
-                url: baseUrl + '/humanConfig',
+                url: baseUrl + '/startProject',
                 method: 'POST',
                 data: JSON.stringify(data),
                 dataType: 'json',
                 contentType: "application/json",
                 success: function () {
-                    toastr.success('项目已启动', '提示', {timeOut: 1000})
                     // 我醉了....
-                    window.location.href = baseUrl + '/project.html'
+                    window.location.href = baseUrl + '/humanConfigs/' + projectId
                 }
             })
         }

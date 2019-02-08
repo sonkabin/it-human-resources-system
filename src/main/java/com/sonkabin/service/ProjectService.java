@@ -2,7 +2,10 @@ package com.sonkabin.service;
 
 import com.sonkabin.dto.ProjectDTO;
 import com.sonkabin.entity.Project;
+import com.sonkabin.entity.ProjectHistory;
 import com.sonkabin.utils.Message;
+
+import java.util.List;
 
 /**
  * <p>
@@ -27,4 +30,6 @@ public interface ProjectService{
     Message updateProjectInformation(Integer id, Project project);
 
     Message finishProject(Integer id);
+
+    Message updateHumanContributeDetail(List<ProjectHistory> projectHistories);
 }
