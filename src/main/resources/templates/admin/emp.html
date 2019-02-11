@@ -312,10 +312,10 @@
             data: $('#add-form').serialize(),
             success: function () {
                 toastr.success(msg + '成功', '提示', {timeOut: 1000})
+                $('#myModal').modal('hide')
                 initTable()
             }
         })
-        $('#myModal').modal('hide')
     })
 
     // 查看员工详细信息

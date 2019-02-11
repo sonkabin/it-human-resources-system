@@ -46,10 +46,58 @@
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
-                    <li class="breadcrumb-item active">个人资料管理</li>
+                    <li class="breadcrumb-item active">培训管理</li>
                 </ul>
             </div>
 
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">培训列表</h3>
+                                </div>
+                                <br>
+                                <div>
+                                    <!-- search-from -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="start-date" class="form-control-label offset-sm-1">开始日期</label>
+                                            <input id="start-date" name="startDate" type="text" class="col-sm-8 form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="end-date" class="form-control-label offset-sm-1">结束日期</label>
+                                            <input id="end-date" name="endDate" type="text" class="col-sm-8 form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="toolbar" class="btn-group">
+                                    <button id="project-add-btn" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>填写培训需求
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="train-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -74,7 +122,136 @@
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
 <script type="text/javascript">
+    $(function(){
+        initTable()
+    })
 
+    function initTable() {
+        $('#project-table').bootstrapTable('destroy')
+        $('#project-table').bootstrapTable({
+            url: 'http://localhost:8080/projects',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 5, // 每页的记录行数
+            pageList: [5, 10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            //height: 500,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: true, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    status: $('#search-status').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'projectName',
+                title: '项目名'
+            }, {
+                field: 'background',
+                title: '项目背景'
+            }, {
+                field: 'frontEndSkill',
+                title: '前端所需技术',
+            }, {
+                field: 'frontEndNum',
+                title: '前端所需人数'
+            }, {
+                field: 'backEndSkill',
+                title: '后端所需技术',
+            }, {
+                field: 'backEndNum',
+                title: '后端所需人数'
+            }, {
+                field: 'dbSkill',
+                title: '数据库所需技术',
+            }, {
+                field: 'dbNum',
+                title: '数据库所需人数'
+            }, {
+                field: 'status',
+                title: '项目状态',
+                formatter: function (value) {
+                    if (value == 0) {
+                        return '未启动'
+                    } else if (value == 1) {
+                        return '进行中'
+                    } else {
+                        return '已完成'
+                    }
+                }
+            }, {
+                field: 'predictStart',
+                title: '预计开始日期'
+            }, {
+                field: 'startDate',
+                title: '开始日期'
+            },  {
+                field: 'predictEnd',
+                title: '预计结束日期'
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    // console.log(value)
+                    var id = value
+                    var result = ''
+
+                    if (row.status == 0) {
+                        // 未启动的项目的按钮
+                        result += '<button class="btn btn-success btn-sm config-btn" project-id='+ id + '>准备启动</button> '
+                        result += '<button class="btn btn-primary btn-sm edit-project-btn" project-id='+ id + '>编辑项目</button> '
+                        result += '<button class="btn btn-danger btn-sm del-project-btn" project-id='+ id + '>删除项目</button> '
+                    } else if (row.status == 1) {
+                        // 进行中的项目有成员调动按钮和加快项目进度的按钮
+                        result += '<button class="btn btn-primary btn-sm dispatch-btn" project-id='+ id + '>成员调动</button> '
+                        result += '<button class="btn btn-primary btn-sm speedup-btn" project-id='+ id + '>加快项目进度</button> '
+                        result += '<button class="btn btn-success btn-sm finish-btn" project-id='+ id + '>项目完成</button> '
+                    } else {
+                        result += '<button class="btn btn-info btn-sm contribute-btn" project-id=' + id + '>项目成员贡献</button> '
+                    }
+
+                    return result
+                }
+            }
+            ]
+        })
+    }
 </script>
 </body>
 </html>

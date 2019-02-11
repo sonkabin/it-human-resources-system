@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::sidebar(activeUrl='train.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
+                    <li class="breadcrumb-item active">培训管理</li>
+                </ul>
+            </div>
+
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">培训列表</h3>
+                                </div>
+                                <br>
+                                <div>
+                                    <!-- search-from -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="train-name" class="form-control-label offset-sm-1">课程名</label>
+                                            <input id="train-name" type="text" class="col-sm-8 form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="toolbar" class="btn-group">
+                                    <button id="train-add-btn" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增培训
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="train-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 新增培训模态框 -->
+            <div id="addTrainModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="addTrainModalLabel">新增培训</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="add-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">培训课程名</label>
+                                    <input name="name" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row" id="trains">
+                                    <label class="col-sm-3 col-form-label">具体信息</label>
+                                    <div class="form-group row col-sm-10 offset-sm-2">
+                                        <label class="col-form-label col-sm-2">开始时间</label>
+                                        <input type="text" class="form-control col-sm-3 train-date start-date" readonly>
+                                        <label class="col-form-label col-sm-2 offset-sm-1">结束时间</label>
+                                        <input type="text" class="form-control col-sm-3 train-date end-date" readonly>
+                                        <label class="col-form-label col-sm-2">培训内容</label>
+                                        <input type="text" class="form-control col-sm-8 train-content">
+                                        <label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger train-close">删除</button></label>
+                                    </div>
+                                    <a id="add-new-info-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_info('', '', '')">继续添加</a>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">培训领域</label>
+                                    <input name="domain" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">主讲人</label>
+                                    <input name="speaker" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">报名截止时间</label>
+                                    <input name="endTime" type="text" class="form-control col-sm-8" readonly id="end-time">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 查看培训人员模态框 -->
+            <div id="trainEmpModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >培训名单</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="col-sm-4 offset-sm-4">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>员工姓名</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="train-employee-tbody"></tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 查看培训具体信息模态框-->
+            <div id="trainDateModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >培训具体信息</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="col-sm-11">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>培训日期</th>
+                                            <th>开始结束时间</th>
+                                            <th>培训内容</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="train-date-tbody"></tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script type="text/javascript">
+    $(function(){
+        initTable()
+    })
+    // 搜索
+    $('#search-btn').click(function () {
+        initTable()
+    })
+    // 搜索栏重置
+    $('#search-reset').click(function () {
+        initTable()
+    })
+
+    $('#train-add-btn').click(function () {
+        $('#addTrainModal').modal()
+    })
+    $('#addTrainModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+        $('#trains').empty()
+        $('#trains').append('<label class="col-sm-3 col-form-label">具体信息</label>')
+        $('#trains').append('<a id="add-new-info-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_info()">继续添加</a>')
+        add_new_info('', '', '')
+    })
+    function add_new_info(begin, end, cont) {
+        var aNode = $('#add-new-info-btn')
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+        var label1 = $('<label class="col-form-label col-sm-2">开始时间</label>')
+        var begin = $('<input type="text" class="form-control col-sm-3 train-date start-date" readonly>').val(begin)
+        var label2 = $('<label class="col-form-label col-sm-2 offset-sm-1">结束时间</label>')
+        var end = $('<input type="text" class="form-control col-sm-3 train-date end-date" readonly>').val(end)
+        var label3 = $('<label class="col-form-label col-sm-2">培训内容</label>')
+        var content = $('<input type="text" class="form-control col-sm-8 train-content">').val(cont)
+        var btn = $('<label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger train-close">删除</button></label>')
+        div.append(label1).append(begin).append(label2).append(end).append(label3).append(content).append(btn)
+        aNode.before(div)
+    }
+    $(document).on('mouseenter ', '.train-date', function () {
+        $(this).datetimepicker({
+            format: "yyyy-mm-dd hh",
+            showMeridian: true,
+            autoclose: true,
+            todayBtn: true,
+            language: 'zh-CN',
+            minView: 1
+        })
+    })
+    $(document).on('click', '.train-close', function () {
+        var pNode = $(this).parent().parent()
+        pNode.remove()
+    })
+    $('#save-btn').click(function () {
+        // 收集培训具体信息
+        var time = ''
+        var startDates = $('.start-date')
+        var endDates = $('.end-date')
+        var contents = $('.train-content')
+        for (var i = 0; i < startDates.length; i++) {
+            // 检测
+            if ((startDate = $(startDates[i]).val()) == '' || (endDate = $(endDates[i]).val()) == '' || (content = $(contents[i]).val().trim()) == ''){
+                toastr.error('请填写完整信息', '提示', {timeOut: 2000})
+                return
+            }
+            var data = startDate.split(' ')
+            time += data[0] + ':' + data[1] + '-' + endDate.split(' ')[1] + ':' + content + ';'
+        }
+        time = time.substr(0, time.length - 1)
+        // console.log(time)
+        var method, url, msg
+        if ($(this)[0].innerHTML === '保存'){
+            url = baseUrl + '/admin/train'
+            method = 'POST'
+            msg = '保存'
+        } else {
+            url = baseUrl + '/admin/train/' + $(this).attr('edit-id')
+            method = 'PUT'
+            msg = '更新'
+        }
+        $.ajax({
+            url: url,
+            method: method,
+            data: $('#add-form').serialize() + '&' + $.param({'time': time}),
+            success: function () {
+                toastr.success(msg + '培训信息成功', '提示', {timeOut: 1000})
+                $('#addTrainModal').modal('hide')
+                initTable()
+            }
+        })
+    })
+
+    $(document).on('click', '.emp-view-btn', function () {
+        $('#train-employee-tbody').empty()
+        // console.log($(this).attr('emps') == 'null')
+        // console.log($(this).attr('emps') != null)
+        if ((emps = $(this).attr('emps')) != 'null') {
+            var employees = emps.split(';')
+            $.each(employees, function (index, item) {
+                var td = $('<td></td>').append(item)
+                $('<tr></tr>').append(td).appendTo('#train-employee-tbody')
+            })
+        }
+        $('#trainEmpModal').modal()
+    })
+
+    $(document).on('click', '.time-view-btn', function () {
+        $('#train-date-tbody').empty()
+        var dates = $(this).attr('time')
+        var data = dates.split(';')
+        $.each(data, function (index, item) {
+            var infos = item.split(":")
+            var dateTd = $('<td></td>').append(infos[0])
+            var lastTd = $('<td></td>').append(infos[1])
+            var contentTd = $('<td></td>').append(infos[2])
+            $('<tr></tr>').append(dateTd).append(lastTd).append(contentTd).appendTo('#train-date-tbody')
+        })
+        $('#trainDateModal').modal()
+    })
+
+    $(document).on('click', '.del-btn', function () {
+        if (confirm('确定要删除课程[' + $(this).attr('train-name') + ']吗?')) {
+            $.ajax({
+                url: baseUrl + '/admin/train/' + $(this).attr('train-id'),
+                method: 'DELETE',
+                success: function () {
+                    toastr.success('删除成功', '提示', {timeOut: 1000})
+                    initTable()
+                }
+            })
+        }
+    })
+    $(document).on('click', '.start-btn', function () {
+        var name = $(this).attr('train-name')
+        if (confirm('确定要开始课程[' + name + ']吗?')) {
+            $.ajax({
+                url: baseUrl + '/admin/train/start/' + $(this).attr('train-id'),
+                method: 'PUT',
+                success: function () {
+                    toastr.success('启动课程[' + name + ']成功', '提示', {timeOut: 1000})
+                    initTable()
+                }
+            })
+        }
+    })
+    $(document).on('click', '.finish-btn', function () {
+        $.ajax({
+            url: baseUrl + '/admin/train/finish/' + $(this).attr('train-id'),
+            method: 'PUT',
+            success: function () {
+                toastr.success('成功', '提示', {timeOut: 1000})
+                initTable()
+            }
+        })
+    })
+    $(document).on('click', '.edit-btn', function () {
+        var id = $(this).attr('train-id')
+        $.ajax({
+            url: baseUrl + '/admin/train/' + id,
+            method: 'GET',
+            success: function (result) {
+                var train = result.info.train
+                $('#addTrainModal input[name=name]').val(train.name)
+                $('#addTrainModal input[name=domain]').val(train.domain)
+                $('#addTrainModal input[name=speaker]').val(train.speaker)
+                $('#addTrainModal input[name=endTime]').val(LocalDateTimeFormatter(train.endTime))
+
+                $('#trains').empty()
+                $('#trains').append('<label class="col-sm-3 col-form-label">具体信息</label>')
+                $('#trains').append('<a id="add-new-info-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_info()">继续添加</a>')
+                var time = train.time
+                var data = time.split(';')
+                for (var i = 0; i < data.length -1; i++) {
+                    var infos = data[i].split(":")
+                    var t = infos[1].split('-')
+                    add_new_info(infos[0] + ' ' + t[0], infos[0] + ' ' + t[1], infos[2])
+                }
+                $('#addTrainModal').modal()
+            }
+        })
+        $('#addTrainModalLabel').text('更新培训')
+        $('#save-btn').text('更新')
+        $('#save-btn').attr('edit-id', id);
+    })
+
+    function initTable() {
+        $('#train-table').bootstrapTable('destroy')
+        $('#train-table').bootstrapTable({
+            url: baseUrl + '/admin/trains',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 5, // 每页的记录行数
+            pageList: [5, 10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    trainName: $('#train-name').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'name',
+                title: '培训课程名'
+            }, {
+                field: 'time',
+                title: '培训日期',
+                formatter: function (value) {
+                    var date = ""
+                    var each = value.split(';')
+                    for (var i = 0, len = each.length; i < len; i++) {
+                        date += each[i].split(':')[0]
+                        if (i < len - 1) {
+                            date += ','
+                        }
+                    }
+                    return date
+                }
+            }, {
+                field: 'domain',
+                title: '培训领域'
+            }, {
+                field: 'speaker',
+                title: '主讲人'
+            }, {
+                field: 'status',
+                title: '培训课程状态',
+                formatter: function (value) {
+                    if (value == 0) {
+                        return '未开始'
+                    } else if (value == 1) {
+                        return '进行中'
+                    } else {
+                        return '已结束'
+                    }
+                }
+            }, {
+                field: 'endTime',
+                title: '报名截止时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    // console.log(row)
+                    var id = value
+                    var result = ''
+
+                    result += '<button class="btn btn-primary btn-sm emp-view-btn" emps='+ row.emps + '>查看培训人员</button> '
+                    result += '&nbsp;'
+                    result += '<button class="btn btn-info btn-sm time-view-btn" time='+ row.time + '>培训具体信息</button> '
+                    if (row.status == 0) {
+                        result += '<button class="btn btn-primary btn-sm edit-btn" train-id='+ id + '>编辑</button> '
+                        result += '<button class="btn btn-success btn-sm start-btn" train-id='+ id + ' train-name=' + row.name + '>开始培训</button> '
+                        result += '<button class="btn btn-danger btn-sm del-btn" train-id='+ id + ' train-name=' + row.name + '>删除</button> '
+                    } else if (row.status == 1) {
+                        result += '<button class="btn btn-danger btn-sm finish-btn" train-id='+ id + '>结束培训</button> '
+                    }
+                    return result
+                }
+            }
+            ]
+        })
+    }
+
+    $("#end-time").datetimepicker({
+        format: "yyyy-mm-dd hh:00:00",
+        showMeridian: true,
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: 'top-right',
+        language: 'zh-CN',
+        minView: 1
+    })
+</script>
+<script th:src="@{/custom/custom.js}"></script>
+</body>
+</html>

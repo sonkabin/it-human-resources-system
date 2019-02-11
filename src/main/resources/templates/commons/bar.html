@@ -93,7 +93,7 @@
     <ul class="list-unstyled">
         <li class="active" th:class="${activeUrl=='index.html'? 'active' : ''}"><a href="/admin.html"> <i class="icon-home"></i>主页 </a></li>
         <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/manageEmp.html"> <i class="icon-padnote"></i>员工管理 </a></li>
-        <li><a href="#"> <i class="icon-padnote"></i>培训管理 </a></li>
+        <li th:class="${activeUrl=='train.html' ? 'active' : ''}"><a href="/manageTrain.html"> <i class="icon-padnote"></i>培训管理 </a></li>
         <li><a href="#"> <i class="fa fa-bar-chart"></i>报表管理 </a></li>
         <li><a href="#"> <i class="fa fa-bar-chart"></i>权限管理 </a></li>
         <li><a href="#"> <i class="fa fa-bar-chart"></i>账号设置 </a></li>
@@ -107,7 +107,7 @@
     </ul>
 </nav>
 
-<!-- 员工 Side Bar-->
+<!-- Employee Side Bar-->
 <nav class="side-navbar" th:fragment="employee-sidebar">
     <!-- Sidebar Header-->
     <div class="sidebar-header d-flex align-items-center">
@@ -128,7 +128,7 @@
                 <li th:class="${activeUrl=='accountManage.html' ? 'active' : ''}"><a href="/accountManage.html">账号设置</a></li>
             </ul>
         </li>
-        <li th:class="${activeUrl=='trainManage.html' ? 'active' : ''}"><a href="/trainManage.html"> <i class="icon-padnote"></i>培训管理 </a></li>
+        <li th:class="${activeUrl=='empTrainManage.html' ? 'active' : ''}"><a href="/trainManage.html"> <i class="icon-padnote"></i>培训管理 </a></li>
         <li th:class="${activeUrl=='projectInformation.html' ? 'active' : ''}"><a href="#" th:href="${session.loginEmp.roleId} == 1 ? '/projectInformation.html' : '/project.html'"> <i class="fa fa-bar-chart"></i>[[${session.loginEmp.roleId} == 1 ? '项目信息' : '项目管理']] </a></li>
         <li th:class="${activeUrl=='messageManage.html' ? 'active' : ''}"><a href="/messageManage.html"> <i class="fa fa-bar-chart"></i>消息管理 </a></li>
     </ul>

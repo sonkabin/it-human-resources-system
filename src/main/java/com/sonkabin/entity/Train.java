@@ -3,12 +3,14 @@ package com.sonkabin.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -38,13 +40,24 @@ public class Train implements Serializable {
     private String domain;
 
     /**
+     * 主讲人
+     */
+    private String speaker;
+
+    /**
      * 报名员工
      */
     private String emps;
 
     /**
+     * 培训课程状态，0表示未开始，1表示进行中，2表示已结束
+     */
+    private Integer status;
+
+    /**
      * 报名截止时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
     /**
@@ -122,17 +135,35 @@ public class Train implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public String getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(String speaker) {
+        this.speaker = speaker;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Train{" +
-        "id=" + id +
-        ", name=" + name +
-        ", time=" + time +
-        ", domain=" + domain +
-        ", emps=" + emps +
-        ", endTime=" + endTime +
-        ", gmtCreate=" + gmtCreate +
-        ", gmtModified=" + gmtModified +
-        "}";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", time='" + time + '\'' +
+                ", domain='" + domain + '\'' +
+                ", speaker='" + speaker + '\'' +
+                ", emps='" + emps + '\'' +
+                ", status=" + status +
+                ", endTime=" + endTime +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }
