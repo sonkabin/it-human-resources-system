@@ -19,4 +19,12 @@ public class MyTest {
 
         }
     }
+
+    // substring Test
+    @Test
+    public void test2 () {
+        String s = "zs;ls";
+        StringBuilder builder = new StringBuilder(s.substring(0, 0));
+        System.out.println(builder);
+    }
 }

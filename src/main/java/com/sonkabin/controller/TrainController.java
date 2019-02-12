@@ -21,6 +21,7 @@ public class TrainController {
     @Autowired
     private TrainService trainService;
 
+    //--------------- 管理员开始 -------------------------
     @ResponseBody
     @GetMapping("/admin/trains")
     public Message getAllTrains (TrainDTO trainDTO) {
@@ -62,7 +63,31 @@ public class TrainController {
     public Message deleteTrain (@PathVariable("id") Integer trainId) {
         return trainService.deleteTrain(trainId);
     }
+    //--------------- 管理员结束 -------------------------
 
+    //--------------- 员工开始 -------------------------
+    @ResponseBody
+    @GetMapping("/employee/trains")
+    public Message getNotFinishedTrains (TrainDTO trainDTO) {
+        return trainService.getNotFinishedTrains(trainDTO);
+    }
 
+    @ResponseBody
+    @PutMapping("/employee/train/join/{id}")
+    public Message joinTrain (@PathVariable("id") Integer trainId, @RequestParam("empName") String empName) {
+        return trainService.joinTrain(trainId, empName);
+    }
+
+    @ResponseBody
+    @PutMapping("/employee/train/quit/{id}")
+    public Message quitTrain (@PathVariable("id") Integer trainId, @RequestParam("empName") String empName) {
+        return trainService.quitTrain(trainId, empName);
+    }
+
+    @ResponseBody
+    @GetMapping("/employee/trains/history")
+    public Message getHistoryTrains (TrainDTO trainDTO) {
+        return trainService.getHistoryTrains(trainDTO);
+    }
 }
 

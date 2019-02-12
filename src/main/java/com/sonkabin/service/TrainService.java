@@ -27,4 +27,12 @@ public interface TrainService{
     Message startTrain(Integer trainId);
 
     Message finishTrain(Integer trainId);
+
+    Message getNotFinishedTrains(TrainDTO trainDTO);
+
+    Message joinTrain(Integer trainId, String empName);
+
+    Message quitTrain(Integer trainId, String empName);
+
+    Message getHistoryTrains(TrainDTO trainDTO);
 }

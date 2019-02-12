@@ -319,7 +319,7 @@
         $('#train-employee-tbody').empty()
         // console.log($(this).attr('emps') == 'null')
         // console.log($(this).attr('emps') != null)
-        if ((emps = $(this).attr('emps')) != 'null') {
+        if ((emps = $(this).attr('emps')) != '') {
             var employees = emps.split(';')
             $.each(employees, function (index, item) {
                 var td = $('<td></td>').append(item)
