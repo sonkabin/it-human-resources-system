@@ -240,6 +240,8 @@
     })
 
     $('#train-add-btn').click(function () {
+        $('#addTrainModalLabel').text('新增培训')
+        $('#save-btn').text('保存')
         $('#addTrainModal').modal()
     })
     $('#addTrainModal').on('hidden.bs.modal', function () {
@@ -392,10 +394,10 @@
 
                 $('#trains').empty()
                 $('#trains').append('<label class="col-sm-3 col-form-label">具体信息</label>')
-                $('#trains').append('<a id="add-new-info-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_info()">继续添加</a>')
+                $('#trains').append('<a id="add-new-info-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_info(\'\',\'\',\'\')">继续添加</a>')
                 var time = train.time
                 var data = time.split(';')
-                for (var i = 0; i < data.length -1; i++) {
+                for (var i = 0; i < data.length; i++) {
                     var infos = data[i].split(":")
                     var t = infos[1].split('-')
                     add_new_info(infos[0] + ' ' + t[0], infos[0] + ' ' + t[1], infos[2])
@@ -405,7 +407,7 @@
         })
         $('#addTrainModalLabel').text('更新培训')
         $('#save-btn').text('更新')
-        $('#save-btn').attr('edit-id', id);
+        $('#save-btn').attr('edit-id', id)
     })
 
     function initTable() {

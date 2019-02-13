@@ -55,9 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
         // 获取某个项目经理的项目，而不是所有项目
         wrapper.eq(Project::getManagerId, employee.getId());
         IPage<Project> result = projectMapper.selectPage(page, wrapper);
-        Message msg = Message.success().put("total", result.getTotal());
-        msg.put("rows", result.getRecords());
-        return msg;
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
     }
 
     @Override
