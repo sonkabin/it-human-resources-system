@@ -49,5 +49,22 @@ public class JobController {
     public Message finishJob (@PathVariable("id") Integer id) {
         return jobService.finishJob(id);
     }
+
+    /**
+     * 招聘者获取的job列表
+     * @param jobDTO
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/anon/jobs")
+    public Message getJobs (JobDTO jobDTO) {
+        return jobService.getJobs(jobDTO);
+    }
+
+    @ResponseBody
+    @GetMapping("/anon/job/{id}")
+    public Message getAnonJob (@PathVariable("id") Integer id) {
+        return jobService.getJob(id);
+    }
 }
 

@@ -17,7 +17,7 @@ import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
     /**
@@ -73,6 +73,7 @@ public class ShiroConfig {
         filterChainDefinitions.put("/","anon");
         filterChainDefinitions.put("/index.html","anon");
         filterChainDefinitions.put("/login.html","anon");
+        filterChainDefinitions.put("/recruit.html","anon");
         filterChainDefinitions.put("/custom/**", "anon");
         filterChainDefinitions.put("/css/**", "anon");
         filterChainDefinitions.put("/fonts/**", "anon");
@@ -97,7 +98,8 @@ public class ShiroConfig {
     @Bean
     @DependsOn("lifecycleBeanPostProcessor")//是一个String数组
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator(){
-        return new DefaultAdvisorAutoProxyCreator();
+        DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+        return defaultAdvisorAutoProxyCreator;
     }
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(){

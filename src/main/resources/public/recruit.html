@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>招聘页面</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="css/toastr.min.css">
+</head>
+<body>
+
+<div class="page">
+    <header class="header">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <div class="navbar-holder d-flex align-items-center justify-content-between">
+                    <!-- Navbar Header-->
+                    <div class="navbar-header">
+                        <!-- Navbar Brand -->
+                        <a href="/index.html" class="navbar-brand d-none d-sm-inline-block">
+                            <div class="brand-text d-none d-lg-inline-block"><span>IT企业人力资源管理系统 </span></div>
+                        </a>
+                        <a href="/recruit.html" class="navbar-brand d-none d-sm-inline-block">
+                            <div class="brand-text d-none d-lg-inline-block" style="padding-left: 30px;"><span>加入我们</span></div>
+                        </a>
+                        <a href="#" class="navbar-brand d-none d-sm-inline-block">
+                            <div class="brand-text d-none d-lg-inline-block" style="padding-left: 20px;"><span>关于我们</span></div>
+                        </a>
+                        <a href="#" class="navbar-brand d-none d-sm-inline-block">
+                            <div class="brand-text d-none d-lg-inline-block" style="padding-left: 20px;"><span>那些日子</span></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="page-content d-flex align-items-stretch">
+
+        <div class="content-inner" style="padding-left: 150px;">
+
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="search-career" class="form-control-label">职位关键字</label>
+                                            <input id="search-career" type="text" class="mr-3 form-control">
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="job-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+    <footer style="bottom: 0;width: 100%;background: #2f333e;color: #fff;padding: 20px 10px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6 text-right">
+                    <p>sonkabin &copy; 2019</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JobDescription模态框 -->
+    <div id="jdModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+        <div role="document" class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" >职位描述</h4>
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row" id="responsibility">
+                            <label class="col-sm-2  col-form-label">岗位职责</label>
+
+                        </div>
+                        <div class="form-group row" id="demand">
+                            <label class="col-sm-2  col-form-label">任职要求</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 申请职位模态框 -->
+    <div id="applyModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+        <div role="document" class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" >个人信息</h4>
+                    <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="add-form">
+                        <input type="hidden" name="jobId" id="jobId">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">姓名</label>
+                            <input name="applicantName" type="text" class="form-control col-sm-9" placeholder="姓名">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">手机</label>
+                            <input name="phone" type="text" class="form-control col-sm-9" placeholder="请输入手机号">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">邮箱</label>
+                            <input name="email" type="text" class="form-control col-sm-9" placeholder="example@qq.com">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">简历</label>
+                            <input name="resume" type="file" class="form-control col-sm-9">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="save-btn">提交</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/popper.js/umd/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+<script src="js/charts-home.js"></script>
+<script src="js/bootstrap-table.min.js"></script>
+<script src="js/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="js/toastr.min.js"></script>
+<!-- Main File-->
+<script src="js/front.js"></script>
+<script src="custom/custom.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        initTable()
+    })
+    $('#search-btn').click(function () {
+        initTable()
+    })
+    $('#search-reset').click(function () {
+        initTable()
+    })
+
+
+    $(document).on('click', '.jd-btn', function () {
+        var id = $(this).attr('id')
+        $.ajax({
+            url: baseUrl + '/anon/job/' + id,
+            method: 'GET',
+            success: function (result) {
+                var job = result.info.job
+                var responsibilities = job.responsibility.split(';')
+                var demand = job.demand.split(';')
+                $('#responsibility').empty()
+                $('#responsibility').append('<label class="col-sm-2  col-form-label">岗位职责</label>')
+                for (var i = 0; i < responsibilities.length; i++) {
+                    var div = $('<div class="form-group row col-sm-9 offset-sm-2"></div>')
+                    var span = $('<span class="form-control-plaintext"></span>').text((i + 1) + '、' + responsibilities[i])
+                    div.append(span)
+                    $('#responsibility').append(div)
+                }
+                $('#demand').empty()
+                $('#demand').append('<label class="col-sm-2  col-form-label">任职要求</label>')
+                for (var i = 0; i < demand.length; i++) {
+                    var div = $('<div class="form-group row col-sm-9 offset-sm-2"></div>')
+                    var span = $('<span class="form-control-plaintext"></span>').text((i + 1) + '、' + demand[i])
+                    div.append(span)
+                    $('#demand').append(div)
+                }
+                $('#jdModal').modal()
+            }
+        })
+
+    })
+
+    $(document).on('click', '.apply-btn', function () {
+        $('#jobId').val($(this).attr('id'))
+        $('#applyModal').modal()
+    })
+    $('#save-btn').click(function () {
+        var form = document.getElementById('add-form')
+        var formData = new FormData(form)
+        $.ajax({
+            url: baseUrl + '/anon/recruit',
+            method: 'POST',
+            data: formData,
+            processData:false,
+            contentType:false,
+            success: function () {
+                toastr.success('成功', '提示', {timeOut: 2000})
+                $('#applyModal').modal('hide')
+            }
+        })
+    })
+
+    $('#applyModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+    })
+
+    function initTable() {
+        $('#job-table').bootstrapTable('destroy')
+        $('#job-table').bootstrapTable({
+            url: baseUrl + '/anon/jobs',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 10, // 每页的记录行数
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    career: $('#search-career').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'career',
+                title: '招聘职位'
+            }, {
+                field: 'num',
+                title: '招聘人数'
+            }, {
+                field: 'eduBackground',
+                title: '学历要求'
+            }, {
+                field: 'experience',
+                title: '工作经验',
+                formatter: function (value) {
+                    if (value == 0) {
+                        return '无工作经验'
+                    } else {
+                        return value + '年'
+                    }
+                }
+            }, {
+                field: 'salary',
+                title: '薪资'
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    var id = value
+                    var result = ''
+
+                    result += '<button class="btn btn-primary btn-sm jd-btn" id= ' + id + '>职位描述</button> '
+                    result += '&nbsp;'
+                    result += '<button class="btn btn-info btn-sm apply-btn" id = '+ id + '>申请职位</button> '
+                    return result
+                }
+            }
+            ]
+        })
+    }
+</script>
+</body>
+</html>

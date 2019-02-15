@@ -14,13 +14,15 @@ import com.sonkabin.utils.Message;
  */
 public interface JobService{
 
- Message getAllJobs(JobDTO jobDTO);
+    Message getAllJobs(JobDTO jobDTO);
 
- Message getJob(Integer id);
+    Message getJobs(JobDTO jobDTO);
 
- Message saveJob(Job job);
+    Message getJob(Integer id);
 
- Message updateJob(Job job, Integer id);
+    Message saveJob(Job job);
 
- Message finishJob(Integer id);
+    Message updateJob(Job job, Integer id);
+
+    Message finishJob(Integer id);
 }

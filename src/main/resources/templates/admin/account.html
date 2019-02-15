@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::sidebar(activeUrl='account.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
+                    <li class="breadcrumb-item active">账号设置</li>
+                </ul>
+            </div>
+            <section class="forms">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">密码设置</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal" id="edit-form">
+                                        <input type="hidden" th:value="${session.loginEmp.id}" id="edit-id">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label" >初始密码</label>
+                                            <input name="oldPassword" type="password" class="col-sm-9 form-control" id="oldPassword">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label" >新密码</label>
+                                            <input name="newPassword" type="password" class="col-sm-9 form-control" id="newPassword">
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2  col-form-label" >重复新密码</label>
+                                            <input type="password" class="col-sm-9 form-control" id="confirmPassword">
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="card-footer ">
+                                    <button class="btn btn-primary" id="save-btn">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script th:src="@{/custom/custom.js}"></script>
+<script type="text/javascript">
+    $('#save-btn').click(function () {
+        var id = $('#edit-id').val()
+        var newPwd = $('#newPassword').val().trim()
+        var confirmPwd = $('#confirmPassword').val().trim()
+        var oldPassword = $('#oldPassword').val().trim()
+        if (oldPassword == '' || newPwd == '' || confirmPwd == '') {
+            toastr.error('请输入密码', '提示', {timeOut: 1000})
+            return
+        }
+        if (newPwd != confirmPwd) {
+            toastr.error('两次输入的密码不一致', '提示', {timeOut: 1000})
+            return
+        }
+        $.ajax({
+            url: baseUrl + '/setPassword/' + id,
+            method: 'PUT',
+            data: $('#edit-form').serialize(),
+            success: function (result) {
+                if (result.info.msg != null) {
+                    toastr.error(result.info.msg, '提示', {timeOut: 1000})
+                } else {
+                    toastr.success('密码更新成功', '提示', {timeOut: 1000})
+                }
+            }
+        })
+        $('#edit-form')[0].reset()
+    })
+</script>
+</body>
+</html>

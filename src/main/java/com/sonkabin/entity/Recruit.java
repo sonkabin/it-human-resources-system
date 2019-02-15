@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -27,13 +27,6 @@ public class Recruit implements Serializable {
      */
     private String applicantName;
 
-    private Integer age;
-
-    /**
-     * 求职意向
-     */
-    private String jobIntension;
-
     private String phone;
 
     private String email;
@@ -42,6 +35,8 @@ public class Recruit implements Serializable {
      * 简历在系统中存放的路径
      */
     private String resumePath;
+
+    private Integer jobId;
 
     /**
      * 处理情况
@@ -52,6 +47,8 @@ public class Recruit implements Serializable {
      * 处理人id
      */
     private Integer empId;
+
+    private String empName;
 
     private LocalDateTime gmtCreate;
 
@@ -72,22 +69,6 @@ public class Recruit implements Serializable {
 
     public void setApplicantName(String applicantName) {
         this.applicantName = applicantName;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getJobIntension() {
-        return jobIntension;
-    }
-
-    public void setJobIntension(String jobIntension) {
-        this.jobIntension = jobIntension;
     }
 
     public String getPhone() {
@@ -146,13 +127,27 @@ public class Recruit implements Serializable {
         this.gmtModified = gmtModified;
     }
 
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
     @Override
     public String toString() {
         return "Recruit{" +
         "id=" + id +
         ", applicantName=" + applicantName +
-        ", age=" + age +
-        ", jobIntension=" + jobIntension +
         ", phone=" + phone +
         ", email=" + email +
         ", resumePath=" + resumePath +

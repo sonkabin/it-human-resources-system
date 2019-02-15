@@ -24,7 +24,7 @@ public class LoginController {
         employeeService.login(empId, password);
         Employee loginEmp = (Employee) session.getAttribute("loginEmp");
         Integer id = loginEmp.getRoleId();
-        if (id == 4){ // 管理员
+        if (id == 3){ // 管理员
             return "redirect:/admin.html";
         } else if (id == 1 || id == 2) { // 员工和项目经理跳转到同一页面，项目模块需要单独处理
             return "redirect:/employee.html";

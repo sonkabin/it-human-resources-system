@@ -39,4 +39,9 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
 
+# 配置Shiro
+shiro:
+  loginUrl: /login.html
+  sessionManager:
+    sessionIdUrlRewritingEnabled: false
 

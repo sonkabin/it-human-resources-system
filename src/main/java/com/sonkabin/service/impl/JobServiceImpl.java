@@ -1,5 +1,6 @@
 package com.sonkabin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,13 +30,27 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public Message getAllJobs(JobDTO jobDTO) {
+        LambdaQueryWrapper<Job> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(!StringUtils.isEmpty(jobDTO.getCareer()), Job::getCareer, jobDTO.getCareer());
+        // 不用compare方法，因为必定是在-127到128之间
+        wrapper.eq(jobDTO.getStatus() != -1, Job::getStatus, jobDTO.getStatus());
+        IPage<Job> result = selectPage(jobDTO, wrapper);
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+    }
+
+    private IPage<Job> selectPage (JobDTO jobDTO, Wrapper<Job> wrapper) {
         Page<Job> page = new Page<>();
         page.setSize(jobDTO.getRows());
         page.setCurrent(jobDTO.getPage());
+        return jobMapper.selectPage(page, wrapper);
+    }
+
+    @Override
+    public Message getJobs(JobDTO jobDTO) {
         LambdaQueryWrapper<Job> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(!StringUtils.isEmpty(jobDTO.getCareer()), Job::getCareer, jobDTO.getCareer());
-        wrapper.eq(jobDTO.getStatus().compareTo(-1) != 0, Job::getStatus, jobDTO.getStatus());
-        IPage<Job> result = jobMapper.selectPage(page, wrapper);
+        wrapper.eq(Job::getStatus, 0);
+        IPage<Job> result = selectPage(jobDTO, wrapper);
         return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
     }
 
@@ -72,4 +87,5 @@ public class JobServiceImpl implements JobService {
         jobMapper.updateById(job);
         return Message.success();
     }
+
 }
