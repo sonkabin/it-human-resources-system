@@ -1,11 +1,12 @@
 package com.sonkabin.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
 import com.sonkabin.service.SkillService;
+import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -13,9 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2019-01-24
  */
 @Controller
-@RequestMapping("/skill")
 public class SkillController {
     @Autowired
-    private SkillService SkillService;
+    private SkillService skillService;
+
+    @ResponseBody
+    @GetMapping("/skills/group")
+    public Message getThreeSkillNames () {
+        return skillService.getThreeSkillNames();
+    }
 }
 

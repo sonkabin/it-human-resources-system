@@ -3,7 +3,9 @@ package com.sonkabin.controller;
 
 import com.sonkabin.dto.EmployeeDTO;
 import com.sonkabin.entity.Employee;
+import com.sonkabin.entity.Skill;
 import com.sonkabin.service.EmployeeService;
+import com.sonkabin.service.SkillService;
 import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  *
@@ -21,6 +24,8 @@ import javax.servlet.http.HttpSession;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private SkillService skillService;
 
     @ResponseBody
     @GetMapping("/emps")
@@ -73,6 +78,8 @@ public class EmployeeController {
         Employee employee = (Employee) session.getAttribute("loginEmp");
         Message msg = employeeService.getEmployeeSkills(employee.getId());
         model.addAttribute("employee", msg.getInfo().get("employee"));
+        List<String> skillNames = skillService.getAllSkillNames();
+        model.addAttribute("skillNames", skillNames);
         return "employee/skillManage";
     }
 }

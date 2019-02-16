@@ -1,6 +1,9 @@
 package com.sonkabin.service;
 
 import com.sonkabin.entity.Skill;
+import com.sonkabin.utils.Message;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,4 +15,7 @@ import com.sonkabin.entity.Skill;
  */
 public interface SkillService{
 
- }
+    List<String> getAllSkillNames();
+
+    Message getThreeSkillNames();
+}

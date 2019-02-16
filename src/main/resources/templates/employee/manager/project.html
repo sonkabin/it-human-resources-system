@@ -119,25 +119,25 @@
                                     <label class="col-sm-3 col-form-label">项目背景</label>
                                     <textarea rows="10" name="background" type="text" class="form-control col-sm-8"></textarea>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="front-end-skills">
                                     <label class="col-sm-3 col-form-label">前端所需技能</label>
-                                    <input name="frontEndSkill" type="text" class="col-sm-8 form-control">
+                                    <a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill('')">添加技能信息</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">前端所需人数</label>
-                                    <input name="frontEndNum" type="text" class="col-sm-8 form-control">
+                                    <input name="backEndNum" type="text" class="col-sm-8 form-control">
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" id="back-end-skills">
                                     <label class="col-sm-3 col-form-label">后端所需技能</label>
-                                    <input name="backEndSkill" type="text" class="col-sm-8 form-control">
+                                    <a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill('')">添加技能信息</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3  col-form-label" >后端所需人数</label>
                                     <input name="backEndNum" type="text" class="col-sm-8 form-control">
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-3  col-form-label">数据库所需技能</label>
-                                    <input name="dbSkill" type="text" class="col-sm-8 form-control">
+                                <div class="form-group row" id="db-skills">
+                                    <label class="col-sm-3 col-form-label">数据库所需技能</label>
+                                    <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill('')">添加技能信息</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3  col-form-label">数据库所需人数</label>
@@ -231,6 +231,7 @@
 <script src="js/front.js" th:src="@{/js/front.js}"></script>
 <script th:src="@{/custom/custom.js}"></script>
 <script type="text/javascript">
+    var frontEndSkills, backEndSkills, dbSkills
     $(function () {
         initTable()
     })
@@ -243,16 +244,20 @@
         initTable()
     })
 
-    // todo 新增项目还需进一步完善，即技能是可以选择的，而不是输入的
     $('#project-add-btn').click(function () {
-        // $.ajax({
-        //     url: baseUrl + '/roles',
-        //     method: 'GET',
-        //     success: function (result) {
-        //         $('#myModal').modal()
-        //     }
-        // })
-        $('#myModal').modal()
+        $.ajax({
+            url: baseUrl + '/skills/group',
+            method: 'GET',
+            success: function (result) {
+                frontEndSkills = result.info.frontEndSkills
+                backEndSkills = result.info.backEndSkills
+                dbSkills = result.info.dbSkills
+                add_new_front_skill('')
+                add_new_back_skill('')
+                add_new_db_skill('')
+                $('#myModal').modal()
+            }
+        })
         $('#projectAddModalLabel').text('新增项目')
         $('#save-btn').text('保存')
     })
@@ -268,16 +273,91 @@
             method = 'PUT'
             msg = '更新'
         }
+        // 收集所需技能信息
+        var frontEndSkill = '', backEndSkill = '', dbSkill = ''
+        var frontSkillNames = $('.front-skill-name option:checked')
+        $.each(frontSkillNames, function (index, item) {
+            frontEndSkill += $(item).val() + ','
+        })
+        frontEndSkill = frontEndSkill.substr(0, frontEndSkill.length - 1)
+
+        var backSkillNames = $('.back-skill-name option:checked')
+        $.each(backSkillNames, function (index, item) {
+            backEndSkill += $(item).val() + ','
+        })
+        backEndSkill = backEndSkill.substr(0, backEndSkill.length - 1)
+
+        var dbSkillNames = $('.db-skill-name option:checked')
+        $.each(dbSkillNames, function (index, item) {
+            dbSkill += $(item).val() + ','
+        })
+        dbSkill = dbSkill.substr(0, dbSkill.length - 1)
+        console.log(frontEndSkill, backEndSkill, dbSkill)
         $.ajax({
             url: url,
             method: method,
-            data: $('#add-form').serialize(),
+            data: $('#add-form').serialize() + '&' + $.param({'frontEndSkill': frontEndSkill, 'backEndSkill':backEndSkill, 'dbSkill':dbSkill}),
             success: function () {
                 toastr.success(msg + '成功', '提示', {timeOut: 1000})
                 initTable()
             }
         })
         $('#myModal').modal('hide')
+    })
+
+    function add_new_front_skill (skill) {
+        var aNode = $('#add-new-front-skill-btn')
+        var div = build_skill_name(frontEndSkills, skill, 'front-skill-name')
+        aNode.before(div)
+    }
+    function add_new_back_skill (skill) {
+        var aNode = $('#add-new-back-skill-btn')
+        var div = build_skill_name(backEndSkills, skill, 'back-skill-name')
+        aNode.before(div)
+    }
+    function add_new_db_skill (skill) {
+        var aNode = $('#add-new-db-skill-btn')
+        var div = build_skill_name(dbSkills, skill, 'db-skill-name')
+        aNode.before(div)
+    }
+    function build_skill_name (skillNames, skill, newClass) {
+        var div = $('<div class="form-group row col-sm-10 offset-sm-3">')
+        var select = $('<select class="col-sm-5 form-control">').addClass(newClass)
+        $.each(skillNames, function (index, skillName) {
+            var option = $('<option></option>').val(skillName).append(skillName)
+            select.append(option)
+        })
+        if (skill != '') {
+            select.val([skill])
+        }
+        var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+        div.append(select).append(btn)
+        return div
+    }
+    $(document).on('click', '.skill-close', function () {
+        var pNode = $(this).parent()
+        pNode.remove()
+    })
+    $('#myModal').on('hidden.bs.modal', function () {
+        // 1. 表单重置
+        $('#add-form')[0].reset()
+        // textarea需要自己重置
+        $('#myModal textarea[name=background]').text('')
+        // 2. 处理HTML文档
+        var frontEndSkillsNode = $('#front-end-skills')
+        frontEndSkillsNode.empty()
+        frontEndSkillsNode.append('<label class="col-sm-3 col-form-label">前端所需技能</label>')
+        frontEndSkillsNode.append('<a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill(\'\')">添加技能信息</a>')
+
+        var backEndSkillsNode = $('#back-end-skills')
+        backEndSkillsNode.empty()
+        backEndSkillsNode.append('<label class="col-sm-3 col-form-label">后端所需技能</label>')
+        backEndSkillsNode.append('<a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill(\'\')">添加技能信息</a>')
+
+        var dbSkillsNode = $('#db-skills')
+        dbSkillsNode.empty()
+        dbSkillsNode.append('<label class="col-sm-3 col-form-label">数据库所需技能</label>')
+        dbSkillsNode.append(' <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill(\'\')">添加技能信息</a>')
     })
 
     $(document).on('click', '.contribute-btn', function () {
@@ -548,11 +628,6 @@
         pickerPosition: 'top-right',
         language: 'zh-CN',
         minView: 2 // 选到天就结束
-    })
-    $('#myModal').on('hidden.bs.modal', function () {
-        $('#add-form')[0].reset() // 重置表单
-        // textarea需要自己重置
-        $('#myModal textarea[name=background]').text('')
     })
     $('#contributeModal').on('hidden.bs.modal', function () {
         $('#contribute-form')[0].reset() // 重置表单

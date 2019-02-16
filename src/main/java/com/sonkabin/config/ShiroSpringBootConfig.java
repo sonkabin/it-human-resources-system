@@ -35,6 +35,7 @@ public class ShiroSpringBootConfig {
         chainDefinition.addPathDefinition("/recruit.html","anon");
         chainDefinition.addPathDefinition("/login.html","anon");
         chainDefinition.addPathDefinition("/custom/**", "anon");
+        chainDefinition.addPathDefinition("/img/**", "anon");
         chainDefinition.addPathDefinition("/css/**", "anon");
         chainDefinition.addPathDefinition("/fonts/**", "anon");
         chainDefinition.addPathDefinition("/icons-reference/**", "anon");

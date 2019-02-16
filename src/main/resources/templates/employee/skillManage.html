@@ -68,7 +68,7 @@
 
                                     </form>
                                 </div>
-                                <div class="card-footer ">
+                                <div class="card-footer">
                                     <button class="btn btn-primary" id="save-btn">保存</button>
                                 </div>
                             </div>
@@ -102,6 +102,7 @@
 <!-- 拼接技能信息 -->
 <script th:inline="javascript">
     var skills = [[${employee.skills}]]
+    skillNames = [[${skillNames}]]
 
     //把这段代码放在这里（在这里面依旧可以用$）;
     jQuery(document).ready(function($){
@@ -115,12 +116,15 @@
                 var array = skills[i].split(":")
                 var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
                 var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-                var input = $('<input type="text" class="form-control col-sm-2 skill-name">').val(array[0])
+                // var input = $('<input type="text" class="form-control col-sm-2 skill-name">').val(array[0])
+                var sel = build_skill_name(skillNames)
+                sel.val(array[0])
                 var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
                 var select = build_skill_select()
                 var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
                 select.val([array[1]])
-                div.append(label).append(input).append(label2).append(select).append(btn)
+                // div.append(label).append(input).append(label2).append(select).append(btn)
+                div.append(label).append(sel).append(label2).append(select).append(btn)
                 $('#skills').append(div)
                 // $('#skills').append(label).append(input).append(label2).append(select)
             }
@@ -130,6 +134,14 @@
 
 </script>
 <script type="text/javascript">
+    function build_skill_name (skillNames) {
+        var select = $('<select class="col-sm-2 form-control skill-name"></select>')
+        skillNames.map(function (skillName) {
+            var option = $('<option></option>').val(skillName).append(skillName)
+            select.append(option)
+        })
+        return select
+    }
     function build_skill_select () {
         var select = $('<select class="col-sm-1 form-control level"></select>')
         for (var i = 1; i < 10; i++) {
@@ -142,12 +154,13 @@
     function add_new_skill() {
         var aNode = $('#add-new-skill-btn')
         var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
-        var select = build_skill_select()
         var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-        var input = $('<input type="text" class="form-control col-sm-2 skill-name">')
+        // var input = $('<input type="text" class="form-control col-sm-2 skill-name">')
+        var sel = build_skill_name(skillNames)
         var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
+        var select = build_skill_select()
         var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
-        div.append(label).append(input).append(label2).append(select).append(btn)
+        div.append(label).append(sel).append(label2).append(select).append(btn)
         aNode.before(div)
     }
 
@@ -163,12 +176,14 @@
         var levels = $('.level option:checked')
         for (var i = 0; i < levels.length; i++) {
             var skillName = $(skillNames[i]).val()
-            var level = $(levels[i]).val()
-            skills += skillName + ':' + level + ';'
+            if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入第一个选择的能力等级
+                var level = $(levels[i]).val()
+                skills += skillName + ':' + level + ';'
+            }
         }
         // 移除最后一个分号
         skills = skills.substr(0, skills.length - 1)
-        console.log(skills)
+        // console.log(skills)
         $.ajax({
             url: baseUrl + '/emp/' + id,
             method: 'PUT',
