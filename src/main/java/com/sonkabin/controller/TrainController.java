@@ -4,6 +4,7 @@ package com.sonkabin.controller;
 import com.sonkabin.dto.TrainDTO;
 import com.sonkabin.entity.Train;
 import com.sonkabin.utils.Message;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ public class TrainController {
     }
 
     @ResponseBody
+    @RequiresPermissions("train:add")
     @PostMapping("/admin/train")
     public Message saveTrain (Train train) {
         return trainService.saveTrain(train);
@@ -41,24 +43,28 @@ public class TrainController {
     }
 
     @ResponseBody
+    @RequiresPermissions("train:update")
     @PutMapping("/admin/train/{id}")
     public Message updateTrain (Train train, @PathVariable("id") Integer trainId) {
         return trainService.updateTrain(train, trainId);
     }
 
     @ResponseBody
+    @RequiresPermissions("train:update")
     @PutMapping("/admin/train/start/{id}")
     public Message startTrain (@PathVariable("id") Integer trainId) {
         return trainService.startTrain(trainId);
     }
 
     @ResponseBody
+    @RequiresPermissions("train:update")
     @PutMapping("/admin/train/finish/{id}")
     public Message finishTrain (@PathVariable("id") Integer trainId) {
         return trainService.finishTrain(trainId);
     }
 
     @ResponseBody
+    @RequiresPermissions("train:delete")
     @DeleteMapping("/admin/train/{id}")
     public Message deleteTrain (@PathVariable("id") Integer trainId) {
         return trainService.deleteTrain(trainId);

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::sidebar(activeUrl='permission.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
+                    <li class="breadcrumb-item active">权限管理</li>
+                </ul>
+            </div>
+
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">权限列表</h3>
+                                </div>
+                                <br>
+                                <div id="toolbar" class="btn-group">
+                                    <button id="job-add-btn" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增角色
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="permission-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">修改信息</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="edit-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">角色名</label>
+                                    <input type="text" class="form-control-plaintext col-sm-8" id="roleName" readonly>
+                                </div>
+                                <div class="form-group row" id="permissions">
+                                    <label class="col-sm-3 col-form-label">权限</label>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-btn">更新</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script th:src="@{/custom/custom.js}"></script>
+<script type="text/javascript">
+
+    $(function () {
+        initTable()
+    })
+
+    $(document).on('click', '.edit-btn', function () {
+        var roleId = $(this).attr('id')
+        $('#roleName').val($(this).attr('roleName'))
+        // console.log($(this).attr('codes'))
+        var codes = $(this).attr('codes')
+        $.ajax({
+            url: baseUrl + '/permissions',
+            method: 'GET',
+            success: function (result) {
+                build_permissions(result.info.permissions, codes)
+            }
+        })
+        $('#myModal').modal()
+        // 为按钮绑定id
+        $('#save-btn').attr('roleId', roleId)
+    })
+
+    function build_permissions(permissions, codes) {
+        $('#permissions').empty()
+        $('#permissions').append('<label class="col-sm-3 col-form-label">权限</label>')
+        var checked = codes.split(',')
+        $.each(permissions, function (index, item) {
+            var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+            var checkbox = $('<input type="checkbox" class="form-check-input">').val(item.id)
+            var label = $('<label class="form-check-label"></label>').text(item.permissionName)
+            for (var i = 0, len = checked.length; i < len; i++) {
+                if (item.permissionCode == checked[i]) {
+                    checked.splice(i, 1) // 删除元素
+                    checkbox.prop('checked', true)
+                    break
+                }
+            }
+            div.append(checkbox).append(label).appendTo('#permissions')
+        })
+    }
+
+    $('#save-btn').click(function () {
+        // 收集选中的复选框
+        var checked = $('#permissions').find('input[type="checkbox"]:checked')
+        var ids = ''
+        $.each(checked, function (index, item) {
+            ids += $(item).val() + ','
+        })
+        ids = ids.substr(0, ids.length - 1)
+        // console.log(ids)
+        $.ajax({
+            url: baseUrl + '/permissions/' + $(this).attr('roleId'),
+            method: 'PUT',
+            data: {'ids': ids},
+            success: function () {
+                toastr.success('权限更新成功', '提示', {timeOut: 2000})
+                $('#myModal').modal('hide')
+                initTable()
+            }
+        })
+    })
+
+    function initTable() {
+        $('#permission-table').bootstrapTable('destroy')
+        $('#permission-table').bootstrapTable({
+            url: baseUrl + '/permissions/role',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 10, // 每页的记录行数
+            pageList: [10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    career: $('#career-name').val(),
+                    status: $('#status').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'roleName',
+                title: '角色名'
+            }, {
+                field: 'permissionNames',
+                title: '权限名',
+                formatter: function (value) {
+                    var values = value.split(',')
+                    var result = ''
+                    $.each(values, function (index, item) {
+                        result += '<label class="alert alert-primary btn-sm">' + item + '</label> '
+                    })
+                    return result
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    var id = value
+                    var result = ''
+
+                    result += '<button class="btn btn-primary btn-sm edit-btn" codes=' + row.permissionCodes +  ' roleName=' + row.roleName + ' id=' + id + '>编辑</button> '
+                    return result
+                }
+            }
+            ]
+        })
+    }
+
+</script>
+</body>
+</html>

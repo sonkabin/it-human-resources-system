@@ -5,7 +5,9 @@ import com.sonkabin.dto.ProjectDTO;
 import com.sonkabin.dto.ProjectHistoryDTO;
 import com.sonkabin.entity.Project;
 import com.sonkabin.entity.ProjectHistory;
+import com.sonkabin.service.SkillService;
 import com.sonkabin.utils.Message;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,8 @@ import java.util.List;
 public class ProjectController {
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private SkillService skillService;
 
     // ----------------- 项目经理开始 ---------------------------
     @ResponseBody
@@ -33,6 +37,7 @@ public class ProjectController {
     }
 
     @ResponseBody
+    @RequiresPermissions("project:add")
     @PostMapping("/project")
     public Message saveProject (Project project) {
         return projectService.saveProject(project);
@@ -51,6 +56,7 @@ public class ProjectController {
     }
 
     @ResponseBody
+    @RequiresPermissions("project:delete")
     @DeleteMapping("/project/{id}")
     public Message deleteProject (@PathVariable("id") Integer projectId) {
         return projectService.deleteProject(projectId);
@@ -59,16 +65,19 @@ public class ProjectController {
     @ResponseBody
     @GetMapping("/project/{id}")
     public Message getProjectInformation (@PathVariable("id") Integer id) {
-        return projectService.getProjectInformation(id);
+        Message msg = projectService.getProjectInformation(id);
+        return skillService.getThreeSkillNames().put("project", msg.getInfo().get("project"));
     }
 
     @ResponseBody
+    @RequiresPermissions("project:update")
     @PutMapping("/project/{id}")
     public Message updateProjectInformation (@PathVariable("id") Integer id, Project project) {
         return projectService.updateProjectInformation(id,project);
     }
 
     @ResponseBody
+    @RequiresPermissions("project:update")
     @PutMapping("/project/finish/{id}")
     public Message finishProject (@PathVariable("id") Integer id) {
         return projectService.finishProject(id);

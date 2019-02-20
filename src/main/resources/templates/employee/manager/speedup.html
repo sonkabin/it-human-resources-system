@@ -187,7 +187,7 @@
             },
             success: function (result) {
                 var candidates = result.info.candidates
-                console.log(candidates)
+                // console.log(candidates)
                 var candidatePortions = result.info.candidatePortions
                 var employees = result.info.employees
                 var portions = result.info.empPortions
@@ -268,7 +268,11 @@
                 data: JSON.stringify(data),
                 dataType: 'json',
                 contentType: "application/json",
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     window.location.href = baseUrl + '/humanConfigs/' + projectId
                 }
             })

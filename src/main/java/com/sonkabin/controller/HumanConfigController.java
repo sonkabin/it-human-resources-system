@@ -4,6 +4,7 @@ package com.sonkabin.controller;
 import com.sonkabin.dto.RecalculateDTO;
 import com.sonkabin.entity.HumanConfig;
 import com.sonkabin.utils.Message;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,14 @@ public class HumanConfigController {
 
     // 保存项目人员配置，并启动项目
     @ResponseBody
+    @RequiresPermissions("config:add")
     @PostMapping("/startProject")
     public Message startProject (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.startProject(configs);
     }
     // 保存项目人员配置，并启动项目
     @ResponseBody
+    @RequiresPermissions("config:add")
     @PostMapping("/humanConfig")
     public Message saveConfig (@RequestBody List<HumanConfig> configs, @DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam("endDate") LocalDate endDate) {
         return humanConfigService.saveConfig(configs, endDate);
@@ -55,24 +58,28 @@ public class HumanConfigController {
     }
 
     @ResponseBody
+    @RequiresPermissions("config:update")
     @PutMapping("/humanConfig/release")
     public Message releaseHuman (HumanConfig config, @RequestParam("contribute") String contribute) {
         return humanConfigService.releaseHuman(config, contribute);
     }
 
     @ResponseBody
+    @RequiresPermissions("config:query")
     @GetMapping("/humanConfigs/employees/{id}")
     public Message getOtherEmployees (@PathVariable("id") Integer projectId) {
         return humanConfigService.getOtherEmployees(projectId);
     }
 
     @ResponseBody
+    @RequiresPermissions("config:update")
     @PostMapping("/humanConfig/require")
     public Message requireHuman (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.requireHuman(configs);
     }
 
     @ResponseBody
+    @RequiresPermissions("config:query")
     @PostMapping("/humanConfig/recalculate")
     public Message recalculate (RecalculateDTO recalculateDTO) {
         return humanConfigService.recalculate(recalculateDTO);

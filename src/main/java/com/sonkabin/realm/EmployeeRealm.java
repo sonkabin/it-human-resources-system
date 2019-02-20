@@ -2,23 +2,38 @@ package com.sonkabin.realm;
 
 import com.sonkabin.entity.Employee;
 import com.sonkabin.service.EmployeeService;
+import com.sonkabin.service.PermissionService;
 import com.sonkabin.utils.MD5Util;
+import com.sonkabin.utils.MyUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class EmployeeRealm extends AuthorizingRealm {
 
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private PermissionService permissionService;
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        /*
+        每次遇到权限认证都会调用，若想提高效率，需要使用缓存
+         */
+        Integer roleId = MyUtil.getSessionEmployee("loginEmp").getRoleId(); // 得到登录用户的角色id
+        List<String> permissions = permissionService.getPermissions(roleId);
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        authorizationInfo.addStringPermissions(permissions);
+        return authorizationInfo;
     }
 
     /**

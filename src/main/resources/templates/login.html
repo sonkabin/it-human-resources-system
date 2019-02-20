@@ -41,7 +41,7 @@
               <div class="form d-flex align-items-center">
                 <div class="content">
                   <form method="post" class="form-validate" th:action="@{/login}">
-                    <p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+                    <p style="color: red" th:text="${error}" th:if="${not #strings.isEmpty(error)}"></p>
                     <div class="form-group">
                       <input id="login-empId" type="text" name="empId" required data-msg="请输入用户名" class="input-material">
                       <label for="login-empId" class="label-material">员工号</label>

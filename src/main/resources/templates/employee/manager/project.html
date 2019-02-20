@@ -121,15 +121,15 @@
                                 </div>
                                 <div class="form-group row" id="front-end-skills">
                                     <label class="col-sm-3 col-form-label">前端所需技能</label>
-                                    <a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill('')">添加技能信息</a>
+                                    <a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill('')">添加技能</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">前端所需人数</label>
-                                    <input name="backEndNum" type="text" class="col-sm-8 form-control">
+                                    <input name="frontEndNum" type="text" class="col-sm-8 form-control">
                                 </div>
                                 <div class="form-group row" id="back-end-skills">
                                     <label class="col-sm-3 col-form-label">后端所需技能</label>
-                                    <a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill('')">添加技能信息</a>
+                                    <a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill('')">添加技能</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3  col-form-label" >后端所需人数</label>
@@ -137,7 +137,7 @@
                                 </div>
                                 <div class="form-group row" id="db-skills">
                                     <label class="col-sm-3 col-form-label">数据库所需技能</label>
-                                    <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill('')">添加技能信息</a>
+                                    <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill('')">添加技能</a>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3  col-form-label">数据库所需人数</label>
@@ -292,12 +292,16 @@
             dbSkill += $(item).val() + ','
         })
         dbSkill = dbSkill.substr(0, dbSkill.length - 1)
-        console.log(frontEndSkill, backEndSkill, dbSkill)
+        // console.log(frontEndSkill, backEndSkill, dbSkill)
         $.ajax({
             url: url,
             method: method,
             data: $('#add-form').serialize() + '&' + $.param({'frontEndSkill': frontEndSkill, 'backEndSkill':backEndSkill, 'dbSkill':dbSkill}),
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success(msg + '成功', '提示', {timeOut: 1000})
                 initTable()
             }
@@ -347,17 +351,17 @@
         var frontEndSkillsNode = $('#front-end-skills')
         frontEndSkillsNode.empty()
         frontEndSkillsNode.append('<label class="col-sm-3 col-form-label">前端所需技能</label>')
-        frontEndSkillsNode.append('<a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill(\'\')">添加技能信息</a>')
+        frontEndSkillsNode.append('<a id="add-new-front-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_front_skill(\'\')">添加技能</a>')
 
         var backEndSkillsNode = $('#back-end-skills')
         backEndSkillsNode.empty()
         backEndSkillsNode.append('<label class="col-sm-3 col-form-label">后端所需技能</label>')
-        backEndSkillsNode.append('<a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill(\'\')">添加技能信息</a>')
+        backEndSkillsNode.append('<a id="add-new-back-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_back_skill(\'\')">添加技能</a>')
 
         var dbSkillsNode = $('#db-skills')
         dbSkillsNode.empty()
         dbSkillsNode.append('<label class="col-sm-3 col-form-label">数据库所需技能</label>')
-        dbSkillsNode.append(' <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill(\'\')">添加技能信息</a>')
+        dbSkillsNode.append(' <a id="add-new-db-skill-btn" class="offset-sm-3" href="javascript:void(0);" onclick="add_new_db_skill(\'\')">添加技能</a>')
     })
 
     $(document).on('click', '.contribute-btn', function () {
@@ -414,7 +418,11 @@
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: "application/json",
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success('更新成员贡献成功', '提示', {timeOut: 1000})
             }
         })
@@ -455,6 +463,20 @@
                 $('#myModal input[name=dbNum]').val(project.dbNum)
                 $('#myModal input[name=predictStart]').val(project.predictStart)
                 $('#myModal input[name=predictEnd]').val(project.predictEnd)
+                // 回显所需要的技能
+                frontEndSkills = result.info.frontEndSkills
+                backEndSkills = result.info.backEndSkills
+                dbSkills = result.info.dbSkills
+
+                $.each(project.frontEndSkill.split(','), function (index, item) {
+                    add_new_front_skill(item)
+                })
+                $.each(project.backEndSkill.split(','), function (index, item) {
+                    add_new_back_skill(item)
+                })
+                $.each(project.dbSkill.split(','), function (index, item) {
+                    add_new_db_skill(item)
+                })
                 $('#myModal').modal()
             }
         })
@@ -477,7 +499,11 @@
             $.ajax({
                 url: baseUrl + '/project/finish/' + $(this).attr('project-id'),
                 method: 'PUT',
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     window.location.href = baseUrl + '/project.html'
                 }
             })

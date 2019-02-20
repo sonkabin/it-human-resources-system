@@ -20,6 +20,7 @@ public class MvcConfig {
                 registry.addViewController("/manageEmp.html").setViewName("admin/emp");
                 registry.addViewController("/manageTrain.html").setViewName("admin/train");
                 registry.addViewController("/manageRecruit.html").setViewName("admin/recruit");
+                registry.addViewController("/managePermission.html").setViewName("admin/permission");
                 registry.addViewController("/manageAccount.html").setViewName("admin/account");
 
                 // 员工视图

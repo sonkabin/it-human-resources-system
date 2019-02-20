@@ -7,6 +7,7 @@ import com.sonkabin.entity.Skill;
 import com.sonkabin.service.EmployeeService;
 import com.sonkabin.service.SkillService;
 import com.sonkabin.utils.Message;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +29,14 @@ public class EmployeeController {
     private SkillService skillService;
 
     @ResponseBody
+    @RequiresPermissions("employee:query")
     @GetMapping("/emps")
     public Message getEmployees(EmployeeDTO employeeDTO){
         return employeeService.getEmps(employeeDTO);
     }
 
     @ResponseBody
+    @RequiresPermissions("employee:add")
     @PostMapping("/emp")
     public Message saveEmployee (Employee employee) {
         return employeeService.saveEmployee(employee);

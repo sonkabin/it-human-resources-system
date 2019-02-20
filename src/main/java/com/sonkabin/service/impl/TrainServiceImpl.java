@@ -42,6 +42,7 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public Message saveTrain(Train train) {
         LocalDateTime now = LocalDateTime.now();
+        train.setStatus(0);
         train.setGmtCreate(now);
         train.setGmtModified(now);
         trainMapper.insert(train);
