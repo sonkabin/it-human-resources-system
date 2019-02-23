@@ -339,7 +339,11 @@
             url: url,
             method: method,
             data: $('#add-form').serialize() + '&' + $.param({'responsibility': responsibility, 'demand': demand}),
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success(msg + '职位信息成功', '提示', {timeOut: 2000})
                 initTable()
             }
@@ -421,7 +425,11 @@
             $.ajax({
                 url: baseUrl + '/job/finish/' + id,
                 method: 'PUT',
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     toastr.success('成功', '提示', {timeOut: 1000})
                     initTable()
                 }

@@ -438,7 +438,11 @@
             $.ajax({
                 url: baseUrl + '/project/' + $(this).attr('project-id'),
                 method: 'DELETE',
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     toastr.success('删除项目成功', '提示', {timeOut: 1000})
                 }
             })

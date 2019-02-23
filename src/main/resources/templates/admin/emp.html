@@ -286,6 +286,10 @@
             url: baseUrl + '/roles',
             method: 'GET',
             success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 build_roles(result.info.roles)
                 // $('#role-select')
                 $('#myModal').modal()

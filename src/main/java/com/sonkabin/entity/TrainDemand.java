@@ -12,23 +12,23 @@ import java.io.Serializable;
  * </p>
  *
  * @author sonkabin
- * @since 2019-01-24
+ * @since 2019-02-23
  */
-@TableName("tb_human_config_temp")
-public class HumanConfigTemp implements Serializable {
+@TableName("tb_train_demand")
+public class TrainDemand implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Integer projectId;
-
     private Integer empId;
 
-    private Integer portion;
+    private String empName;
 
-    private Integer status;
+    private String domain;
+
+    private String skill;
 
     private LocalDateTime gmtCreate;
 
@@ -43,14 +43,6 @@ public class HumanConfigTemp implements Serializable {
         this.id = id;
     }
 
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
     public Integer getEmpId() {
         return empId;
     }
@@ -59,20 +51,28 @@ public class HumanConfigTemp implements Serializable {
         this.empId = empId;
     }
 
-    public Integer getPortion() {
-        return portion;
+    public String getEmpName() {
+        return empName;
     }
 
-    public void setPortion(Integer portion) {
-        this.portion = portion;
+    public void setEmpName(String empName) {
+        this.empName = empName;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getDomain() {
+        return domain;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public String getSkill() {
+        return skill;
+    }
+
+    public void setSkill(String skill) {
+        this.skill = skill;
     }
 
     public LocalDateTime getGmtCreate() {
@@ -93,12 +93,12 @@ public class HumanConfigTemp implements Serializable {
 
     @Override
     public String toString() {
-        return "HumanConfigTemp{" +
+        return "TrainDemand{" +
         "id=" + id +
-        ", projectId=" + projectId +
         ", empId=" + empId +
-        ", portion=" + portion +
-        ", status=" + status +
+        ", empName=" + empName +
+        ", domain=" + domain +
+        ", skill=" + skill +
         ", gmtCreate=" + gmtCreate +
         ", gmtModified=" + gmtModified +
         "}";

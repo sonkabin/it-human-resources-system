@@ -309,12 +309,16 @@
             url: url,
             method: method,
             data: $('#add-form').serialize() + '&' + $.param({'time': time}),
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success(msg + '培训信息成功', '提示', {timeOut: 1000})
-                $('#addTrainModal').modal('hide')
                 initTable()
             }
         })
+        $('#addTrainModal').modal('hide')
     })
 
     $(document).on('click', '.emp-view-btn', function () {
@@ -350,7 +354,11 @@
             $.ajax({
                 url: baseUrl + '/admin/train/' + $(this).attr('train-id'),
                 method: 'DELETE',
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     toastr.success('删除成功', '提示', {timeOut: 1000})
                     initTable()
                 }
@@ -363,7 +371,11 @@
             $.ajax({
                 url: baseUrl + '/admin/train/start/' + $(this).attr('train-id'),
                 method: 'PUT',
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     toastr.success('启动课程[' + name + ']成功', '提示', {timeOut: 1000})
                     initTable()
                 }
@@ -374,7 +386,11 @@
         $.ajax({
             url: baseUrl + '/admin/train/finish/' + $(this).attr('train-id'),
             method: 'PUT',
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success('成功', '提示', {timeOut: 1000})
                 initTable()
             }

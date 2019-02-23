@@ -142,6 +142,10 @@
             url: baseUrl + '/permissions',
             method: 'GET',
             success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 build_permissions(result.info.permissions, codes)
             }
         })
@@ -182,12 +186,16 @@
             url: baseUrl + '/permissions/' + $(this).attr('roleId'),
             method: 'PUT',
             data: {'ids': ids},
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
                 toastr.success('权限更新成功', '提示', {timeOut: 2000})
-                $('#myModal').modal('hide')
                 initTable()
             }
         })
+        $('#myModal').modal('hide')
     })
 
     function initTable() {

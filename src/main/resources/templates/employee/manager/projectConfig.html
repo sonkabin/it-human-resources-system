@@ -246,7 +246,11 @@
                 data: JSON.stringify(data),
                 dataType: 'json',
                 contentType: "application/json",
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
                     // 我醉了....
                     window.location.href = baseUrl + '/humanConfigs/' + projectId
                 }

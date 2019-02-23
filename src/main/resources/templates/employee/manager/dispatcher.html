@@ -256,7 +256,12 @@
             url: baseUrl + '/humanConfig/release',
             method: 'PUT',
             data: $('#release-form').serialize()+'&'+$.param({'projectId': $('#project-id').val()}),
-            success: function () {
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    $('#releaseModal').modal('hide')
+                    return
+                }
                 window.location.href = baseUrl + '/humanConfigs/' + $('#project-id').val()
             }
         })
@@ -267,6 +272,11 @@
             url: baseUrl + '/humanConfigs/employees/' + $('#project-id').val(),
             method: 'GET',
             success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    $('#requireModal').modal('hide')
+                    return
+                }
                 // console.log(result.info)
                 var emps = result.info.employees
                 $('#require-tbody').empty()
@@ -309,7 +319,12 @@
                 data: JSON.stringify(humanConfigs),
                 dataType: 'json',
                 contentType: "application/json",
-                success: function () {
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        $('#requireModal').modal('hide')
+                        return
+                    }
                     window.location.href = baseUrl + '/humanConfigs/' + $('#project-id').val()
                 }
             })

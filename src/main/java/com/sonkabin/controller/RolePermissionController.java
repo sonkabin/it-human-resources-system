@@ -4,18 +4,18 @@ package com.sonkabin.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
-import com.sonkabin.service.PlanService;
+import com.sonkabin.service.RolePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author sonkabin
- * @since 2019-01-24
+ * @since 2019-02-23
  */
 @Controller
-@RequestMapping("/plan")
-public class PlanController {
+@RequestMapping("/rolePermission")
+public class RolePermissionController {
     @Autowired
-    private PlanService PlanService;
+    private RolePermissionService RolePermissionService;
 }
 

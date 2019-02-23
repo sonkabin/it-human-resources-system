@@ -1,6 +1,6 @@
 package com.sonkabin.mapper;
 
-import com.sonkabin.entity.Plan;
+import com.sonkabin.entity.TrainDemand;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author sonkabin
- * @since 2019-01-24
+ * @since 2019-02-23
  */
-public interface PlanMapper extends BaseMapper<Plan> {
+public interface TrainDemandMapper extends BaseMapper<TrainDemand> {
 
 }

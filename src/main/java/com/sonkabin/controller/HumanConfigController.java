@@ -42,7 +42,7 @@ public class HumanConfigController {
     public Message startProject (@RequestBody List<HumanConfig> configs) {
         return humanConfigService.startProject(configs);
     }
-    // 保存项目人员配置，并启动项目
+    // 加快项目进度，保存新的结束日期和新增的人员
     @ResponseBody
     @RequiresPermissions("config:add")
     @PostMapping("/humanConfig")
