@@ -121,7 +121,13 @@
                 <li th:class="${activeUrl=='accountManage.html' ? 'active' : ''}"><a href="/accountManage.html">账号设置</a></li>
             </ul>
         </li>
-        <li th:class="${activeUrl=='empTrainManage.html' ? 'active' : ''}"><a href="/empTrainManage.html"> <i class="icon-padnote"></i>职业规划管理 </a></li>
+        <li>
+            <a href="#careerDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>职业规划管理</a>
+            <ul id="careerDropdown" class="collapse list-unstyled ">
+                <li th:class="${activeUrl=='empTrainManage.html' ? 'active' : ''}"><a href="/empTrainManage.html">培训管理</a></li>
+                <li th:class="${activeUrl=='demandManage.html' ? 'active' : ''}"><a href="/demandManage.html" >规划管理</a></li>
+            </ul>
+        </li>
         <li th:class="${activeUrl=='projectInformation.html' ? 'active' : ''}"><a href="#" th:href="${session.loginEmp.roleId} == 1 ? '/projectInformation.html' : '/project.html'"> <i class="fa fa-bar-chart"></i>[[${session.loginEmp.roleId} == 1 ? '项目信息' : '项目管理']] </a></li>
         <li th:class="${activeUrl=='messageManage.html' ? 'active' : ''}"><a href="/messageManage.html"> <i class="fa fa-bar-chart"></i>消息管理 </a></li>
     </ul>

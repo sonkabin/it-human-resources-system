@@ -46,7 +46,8 @@
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
-                    <li class="breadcrumb-item active">职业规划管理</li>
+                    <li class="breadcrumb-item">职业规划管理</li>
+                    <li class="breadcrumb-item active">培训管理</li>
                 </ul>
             </div>
 
@@ -77,15 +78,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                                <div id="toolbar" class="btn-group">
-                                    <button id="demand-add-btn" type="button" class="btn btn-success">
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增培训需求
-                                    </button>
-                                    &nbsp;
-                                    <button id="demand-history-btn" type="button" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>历史培训需求
-                                    </button>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -255,7 +247,6 @@
         $('#train-table').bootstrapTable({
             url: baseUrl + '/employee/trains',
             method: 'GET',
-            toolbar: '#toolbar', //工具按钮用哪个容器
             pagination: true, // 是否显示分页
             sortable: true, //是否启用排序
             sortOrder: "asc", //排序方式

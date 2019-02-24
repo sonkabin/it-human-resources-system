@@ -21,3 +21,12 @@ function DateCompare(date1, date2) {
     return value
 }
 
+function LocalDateObject(date) {
+    var vars = date.split('T')
+    var dateObject = {}
+    var data = vars[0].split('-')
+    dateObject.year = data[0]
+    dateObject.month = data[1]
+    dateObject.day = data[2]
+    return dateObject
+}

@@ -92,6 +92,23 @@
                         </div>
 
                     </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">员工规划列表</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="demand-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 
@@ -229,6 +246,7 @@
 <script type="text/javascript">
     $(function(){
         initTable()
+        initDemandTable()
     })
     // 搜索
     $('#search-btn').click(function () {
@@ -538,6 +556,69 @@
                         result += '<button class="btn btn-danger btn-sm finish-btn" train-id='+ id + '>结束培训</button> '
                     }
                     return result
+                }
+            }
+            ]
+        })
+    }
+
+    function initDemandTable() {
+        $('#demand-table').bootstrapTable('destroy')
+        $('#demand-table').bootstrapTable({
+            url: baseUrl + '/admin/demands',
+            method: 'GET',
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 10, // 每页的记录行数
+            pageList: [10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'empName',
+                title: '员工名'
+            }, {
+                field: 'domain',
+                title: '感兴趣的技术领域'
+            }, {
+                field: 'skill',
+                title: '想发展的技术'
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
                 }
             }
             ]

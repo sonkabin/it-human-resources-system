@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::employee-sidebar(activeUrl='demandManage.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
+                    <li class="breadcrumb-item">职业规划管理</li>
+                    <li class="breadcrumb-item active">规划管理</li>
+                </ul>
+            </div>
+
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">规划列表</h3>
+                                </div>
+                                <br>
+                                <div>
+                                    <!-- search-from -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="train-name" class="form-control-label offset-sm-1">课程名</label>
+                                            <input id="train-name" type="text" class="col-sm-8 form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="toolbar" class="btn-group">
+                                    <button id="demand-add-btn" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="demand-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div id="demandModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="demandModalLabel" class="modal-title">新增规划</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="add-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">感兴趣的技术领域</label>
+                                    <input name="domain" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">想要发展的技术</label>
+                                    <input name="skill" type="text" class="form-control col-sm-8">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script th:src="@{/custom/custom.js}"></script>
+<script type="text/javascript">
+
+    $(function () {
+        initTable()
+    })
+
+    $('#demand-add-btn').click(function () {
+        $('#demandModalLabel').text('新增规划')
+        $('#save-btn').text('保存')
+        $('#demandModal').modal()
+    })
+
+    $('#save-btn').click(function () {
+        var method, url, msg
+        if ($(this)[0].innerHTML === '保存'){
+            url = baseUrl + '/employee/demand'
+            method = 'POST'
+            msg = '保存'
+        } else {
+            url = baseUrl + '/employee/demand/' + $(this).attr('edit-id')
+            method = 'PUT'
+            msg = '更新'
+        }
+        $.ajax({
+            url: url,
+            method: method,
+            data: $('#add-form').serialize(),
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
+                toastr.success(msg + '成功', '提示', {timeOut: 1000})
+                initTable()
+            }
+        })
+        $('#demandModal').modal('hide')
+    })
+
+    $(document).on('click', '.edit-btn', function () {
+        var id = $(this).attr('id')
+        $.ajax({
+            url: baseUrl + '/employee/demand/' + id,
+            method: 'GET',
+            success: function (result) {
+                var demand = result.info.demand
+                // 表单回显
+                $('#add-form input[name=domain]').val(demand.domain)
+                $('#add-form input[name=skill]').val(demand.skill)
+                $('#demandModal').modal()
+            }
+        })
+        $('#demandModalLabel').text('修改规划')
+        $('#save-btn').text('更新')
+        // 为按钮绑定id
+        $('#save-btn').attr('edit-id', id);
+    })
+
+    $(document).on('click', '.del-btn', function () {
+        if (confirm('确定要删除此记录吗?')) {
+            $.ajax({
+                url: baseUrl + '/employee/demand/' + $(this).attr('id'),
+                method: 'DELETE',
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
+                    toastr.success('删除成功', '提示', {timeOut: 1000})
+                    initTable()
+                }
+            })
+        }
+    })
+
+    $('#demandModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+    })
+
+    function initTable() {
+        $('#demand-table').bootstrapTable('destroy')
+        $('#demand-table').bootstrapTable({
+            url: baseUrl + '/employee/demands',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 5, // 每页的记录行数
+            pageList: [5, 10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    // trainName: $('#train-name').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'domain',
+                title: '感兴趣的技术领域'
+            }, {
+                field: 'skill',
+                title: '想发展的技术'
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    var id = value
+                    var result = ''
+
+                    var createTime = LocalDateObject(row.gmtCreate)
+                    var now = new Date()
+                    // console.log(now.getFullYear(), now.getMonth())
+                    // now.getMonth() 0-11，0代表1月
+                    if (createTime.year == now.getFullYear() && createTime.month == now.getMonth() + 1) {
+                        result += '<button class="btn btn-primary btn-sm edit-btn" id='+ id + '>编辑</button> '
+                        result += '<button class="btn btn-danger btn-sm del-btn" id='+ id + '>删除</button> '
+                    }
+                    return result
+                }
+            }
+            ]
+        })
+    }
+</script>
+</body>
+</html>

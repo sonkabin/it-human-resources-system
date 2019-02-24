@@ -1,6 +1,8 @@
 package com.sonkabin.service;
 
+import com.sonkabin.dto.DemandDTO;
 import com.sonkabin.entity.TrainDemand;
+import com.sonkabin.utils.Message;
 
 /**
  * <p>
@@ -12,4 +14,15 @@ import com.sonkabin.entity.TrainDemand;
  */
 public interface TrainDemandService{
 
- }
+    Message getAllDemands(DemandDTO demandDTO);
+
+    Message getDemands(DemandDTO demandDTO);
+
+    Message saveDemand(TrainDemand demand);
+
+    Message getDemand(Integer id);
+
+    Message updateDemand(TrainDemand demand, Integer id);
+
+    Message deleteDemand(Integer id);
+}
