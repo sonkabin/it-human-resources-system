@@ -3,7 +3,7 @@ package com.sonkabin.dto;
 public class DemandDTO {
     private long rows;
     private long page;
-    private String sortOrder = "asc";
+    private String sortOrder = "desc";
 
     public long getRows() {
         return rows;

@@ -58,12 +58,6 @@
                                 <div class="card-header d-flex align-items-center">
                                     <h3 class="h4">权限列表</h3>
                                 </div>
-                                <br>
-                                <div id="toolbar" class="btn-group">
-                                    <button id="job-add-btn" type="button" class="btn btn-success">
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增角色
-                                    </button>
-                                </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table id="permission-table">
@@ -88,7 +82,7 @@
                         <div class="modal-body">
                             <form class="form-horizontal" id="edit-form">
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">角色名</label>
+                                    <label class="col-sm-2 col-form-label">角色名</label>
                                     <input type="text" class="form-control-plaintext col-sm-8" id="roleName" readonly>
                                 </div>
                                 <div class="form-group row" id="permissions">
@@ -203,7 +197,6 @@
         $('#permission-table').bootstrapTable({
             url: baseUrl + '/permissions/role',
             method: 'GET',
-            toolbar: '#toolbar', //工具按钮用哪个容器
             pagination: true, // 是否显示分页
             sortable: true, //是否启用排序
             sortOrder: "asc", //排序方式

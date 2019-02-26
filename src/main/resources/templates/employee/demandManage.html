@@ -59,25 +59,6 @@
                                 <div class="card-header d-flex align-items-center">
                                     <h3 class="h4">规划列表</h3>
                                 </div>
-                                <br>
-                                <div>
-                                    <!-- search-from -->
-                                    <form class="form-inline">
-                                        <div class="form-group">
-                                            <label for="train-name" class="form-control-label offset-sm-1">课程名</label>
-                                            <input id="train-name" type="text" class="col-sm-8 form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
-                                        </div>
-                                        &nbsp;
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-primary" onclick="reset()"
-                                                    id="search-reset">重置
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
                                 <div id="toolbar" class="btn-group">
                                     <button id="demand-add-btn" type="button" class="btn btn-success">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
@@ -234,7 +215,7 @@
             toolbar: '#toolbar', //工具按钮用哪个容器
             pagination: true, // 是否显示分页
             sortable: true, //是否启用排序
-            sortOrder: "asc", //排序方式
+            sortOrder: "desc", //排序方式
 
             sidePagination: "server", // 服务端分页
             pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
@@ -277,7 +258,8 @@
                 title: '创建时间',
                 formatter: function (value) {
                     return LocalDateTimeFormatter(value)
-                }
+                },
+                sortable: true
             }, {
                 field: 'gmtModified',
                 title: '修改时间',

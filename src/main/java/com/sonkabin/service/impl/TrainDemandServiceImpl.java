@@ -10,9 +10,11 @@ import com.sonkabin.entity.TrainDemand;
 import com.sonkabin.mapper.TrainDemandMapper;
 import com.sonkabin.service.TrainDemandService;
 import com.sonkabin.utils.Message;
+import com.sonkabin.utils.MyConstant;
 import com.sonkabin.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +36,7 @@ public class TrainDemandServiceImpl implements TrainDemandService {
         LambdaQueryWrapper<TrainDemand> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(TrainDemand::getGmtCreate, TrainDemand::getGmtModified);
         IPage<TrainDemand> result = selectPage(demandDTO, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override
@@ -42,9 +44,9 @@ public class TrainDemandServiceImpl implements TrainDemandService {
         Employee loginEmp = MyUtil.getSessionEmployee("loginEmp");
         LambdaQueryWrapper<TrainDemand> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(TrainDemand::getEmpId, loginEmp.getId());
-        wrapper.orderByDesc(TrainDemand::getGmtCreate, TrainDemand::getGmtModified);
+        wrapper.orderBy(true, demandDTO.getSortOrder().equals(MyConstant.ASC), TrainDemand::getGmtCreate);
         IPage<TrainDemand> result = selectPage(demandDTO, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     private IPage<TrainDemand> selectPage(DemandDTO demandDTO, Wrapper<TrainDemand> wrapper) {
