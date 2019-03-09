@@ -42,8 +42,9 @@ public class EmployeeRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        //强转为UsernamePasswordToken
+        // 强转为UsernamePasswordToken
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
+        // 此empId对应于数据库表中的自增id
         String empId = usernamePasswordToken.getUsername();
         String password = new String(usernamePasswordToken.getPassword());
 

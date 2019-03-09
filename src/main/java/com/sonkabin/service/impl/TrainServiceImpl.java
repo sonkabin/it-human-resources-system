@@ -58,6 +58,8 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public Message updateTrain(Train train, Integer trainId) {
         train.setId(trainId);
+        // 更新培训信息时应仍旧保存培训的员工信息
+        train.setEmps(trainMapper.selectById(trainId).getEmps());
         train.setGmtModified(LocalDateTime.now());
         trainMapper.updateById(train);
         return Message.success();

@@ -47,7 +47,7 @@ public class Train implements Serializable {
     /**
      * 报名员工
      */
-    private String emps = "";
+    private String emps;
 
     /**
      * 培训课程状态，0表示未开始，1表示进行中，2表示已结束
