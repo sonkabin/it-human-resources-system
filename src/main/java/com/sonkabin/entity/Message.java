@@ -12,7 +12,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author sonkabin
- * @since 2019-01-24
+ * @since 2019-04-02
  */
 @TableName("tb_message")
 public class Message implements Serializable {
@@ -22,13 +22,26 @@ public class Message implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 消息内容
+     */
     private String content;
 
-    private Integer empId;
+    /**
+     * 发送者
+     */
+    private String sender;
 
+    private Integer receiverId;
+
+    /**
+     * 读取状态
+     */
     private Integer status;
 
-    private LocalDateTime sendDate;
+    private LocalDateTime gmtCreate;
+
+    private LocalDateTime gmtModified;
 
 
     public Integer getId() {
@@ -47,12 +60,20 @@ public class Message implements Serializable {
         this.content = content;
     }
 
-    public Integer getEmpId() {
-        return empId;
+    public String getSender() {
+        return sender;
     }
 
-    public void setEmpId(Integer empId) {
-        this.empId = empId;
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public Integer getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Integer receiverId) {
+        this.receiverId = receiverId;
     }
 
     public Integer getStatus() {
@@ -63,12 +84,20 @@ public class Message implements Serializable {
         this.status = status;
     }
 
-    public LocalDateTime getSendDate() {
-        return sendDate;
+    public LocalDateTime getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setSendDate(LocalDateTime sendDate) {
-        this.sendDate = sendDate;
+    public void setGmtCreate(LocalDateTime gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public LocalDateTime getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(LocalDateTime gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     @Override
@@ -76,9 +105,11 @@ public class Message implements Serializable {
         return "Message{" +
         "id=" + id +
         ", content=" + content +
-        ", empId=" + empId +
+        ", sender=" + sender +
+        ", receiverId=" + receiverId +
         ", status=" + status +
-        ", sendDate=" + sendDate +
+        ", gmtCreate=" + gmtCreate +
+        ", gmtModified=" + gmtModified +
         "}";
     }
 }

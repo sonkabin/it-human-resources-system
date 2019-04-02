@@ -48,7 +48,7 @@ public class Employee implements Serializable {
 
     private String education;
 
-    private String train;
+    private Integer inservice;
 
     private Integer status;
 
@@ -166,12 +166,12 @@ public class Employee implements Serializable {
         this.education = education;
     }
 
-    public String getTrain() {
-        return train;
+    public Integer getInservice() {
+        return inservice;
     }
 
-    public void setTrain(String train) {
-        this.train = train;
+    public void setInservice(Integer inservice) {
+        this.inservice = inservice;
     }
 
     public Integer getStatus() {
@@ -229,7 +229,7 @@ public class Employee implements Serializable {
         ", idCard=" + idCard +
         ", avatar=" + avatar +
         ", education=" + education +
-        ", train=" + train +
+        ", inservice=" + inservice +
         ", status=" + status +
         ", skills=" + skills +
         ", roleId=" + roleId +

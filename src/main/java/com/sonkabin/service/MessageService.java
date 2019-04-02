@@ -8,7 +8,7 @@ import com.sonkabin.entity.Message;
  * </p>
  *
  * @author sonkabin
- * @since 2019-01-24
+ * @since 2019-04-02
  */
 public interface MessageService{
 
