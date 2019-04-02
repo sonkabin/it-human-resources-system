@@ -46,7 +46,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
 
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
-        wrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
+        wrapper.eq(Employee::getInservice, 1); // 离职的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(wrapper);
         // 查询员工工作时间比例
         List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
@@ -284,7 +284,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
         LambdaQueryWrapper<Employee> employeeLambdaQueryWrapper = new LambdaQueryWrapper<>();
         employeeLambdaQueryWrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
-        employeeLambdaQueryWrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
+        employeeLambdaQueryWrapper.eq(Employee::getInservice, 1); // 离职的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(employeeLambdaQueryWrapper);
         // 移除当前项目的人员
         removeCurrentEmployees(humanConfigs, employees);

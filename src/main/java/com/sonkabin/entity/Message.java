@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -33,6 +33,8 @@ public class Message implements Serializable {
     private String sender;
 
     private Integer receiverId;
+
+    private String receiverName;
 
     /**
      * 读取状态
@@ -98,6 +100,14 @@ public class Message implements Serializable {
 
     public void setGmtModified(LocalDateTime gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     @Override

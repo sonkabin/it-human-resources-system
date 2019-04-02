@@ -30,4 +30,6 @@ public interface EmployeeService{
     Message updateEmployee(Employee employee);
 
     Message getEmployeeSkills(Integer id);
+
+    Message getNotInserviceEmployee();
 }

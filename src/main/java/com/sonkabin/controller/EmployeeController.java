@@ -67,6 +67,14 @@ public class EmployeeController {
         return employeeService.setPassword(id, oldPwd, newPwd);
     }
 
+    /*
+    离职员工所参与的项目
+     */
+    @ResponseBody
+    @GetMapping("/emps/notInservice")
+    public Message getNotInserviceEmployee () {
+        return employeeService.getNotInserviceEmployee();
+    }
 
     @GetMapping("/person")
     public String getPersonInfo (HttpSession session, Model model) {

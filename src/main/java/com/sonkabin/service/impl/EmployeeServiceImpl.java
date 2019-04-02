@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -144,6 +145,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Message getEmployeeSkills(Integer id) {
         Employee employee = employeeMapper.selectSkill(id);
         return Message.success().put("employee", employee);
+    }
+
+    @Override
+    public Message getNotInserviceEmployee() {
+        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Employee::getInservice, 0);
+        List<Employee> employees = employeeMapper.selectList(wrapper); // 离职人员
+        List<Map<String, Object>> data = employeeMapper.getProjects(employees);
+        return Message.success().put("total", data.size()).put("rows", data);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.sonkabin.service;
 
-import com.sonkabin.entity.Message;
+import com.sonkabin.dto.MessageDTO;
+import com.sonkabin.utils.Message;
 
 /**
  * <p>
@@ -12,4 +13,13 @@ import com.sonkabin.entity.Message;
  */
 public interface MessageService{
 
- }
+    Message sendMessage(String empName, String projectName, Integer receiverId, String receiverName);
+
+    Message listSendMessages(MessageDTO messageDTO);
+
+    Message deleteMessage(Integer id);
+
+    Message listReceiveMessages(MessageDTO messageDTO);
+
+    Message markMessage(Integer id);
+}

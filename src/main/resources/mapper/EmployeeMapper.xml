@@ -29,4 +29,13 @@
         WHERE id = #{id}
     </select>
 
+    <select id="getProjects" resultType="java.util.Map">
+        SELECT h.emp_name empName, p.project_name pName, p.manager_name mName, p.manager_id mId
+        FROM tb_project p, tb_human_config h
+        WHERE p.status = 1 AND h.status = 1 AND p.id = h.project_id AND h.emp_name IN
+        <foreach collection="employees" item="emp" separator="," open="(" close=")">
+            #{emp.empName}
+        </foreach>
+    </select>
+
 </mapper>

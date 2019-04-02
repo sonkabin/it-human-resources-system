@@ -33,7 +33,7 @@
 
     <div class="page-content d-flex align-items-stretch">
         <!-- 引入抽取的sidebar -->
-        <div th:replace="~{commons/bar::employee-sidebar(activeUrl='messageManage.html')}"></div>
+        <div th:replace="~{commons/bar::sidebar(activeUrl='message.html')}"></div>
         <div class="content-inner">
             <!-- Page Header-->
             <header class="page-header">
@@ -44,22 +44,54 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
+                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
                     <li class="breadcrumb-item active">消息管理</li>
                 </ul>
             </div>
-
             <section class="tables">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header d-flex align-items-center">
-                                    <h3 class="h4">消息列表</h3>
+                                    <h3 class="h4">离职员工列表</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="receive-table"></table>
+                                        <table id="emp-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">发送消息列表</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="send-table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">接收消息列表</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="receive-table">
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -94,24 +126,35 @@
 <script type="text/javascript">
 
     $(function () {
-        initReceiveTable()
+        initTable()
+        initSendTable()
     })
 
-    $(document).on('click', '.mark-btn', function () {
-        var id = $(this).attr('id')
-        $.ajax({
-            url: baseUrl + '/message/' + id,
-            method: 'PUT',
-            success: function (result) {
-                if (result.info.error != null) {
-                    toastr.error(result.info.error, '错误', {timeOut: 2000})
-                    return
-                } else {
-                    toastr.success('消息标为已读', '提示', {timeOut: 2000})
+    $(document).on('click', '.send-btn', function () {
+        var tr = $(this).parents('tr')
+        var mName = tr.find('td:eq(2)').text()
+        if (confirm('确定要向项目经理[' + mName + ']发送离职人员消息吗?')) {
+            $.ajax({
+                url: baseUrl + '/message',
+                method: 'POST',
+                data: {
+                    empName: tr.find('td:eq(0)').text(),
+                    projectName: tr.find('td:eq(1)').text(),
+                    receiverId: $(this).attr('receiver-id'),
+                    receiverName: mName
+                },
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    } else {
+                        toastr.success('发送消息成功', '提示', {timeOut: 2000})
+                    }
+                    initSendTable()
                 }
-                initReceiveTable()
-            }
-        })
+            })
+        }
+
     })
 
     $(document).on('click', '.del-btn', function () {
@@ -127,17 +170,53 @@
                     } else {
                         toastr.success('删除消息成功', '提示', {timeOut: 2000})
                     }
-                    initReceiveTable()
+                    initSendTable()
                 }
             })
         }
 
     })
 
-    function initReceiveTable() {
-        $('#receive-table').bootstrapTable('destroy')
-        $('#receive-table').bootstrapTable({
-            url: 'http://localhost:8080/messages/receive',
+    function initTable() {
+        $('#emp-table').bootstrapTable('destroy')
+        $('#emp-table').bootstrapTable({
+            url: 'http://localhost:8080/emps/notInservice',
+            method: 'GET',
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            columns: [{
+                field: 'empName',
+                title: '离职员工'
+            }, {
+                field: 'pName',
+                title: '参与的项目'
+            }, {
+                field: 'mName',
+                title: '项目经理'
+            }, {
+                field: 'mId',
+                title: '操作',
+                formatter: function (value, row) {
+                    var result = ''
+                    result += '<button receiver-id=' + value + ' class="btn btn-primary btn-sm send-btn">发送通知消息</button>'
+                    return result
+                }
+            }
+            ]
+        })
+    }
+    function initSendTable() {
+        $('#send-table').bootstrapTable('destroy')
+        $('#send-table').bootstrapTable({
+            url: 'http://localhost:8080/messages/send',
             method: 'GET',
             pagination: true, // 是否显示分页
             sortable: true, //是否启用排序
@@ -178,13 +257,17 @@
                 field: 'content',
                 title: '消息内容'
             }, {
-                field: 'sender',
-                title: '发送者'
+                field: 'receiverName',
+                title: '接收人'
             }, {
-                field: 'gmtModified',
-                title: '发送时间',
+                field: 'status',
+                title: '读取状态',
                 formatter: function(value) {
-                    return LocalDateTimeFormatter(value)
+                    if (value == 0) {
+                        return '未读'
+                    } else {
+                        return '已读'
+                    }
                 }
             }, {
                 field: 'id',
@@ -192,9 +275,8 @@
                 formatter: function (value, row) {
                     var result = ''
                     if (row.status == 0) {
-                        result += '<button id=' + value + ' class="btn btn-success btn-sm mark-btn">标为已读</button> '
+                        result += '<button id=' + value + ' class="btn btn-danger btn-sm del-btn">删除</button>'
                     }
-                    result += '<button id=' + value + ' class="btn btn-danger btn-sm del-btn">删除</button>'
                     return result
                 }
             }
