@@ -25,4 +25,6 @@ public interface JobService{
     Message updateJob(Job job, Integer id);
 
     Message finishJob(Integer id);
+
+    Message postJob(Job job, Integer id);
 }

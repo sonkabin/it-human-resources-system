@@ -144,7 +144,7 @@
                             <form class="form-horizontal" id="add-form">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">招聘职位</label>
-                                    <input name="career" type="text" class="form-control col-sm-8" placeholder="Java开发工程师">
+                                    <input id="career" name="career" type="text" class="form-control col-sm-8" placeholder="Java开发工程师">
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">招聘人数</label>
@@ -162,7 +162,12 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">工作经验</label>
-                                    <input name="experience" type="text" class="form-control col-sm-8" placeholder="0/1/2-3">
+                                    <select id="experience" name="experience" class="col-sm-8 form-control" onchange="init_demand_responsibility(this.value)">
+                                        <option value="0" selected>无工作经验</option>
+                                        <option value="1">1-2年工作经验</option>
+                                        <option value="2">2-3年工作经验</option>
+                                        <option value="3">3年以上工作经验</option>
+                                    </select>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">薪资</label>
@@ -361,23 +366,12 @@
                 $('#jobModal input[name=career]').val(job.career)
                 $('#jobModal input[name=num]').val(job.num)
                 $('#eduBackground').val([job.eduBackground])
-                $('#jobModal input[name=experience]').val(job.experience)
+                $('#experience').val([job.experience])
                 $('#jobModal input[name=salary]').val(job.salary)
 
                 var responsibilities = job.responsibility.split(';')
-                $('#responsibilities').empty()
-                $('#responsibilities').append('<label class="col-sm-3 col-form-label">岗位职责</label>')
-                $('#responsibilities').append('<a id="add-new-responsibility-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_responsibility(\'\')">继续添加</a>')
-                for (var i = 0; i < responsibilities.length; i++) {
-                    add_new_responsibility(responsibilities[i])
-                }
                 var demands = job.demand.split(';')
-                $('#demands').empty()
-                $('#demands').append('<label class="col-sm-2  col-form-label">任职要求</label>')
-                $('#demands').append('<a id="add-new-demand-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_demand(\'\')">继续添加</a>')
-                for (var i = 0; i < demands.length; i++) {
-                    add_new_demand(demands[i])
-                }
+                build_responsibility_demand(responsibilities, demands)
                 $('#jobModal').modal()
             }
         })
@@ -416,6 +410,23 @@
         })
 
     })
+
+    function build_responsibility_demand (responsibilities, demands) {
+        $('#responsibilities').empty()
+        $('#responsibilities').append('<label class="col-sm-3 col-form-label">岗位职责</label>')
+        $('#responsibilities').append('<a id="add-new-responsibility-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_responsibility(\'\')">继续添加</a>')
+        for (var i = 0; i < responsibilities.length; i++) {
+            add_new_responsibility(responsibilities[i])
+        }
+
+        $('#demands').empty()
+        $('#demands').append('<label class="col-sm-2  col-form-label">任职要求</label>')
+        $('#demands').append('<a id="add-new-demand-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_demand(\'\')">继续添加</a>')
+        for (var i = 0; i < demands.length; i++) {
+            add_new_demand(demands[i])
+        }
+
+    }
 
     $(document).on('click', '.finish-btn', function () {
         var id = $(this).attr('id')
@@ -468,6 +479,30 @@
             })
         }
     })
+
+    function init_demand_responsibility(experience) {
+        // 检查是否是新增，若是修改，跳过Ajax请求
+        // console.log(experience)
+        // console.log($('#jobModelLabel').text() == '新增职位')
+        if ($('#jobModelLabel').text() == '新增职位') {
+            $.ajax({
+                url: baseUrl + '/jd',
+                method: 'GET',
+                data: {
+                    'job': $('#career').val(),
+                    'experience': experience
+                },
+                success: function (result) {
+                    var responsibility = result.info.responsibility
+                    var demand = result.info.demand
+                    var responsibilities = responsibility.split(';')
+                    var demands = demand.split(';')
+                    console.log(responsibilities, demand)
+                    build_responsibility_demand(responsibilities, demands)
+                }
+            })
+        }
+    }
 
     function initTable() {
         $('#job-table').bootstrapTable('destroy')
@@ -525,8 +560,11 @@
                 formatter: function (value) {
                     if (value == 0) {
                         return '无工作经验'
+                    } else if (value == 3) {
+                        return '3年以上'
                     } else {
-                        return value + '年'
+                        var temp = parseInt(value) + 1
+                        return value + '-' + temp + '年'
                     }
                 }
             }, {

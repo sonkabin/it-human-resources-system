@@ -63,5 +63,15 @@ public class JobController {
     public Message getAnonJob (@PathVariable("id") Integer id) {
         return jobService.getJob(id);
     }
+
+    /**
+     * 人员不够时由管理员通过消息管理页面直接发起的职位招聘
+     * @param id：消息id
+     * @return
+     */
+    @PostMapping("/postJob/{id}")
+    public Message postJob (Job job, @PathVariable("id") Integer id) {
+        return jobService.postJob(job, id);
+    }
 }
 

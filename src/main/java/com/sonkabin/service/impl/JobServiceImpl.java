@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.JobDTO;
 import com.sonkabin.entity.Job;
 import com.sonkabin.mapper.JobMapper;
+import com.sonkabin.mapper.MessageMapper;
 import com.sonkabin.service.JobService;
 import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,21 @@ public class JobServiceImpl implements JobService {
         job.setId(id);
         job.setStatus(1);
         jobMapper.updateById(job);
+        return Message.success();
+    }
+
+    @Autowired
+    private MessageMapper messageMapper;
+    @Override
+    public Message postJob(Job job, Integer id) {
+        // 发布职位
+
+
+        // 变更消息状态
+        com.sonkabin.entity.Message message = new com.sonkabin.entity.Message();
+        message.setId(id);
+        message.setStatus(1);
+        messageMapper.updateById(message);
         return Message.success();
     }
 

@@ -6,6 +6,7 @@ import com.sonkabin.entity.*;
 import com.sonkabin.mapper.*;
 import com.sonkabin.service.HumanConfigService;
 import com.sonkabin.utils.Message;
+import com.sonkabin.utils.MessageUtil;
 import com.sonkabin.utils.MyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -368,12 +369,12 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         Map<String, Integer> map = calculateWorkload(project);
 
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(HumanConfig::getProjectId, projectId).eq(HumanConfig::getStatus, 1);
-        // 当前项目的人员配置
-        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
+        wrapper.eq(HumanConfig::getProjectId, projectId);
+        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);// 当前项目的人员配置，已被释放的成员将不会再考虑进项目组
+
         LambdaQueryWrapper<Employee> employeeLambdaQueryWrapper = new LambdaQueryWrapper<>();
         employeeLambdaQueryWrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
-        employeeLambdaQueryWrapper.eq(Employee::getStatus, 1); // 禁用的员工不用考虑
+        employeeLambdaQueryWrapper.eq(Employee::getInservice, 1); // 离职的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(employeeLambdaQueryWrapper);
         // 移除当前项目的人员
         removeCurrentEmployees(humanConfigs, employees);
@@ -401,6 +402,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         LocalDate endDate = recalculateDTO.getEndDate();
         long minus = predictEnd.toEpochDay() - endDate.toEpochDay();
         // 以每提前一个10天为项目增加一个前台人员和后台人员
+        // frontNum：要加入的前端人员数， backNum：要加入的后端人员数
         int num = 0, frontNum = 0, backNum = 0;
         num += minus / 10;
         num *= 2;
@@ -435,11 +437,11 @@ public class HumanConfigServiceImpl implements HumanConfigService {
                     backCount++;
                 }
             }
-            if (frontNum != num /2 && frontCount > backCount) { // 是前端人员
+            if (frontNum != num /2 && frontCount > backCount) { // 前端人员数未达到所要求的数量，且当前人员是前端人员
                 frontNum++;
                 candidates.add(employees.get(index));
                 candidatePortions.add(portion);
-            } else if (backNum != num /2 && frontCount <= backCount){ // 后端人员
+            } else if (backNum != num /2 && frontCount <= backCount){ // 后端人员数未达到所要求的数量，且当前人员后端人员
                 backNum++;
                 candidates.add(employees.get(index));
                 candidatePortions.add(portion);
@@ -453,6 +455,9 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             empPortions = new int[j];
             System.arraycopy(portions, 0, empPortions, 0, j);
         }
+
+        // 检查此项目中员工的需求是否足够，若缺少员工，则发送系统通知给管理员
+        checkEmployeeNum(num/2, frontNum, backNum);
 
         return Message.success().put("employees", employees).put("empPortions", empPortions)
                 .put("candidates", candidates).put("candidatePortions", candidatePortions);
@@ -478,6 +483,22 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             }
         }
         return j;
+    }
+
+    @Autowired
+    private MessageMapper messageMapper;
+    private void checkEmployeeNum(int num, int frontNum, int backNum) {
+        com.sonkabin.entity.Message message = null;
+        if (num > frontNum && num > backNum) {
+            message = MessageUtil.employeeNotEnoughMessage(2, num - frontNum, num - backNum);
+        } else if (num > frontNum) {
+            message = MessageUtil.employeeNotEnoughMessage(0, num - frontNum, 0);
+        } else if (num > backNum) {
+            message = MessageUtil.employeeNotEnoughMessage(1, 0, num - backNum);
+        }
+        if (message != null) {
+            messageMapper.insert(message);
+        }
     }
 
 }

@@ -128,6 +128,7 @@
     $(function () {
         initTable()
         initSendTable()
+        initReceiveTable()
     })
 
     $(document).on('click', '.send-btn', function () {
@@ -157,6 +158,25 @@
 
     })
 
+    $(document).on('click', '.post-btn', function () {
+        var id = $(this).attr('id')
+        $.ajax({
+            url: baseUrl + '/postJob/' + id, // JobController
+            method: 'POST',
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                } else {
+                    toastr.success('发布招聘成功', '提示', {timeOut: 2000})
+                }
+                initReceiveTable()
+            }
+        })
+
+
+    })
+
     $(document).on('click', '.del-btn', function () {
         var id = $(this).attr('id')
         if (confirm('确定要删除此条消息吗?')) {
@@ -171,6 +191,7 @@
                         toastr.success('删除消息成功', '提示', {timeOut: 2000})
                     }
                     initSendTable()
+                    initReceiveTable()
                 }
             })
         }
@@ -277,6 +298,83 @@
                     if (row.status == 0) {
                         result += '<button id=' + value + ' class="btn btn-danger btn-sm del-btn">删除</button>'
                     }
+                    return result
+                }
+            }
+            ]
+        })
+    }
+    function initReceiveTable() {
+        $('#receive-table').bootstrapTable('destroy')
+        $('#receive-table').bootstrapTable({
+            url: 'http://localhost:8080/messages/receive',
+            method: 'GET',
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 5, // 每页的记录行数
+            pageList: [5, 10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            //height: 500,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'id',
+                title: '编号'
+            }, {
+                field: 'content',
+                title: '消息内容'
+            }, {
+                field: 'sender',
+                title: '发送者'
+            }, {
+                field: 'status',
+                title: '招聘发布状态',
+                formatter: function (value) {
+                    if (value == 0) {
+                        return '未发布招聘'
+                    } else {
+                        return '已发布招聘'
+                    }
+                }
+            }, {
+                field: 'gmtModified',
+                title: '发送时间',
+                formatter: function(value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    var result = ''
+                    if (row.status == 0) {
+                        result += '<button id=' + value + ' class="btn btn-success btn-sm post-btn">发布招聘</button> '
+                    }
+                    result += '<button id=' + value + ' class="btn btn-danger btn-sm del-btn">删除</button>'
                     return result
                 }
             }
