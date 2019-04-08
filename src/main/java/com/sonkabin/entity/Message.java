@@ -122,4 +122,14 @@ public class Message implements Serializable {
         ", gmtModified=" + gmtModified +
         "}";
     }
+
+    public Message () {}
+    public Message (Message message) {
+        this.status = message.status;
+        this.gmtCreate = message.gmtCreate;
+        this.gmtModified = message.gmtModified;
+        this.sender = message.sender;
+        this.receiverName = message.receiverName;
+        this.receiverId = message.receiverId;
+    }
 }

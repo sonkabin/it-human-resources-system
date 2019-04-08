@@ -101,6 +101,74 @@
                 </div>
             </section>
 
+            <!-- 新增招聘模态框 -->
+            <div id="jobModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="jobModelLabel">新增职位</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="add-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">招聘职位</label>
+                                    <input id="career" name="career" type="text" class="form-control col-sm-8" placeholder="Java开发工程师">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">招聘人数</label>
+                                    <input id="num" name="num" type="text" class="form-control col-sm-8">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">学历要求</label>
+                                    <select id="eduBackground" name="eduBackground" class="col-sm-8 form-control">
+                                        <option value="高中及以上" selected>高中及以上</option>
+                                        <option value="大专">大专</option>
+                                        <option value="本科">本科</option>
+                                        <option value="硕士">硕士</option>
+                                        <option value="博士">博士</option>
+                                    </select>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">工作经验</label>
+                                    <select id="experience" name="experience" class="col-sm-8 form-control" onchange="init_demand_responsibility(this.value)">
+                                        <option value="0" selected>无工作经验</option>
+                                        <option value="1">1-2年工作经验</option>
+                                        <option value="2">2-3年工作经验</option>
+                                        <option value="3">3年以上工作经验</option>
+                                    </select>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">薪资</label>
+                                    <input name="salary" type="text" class="form-control col-sm-8" placeholder="10k-12k">
+                                </div>
+                                <div class="form-group row" id="responsibilities">
+                                    <label class="col-sm-3 col-form-label">岗位职责</label>
+                                    <div class="form-group row col-sm-10 offset-sm-2">
+                                        <input type="text" class="form-control col-sm-9 responsibility">
+                                        <label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger node-delete">删除</button></label>
+                                    </div>
+                                    <a id="add-new-responsibility-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_responsibility('')">继续添加</a>
+                                </div>
+                                <div class="form-group row" id="demands">
+                                    <label class="col-sm-3 col-form-label">任职要求</label>
+                                    <div class="form-group row col-sm-10 offset-sm-2">
+                                        <input type="text" class="form-control col-sm-9 demand">
+                                        <label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger node-delete">删除</button></label>
+                                    </div>
+                                    <a id="add-new-demand-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_demand('')">继续添加</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
         </div>
@@ -160,21 +228,24 @@
 
     $(document).on('click', '.post-btn', function () {
         var id = $(this).attr('id')
-        $.ajax({
-            url: baseUrl + '/postJob/' + id, // JobController
-            method: 'POST',
-            success: function (result) {
-                if (result.info.error != null) {
-                    toastr.error(result.info.error, '错误', {timeOut: 2000})
-                    return
-                } else {
-                    toastr.success('发布招聘成功', '提示', {timeOut: 2000})
-                }
-                initReceiveTable()
-            }
-        })
-
-
+        var msg = $(this).attr('msg')
+        var numReg = /(\d)+名/
+        var kindReg = /.{2}工程师/
+        var num = numReg.exec(msg)[1]
+        var kind = kindReg.exec(msg)[0]
+        console.log(kind)
+        console.log(num)
+        if (kind == '前端工程师') {
+            $('#career').val('Web前端工程师')
+        } else {
+            $('#career').val('Java开发工程师')
+        }
+        $('#num').val(num)
+        $('#experience').val([1])
+        init_demand_responsibility(1)
+        // todo bug
+        $('#save-btn').attr('edit-id', id)
+        $('#jobModal').modal()
     })
 
     $(document).on('click', '.del-btn', function () {
@@ -196,6 +267,38 @@
             })
         }
 
+    })
+
+    $('#save-btn').click(function () {
+        // 收集岗位职责
+        var responsibility = ''
+        var responsibilities = $('.responsibility')
+        for (var i = 0; i < responsibilities.length; i++) {
+            responsibility += $(responsibilities[i]).val() + ';'
+        }
+        responsibility = responsibility.substr(0, responsibility.length - 1)
+        // console.log(responsibility)
+        // 收集任职要求
+        var demand = ''
+        var demands = $('.demand')
+        for (var i = 0; i < demands.length; i++) {
+            demand += $(demands[i]).val() + ';'
+        }
+        demand = demand.substr(0, demand.length - 1)
+        $.ajax({
+            url: baseUrl + '/postJob/' + $(this).attr('edit-id'),
+            method: 'POST',
+            data: $('#add-form').serialize() + '&' + $.param({'responsibility': responsibility, 'demand': demand}),
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
+                toastr.success('保存职位信息成功', '提示', {timeOut: 2000})
+                initReceiveTable()
+            }
+        })
+        $('#jobModal').modal('hide')
     })
 
     function initTable() {
@@ -372,7 +475,7 @@
                 formatter: function (value, row) {
                     var result = ''
                     if (row.status == 0) {
-                        result += '<button id=' + value + ' class="btn btn-success btn-sm post-btn">发布招聘</button> '
+                        result += '<button msg=' + row.content + ' id=' + value + ' class="btn btn-success btn-sm post-btn">发布招聘</button> '
                     }
                     result += '<button id=' + value + ' class="btn btn-danger btn-sm del-btn">删除</button>'
                     return result
@@ -381,6 +484,84 @@
             ]
         })
     }
+
+    // 新增一行岗位职责
+    function add_new_responsibility (value) {
+        var aNode = $('#add-new-responsibility-btn')
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+        var input = $('<input type="text" class="form-control col-sm-9 responsibility">').val(value)
+        var btn = $('<label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger node-delete">删除</button></label>')
+        div.append(input).append(btn)
+        aNode.before(div)
+    }
+    // 新增一行任职要求
+    function add_new_demand (value) {
+        var aNode = $('#add-new-demand-btn')
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+        var input = $('<input type="text" class="form-control col-sm-9 demand">').val(value)
+        var btn = $('<label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger node-delete">删除</button></label>')
+        div.append(input).append(btn)
+        aNode.before(div)
+    }
+    $(document).on('click', '.node-delete', function () {
+        var pNode = $(this).parent().parent()
+        pNode.remove()
+    })
+    $('#jobModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+        var responsibilities = $('#responsibilities')
+        $(responsibilities).empty()
+        $(responsibilities).append('<label class="col-sm-3 col-form-label">岗位职责</label>')
+        $(responsibilities).append('<a id="add-new-responsibility-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_responsibility(\'\')">继续添加</a>')
+        add_new_responsibility('')
+        var demands = $('#demands')
+        $(demands).empty()
+        $(demands).append('<label class="col-sm-3 col-form-label">任职要求</label>')
+        $(demands).append('<a id="add-new-demand-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_demand(\'\')">继续添加</a>')
+        add_new_demand('')
+    })
+
+    function init_demand_responsibility(experience) {
+        // 检查是否是新增，若是修改，跳过Ajax请求
+        // console.log(experience)
+        // console.log($('#jobModelLabel').text() == '新增职位')
+        if ($('#jobModelLabel').text() == '新增职位') {
+            $.ajax({
+                url: baseUrl + '/jd',
+                method: 'GET',
+                data: {
+                    'job': $('#career').val(),
+                    'experience': experience
+                },
+                success: function (result) {
+                    var responsibility = result.info.responsibility
+                    var demand = result.info.demand
+                    var responsibilities = responsibility.split(';')
+                    var demands = demand.split(';')
+                    console.log(responsibilities, demand)
+                    build_responsibility_demand(responsibilities, demands)
+                }
+            })
+        }
+    }
+
+    function build_responsibility_demand (responsibilities, demands) {
+        $('#responsibilities').empty()
+        $('#responsibilities').append('<label class="col-sm-3 col-form-label">岗位职责</label>')
+        $('#responsibilities').append('<a id="add-new-responsibility-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_responsibility(\'\')">继续添加</a>')
+        for (var i = 0; i < responsibilities.length; i++) {
+            add_new_responsibility(responsibilities[i])
+        }
+
+        $('#demands').empty()
+        $('#demands').append('<label class="col-sm-2  col-form-label">任职要求</label>')
+        $('#demands').append('<a id="add-new-demand-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_demand(\'\')">继续添加</a>')
+        for (var i = 0; i < demands.length; i++) {
+            add_new_demand(demands[i])
+        }
+
+    }
+
 </script>
 </body>
 </html>

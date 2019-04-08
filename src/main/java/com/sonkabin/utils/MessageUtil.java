@@ -3,6 +3,8 @@ package com.sonkabin.utils;
 import com.sonkabin.entity.Message;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 消息工具，定义某种格式的消息
@@ -29,23 +31,30 @@ public class MessageUtil {
      * @param num2: 表示缺少的后端人员数量
      * @return
      */
-    public static Message employeeNotEnoughMessage(int flag, int num, int num2) {
+    public static List<Message> employeeNotEnoughMessage(int flag, int num, int num2) {
+        List<Message> messages = new LinkedList<>();
         Message message = new Message();
         LocalDateTime now = LocalDateTime.now();
         message.setStatus(0);
         message.setSender("系统");
         message.setGmtCreate(now);
         message.setGmtModified(now);
-        if (flag == 0) {
-            message.setContent("缺少工作经验1-2年的前端工程师" + num + "名");
-        } else if (flag == 1) {
-            message.setContent("缺少工作经验1-2年的后端工程师" + num2 + "名");
-        } else {
-            message.setContent("缺少工作经验1-2年的前端工程师" + num + "名, " + "缺少工作经验1-2年的后端工程师" + num2 + "名");
-        }
         // 接下来两行写死了，因为不想再多浪费时间了
         message.setReceiverId(1);
         message.setReceiverName("sonkabin");
-        return message;
+        if (flag == 0) {
+            message.setContent("缺少工作经验1-2年的前端工程师" + num + "名");
+            messages.add(message);
+        } else if (flag == 1) {
+            message.setContent("缺少工作经验1-2年的后端工程师" + num2 + "名");
+            messages.add(message);
+        } else {
+            message.setContent("缺少工作经验1-2年的前端工程师" + num + "名");
+            Message msg2 = new Message(message);
+            msg2.setContent("缺少工作经验1-2年的后端工程师" + num2 + "名");
+            messages.add(message);
+            messages.add(msg2);
+        }
+        return messages;
     }
 }

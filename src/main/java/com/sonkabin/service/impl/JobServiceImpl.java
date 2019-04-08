@@ -12,6 +12,7 @@ import com.sonkabin.service.JobService;
 import com.sonkabin.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -91,10 +92,15 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private MessageMapper messageMapper;
+    @Transactional
     @Override
     public Message postJob(Job job, Integer id) {
         // 发布职位
-
+        job.setStatus(0);
+        LocalDateTime now = LocalDateTime.now();
+        job.setGmtCreate(now);
+        job.setGmtModified(now);
+        jobMapper.insert(job);
 
         // 变更消息状态
         com.sonkabin.entity.Message message = new com.sonkabin.entity.Message();

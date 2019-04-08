@@ -488,16 +488,18 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     @Autowired
     private MessageMapper messageMapper;
     private void checkEmployeeNum(int num, int frontNum, int backNum) {
-        com.sonkabin.entity.Message message = null;
+        List<com.sonkabin.entity.Message> messages = null;
         if (num > frontNum && num > backNum) {
-            message = MessageUtil.employeeNotEnoughMessage(2, num - frontNum, num - backNum);
+            messages = MessageUtil.employeeNotEnoughMessage(2, num - frontNum, num - backNum);
         } else if (num > frontNum) {
-            message = MessageUtil.employeeNotEnoughMessage(0, num - frontNum, 0);
+            messages = MessageUtil.employeeNotEnoughMessage(0, num - frontNum, 0);
         } else if (num > backNum) {
-            message = MessageUtil.employeeNotEnoughMessage(1, 0, num - backNum);
+            messages = MessageUtil.employeeNotEnoughMessage(1, 0, num - backNum);
         }
-        if (message != null) {
-            messageMapper.insert(message);
+        if (messages != null) {
+            messages.forEach((message) -> {
+                messageMapper.insert(message);
+            });
         }
     }
 
