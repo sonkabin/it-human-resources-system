@@ -84,6 +84,9 @@ public class EmployeeController {
         return "employee/personManage";
     }
 
+    /**
+     * f：控制员工查询自己的技能信息的页面跳转
+     */
     @GetMapping("/skills")
     public String getSkillsInfo (HttpSession session, Model model) {
         Employee employee = (Employee) session.getAttribute("loginEmp");
@@ -92,6 +95,18 @@ public class EmployeeController {
         List<String> skillNames = skillService.getAllSkillNames();
         model.addAttribute("skillNames", skillNames);
         return "employee/skillManage";
+    }
+
+    /**
+     * 查询员工的技能信息
+     */
+    @ResponseBody
+    @GetMapping("/employee/skill/{id}")
+    public Message getEmployeeSkills(@PathVariable("id") Integer id) {
+        Message message = employeeService.getEmployeeSkills(id);
+        List<String> skillNames = skillService.getAllSkillNames();
+        message.put("skillNames", skillNames);
+        return message;
     }
 }
 

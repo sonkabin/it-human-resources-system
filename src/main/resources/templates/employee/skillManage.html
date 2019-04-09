@@ -67,9 +67,9 @@
 
                                     </form>
                                 </div>
-                                <div class="card-footer">
-                                    <button class="btn btn-primary" id="save-btn">保存</button>
-                                </div>
+                                <!--<div class="card-footer">-->
+                                    <!--<button class="btn btn-primary" id="save-btn">保存</button>-->
+                                <!--</div>-->
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,6 @@
     jQuery(document).ready(function($){
         if (skills != null) {
             skills = skills.split(';')
-            // console.log(skills)
 
             $('#skills').empty()
             $('#skills').append('<label class="col-sm-2 col-form-label">技能信息</label>')
@@ -115,20 +114,18 @@
                 var array = skills[i].split(":")
                 var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
                 var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-                // var input = $('<input type="text" class="form-control col-sm-2 skill-name">').val(array[0])
                 var sel = build_skill_name(skillNames)
                 sel.val(array[0])
                 var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
                 var select = build_skill_select()
-                var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+                // var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
                 select.val([array[1]])
-                // div.append(label).append(input).append(label2).append(select).append(btn)
-                div.append(label).append(sel).append(label2).append(select).append(btn)
+                div.append(label).append(sel).append(label2).append(select)
+                // div.append(label).append(sel).append(label2).append(select).append(btn)
                 $('#skills').append(div)
-                // $('#skills').append(label).append(input).append(label2).append(select)
             }
         }
-        $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
+        // $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
     })
 
 </script>
@@ -150,49 +147,49 @@
         return select
     }
 
-    function add_new_skill() {
-        var aNode = $('#add-new-skill-btn')
-        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
-        var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-        // var input = $('<input type="text" class="form-control col-sm-2 skill-name">')
-        var sel = build_skill_name(skillNames)
-        var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
-        var select = build_skill_select()
-        var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
-        div.append(label).append(sel).append(label2).append(select).append(btn)
-        aNode.before(div)
-    }
+    // function add_new_skill() {
+    //     var aNode = $('#add-new-skill-btn')
+    //     var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+    //     var label = $('<label class="col-form-label col-sm-1">技能名</label>')
+    //     // var input = $('<input type="text" class="form-control col-sm-2 skill-name">')
+    //     var sel = build_skill_name(skillNames)
+    //     var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
+    //     var select = build_skill_select()
+    //     var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+    //     div.append(label).append(sel).append(label2).append(select).append(btn)
+    //     aNode.before(div)
+    // }
 
-    $(document).on('click', '.skill-close', function () {
-        var pNode = $(this).parent()
-        pNode.remove()
-    })
+    // $(document).on('click', '.skill-close', function () {
+    //     var pNode = $(this).parent()
+    //     pNode.remove()
+    // })
 
-    $('#save-btn').click(function () {
-        var id = $('#edit-id').val()
-        var skills = ''
-        var skillNames = $('.skill-name')
-        var levels = $('.level option:checked')
-        for (var i = 0; i < levels.length; i++) {
-            var skillName = $(skillNames[i]).val()
-            if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入第一个选择的能力等级
-                var level = $(levels[i]).val()
-                skills += skillName + ':' + level + ';'
-            }
-        }
-        // 移除最后一个分号
-        skills = skills.substr(0, skills.length - 1)
-        // console.log(skills)
-        $.ajax({
-            url: baseUrl + '/emp/' + id,
-            method: 'PUT',
-            data: $('#edit-form').serialize() + '&' + $.param({'skills':skills}),
-            success: function () {
-                toastr.success('信息更新成功', '提示', {timeOut: 1000})
-            }
-        })
-
-    })
+    // $('#save-btn').click(function () {
+    //     var id = $('#edit-id').val()
+    //     var skills = ''
+    //     var skillNames = $('.skill-name')
+    //     var levels = $('.level option:checked')
+    //     for (var i = 0; i < levels.length; i++) {
+    //         var skillName = $(skillNames[i]).val()
+    //         if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入第一个选择的能力等级
+    //             var level = $(levels[i]).val()
+    //             skills += skillName + ':' + level + ';'
+    //         }
+    //     }
+    //     // 移除最后一个分号
+    //     skills = skills.substr(0, skills.length - 1)
+    //     // console.log(skills)
+    //     $.ajax({
+    //         url: baseUrl + '/emp/' + id,
+    //         method: 'PUT',
+    //         data: $('#edit-form').serialize() + '&' + $.param({'skills':skills}),
+    //         success: function () {
+    //             toastr.success('信息更新成功', '提示', {timeOut: 1000})
+    //         }
+    //     })
+    //
+    // })
 </script>
 </body>
 </html>

@@ -32,4 +32,5 @@ public interface EmployeeService{
     Message getEmployeeSkills(Integer id);
 
     Message getNotInserviceEmployee();
+
 }

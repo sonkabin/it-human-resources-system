@@ -182,49 +182,72 @@
 
             <!-- 详情模态框 -->
             <div id="detailModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="empDetailModalLabel"
+                       aria-hidden="true" class="modal fade text-left">
+            <div role="document" class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="empDetailModalLabel" class="modal-title" >员工详情</h4>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                       <form class="form-horizontal" >
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">员工编号</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="empId">
+                                <label class="col-sm-2 col-form-label">员工姓名</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="empName">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">性别</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="sex">
+                                <label class="col-sm-2 col-form-label">身份证号</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="idCard">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">年龄</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="age">
+                                <label class="col-sm-2 col-form-label">生日</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="detail-birth">
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">邮箱</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="email">
+                                <label class="col-sm-2 col-form-label">手机号</label>
+                                <input type="text" class="form-control-plaintext col-sm-4" readonly id="phone">
+                            </div>
+                            <div class="form-group row" id="education">
+                                <label class="col-sm-2 col-form-label" >教育信息</label>
+                            </div>
+                            <div class="form-group row" id="skills-information">
+                                <label class="col-sm-2 col-form-label">技能信息</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- 员工技能模态框 -->
+            <div id="skillModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="skillModalLabel"
                  aria-hidden="true" class="modal fade text-left">
                 <div role="document" class="modal-dialog  modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 id="empDetailModalLabel" class="modal-title" >员工详情</h4>
+                            <h4 id="skillModalLabel" class="modal-title" >技能详情</h4>
                             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
                                     aria-hidden="true">×</span></button>
                         </div>
                         <div class="modal-body">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">员工编号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="empId">
-                                    <label class="col-sm-2 col-form-label">员工姓名</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="empName">
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">性别</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="sex">
-                                    <label class="col-sm-2 col-form-label">身份证号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="idCard">
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">年龄</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="age">
-                                    <label class="col-sm-2 col-form-label">生日</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="detail-birth">
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">邮箱</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="email">
-                                    <label class="col-sm-2 col-form-label">手机号</label>
-                                    <input type="text" class="form-control-plaintext col-sm-4" readonly id="phone">
-                                </div>
-                                <div class="form-group row" id="education">
-                                    <label class="col-sm-2 col-form-label" >教育信息</label>
-                                </div>
-                                <div class="form-group row" id="skills">
-                                    <label class="col-sm-2 col-form-label">技能信息</label>
-                                </div>
+                            <form class="form-horizontal" >
+                                <div class="form-group row" id="skills"></div>
                             </form>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="skill-save-btn">保存</button>
                             <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
                         </div>
                     </div>
@@ -339,6 +362,7 @@
                 $('#age').val(employee.age)
                 $('#detail-birth').val(employee.birth)
                 $('#email').val(employee.email)
+                $('#phone').val(employee.phone)
 
                 // 教育信息
                 $('#education').empty()
@@ -355,8 +379,8 @@
                 }
 
                 // 技能信息
-                $('#skills').empty()
-                $('#skills').append('<label class="col-sm-2 col-form-label">技能信息</label>')
+                $('#skills-information').empty()
+                $('#skills-information').append('<label class="col-sm-2 col-form-label">技能信息</label>')
                 if (employee.skills != null) {
                     var skills = employee.skills.split(';')
                     for (var i in skills) {
@@ -364,7 +388,7 @@
                         if (i % 3 == 0 && i != 0) {
                             input.addClass('offset-sm-2')
                         }
-                        $('#skills').append(input)
+                        $('#skills-information').append(input)
                     }
                 }
 
@@ -413,6 +437,102 @@
             $('#role-select').append(option)
         })
     }
+
+    // --------- 编辑技能操作的相关方法 ---------
+    var skillNames
+    $(document).on('click', '.skill-btn', function () {
+        var id = $(this).attr('emp-id')
+        $.ajax({
+            url: baseUrl + '/employee/skill/' + id,
+            method: 'GET',
+            success: function (result) {
+                var skills = result.info.employee.skills
+                skillNames = result.info.skillNames
+                if (skills != null) {
+                    skills = skills.split(';')
+                    // console.log(skills)
+
+                    $('#skills').empty()
+                    for (var i in skills) {
+                        var array = skills[i].split(":")
+                        var div = $('<div class="form-group row col-sm-11"></div>')
+                        var label = $('<label class="col-form-label col-sm-2">技能名</label>')
+                        // var input = $('<input type="text" class="form-control col-sm-2 skill-name">').val(array[0])
+                        var sel = build_skill_name(skillNames)
+                        sel.val(array[0])
+                        var label2 = $('<label class="col-form-label col-sm-2">等级</label>')
+                        var select = build_skill_select()
+                        var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+                        select.val([array[1]])
+                        // div.append(label).append(input).append(label2).append(select).append(btn)
+                        div.append(label).append(sel).append(label2).append(select).append(btn)
+                        $('#skills').append(div)
+                        // $('#skills').append(label).append(input).append(label2).append(select)
+                    }
+                }
+                $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
+            }
+        })
+        $('#skill-save-btn').attr('edit-id', id)
+        $('#skillModal').modal()
+    })
+    function build_skill_name (skillNames) {
+        var select = $('<select class="col-sm-3 form-control skill-name"></select>')
+        skillNames.map(function (skillName) {
+            var option = $('<option></option>').val(skillName).append(skillName)
+            select.append(option)
+        })
+        return select
+    }
+    function build_skill_select () {
+        var select = $('<select class="col-sm-3 form-control level"></select>')
+        for (var i = 1; i < 10; i++) {
+            var option = $('<option></option>').val(i).append(i)
+            select.append(option)
+        }
+        return select
+    }
+    function add_new_skill() {
+        var aNode = $('#add-new-skill-btn')
+        var div = $('<div class="form-group row col-sm-11"></div>')
+        var label = $('<label class="col-form-label col-sm-2">技能名</label>')
+        var sel = build_skill_name(skillNames)
+        var label2 = $('<label class="col-form-label col-sm-2">等级</label>')
+        var select = build_skill_select()
+        var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+        div.append(label).append(sel).append(label2).append(select).append(btn)
+        aNode.before(div)
+    }
+    $(document).on('click', '.skill-close', function () {
+        var pNode = $(this).parent()
+        pNode.remove()
+    })
+    $('#skill-save-btn').click(function () {
+        var id = $(this).attr('edit-id')
+        var skills = ''
+        var skillNames = $('.skill-name')
+        var levels = $('.level option:checked')
+        for (var i = 0; i < levels.length; i++) {
+            var skillName = $(skillNames[i]).val()
+            if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入第一个选择的能力等级
+                var level = $(levels[i]).val()
+                skills += skillName + ':' + level + ';'
+            }
+        }
+        // 移除最后一个分号
+        skills = skills.substr(0, skills.length - 1)
+        // console.log(skills)
+        $.ajax({
+            url: baseUrl + '/emp/' + id,
+            method: 'PUT',
+            data: $('#edit-form').serialize() + '&' + $.param({'skills':skills}),
+            success: function () {
+                toastr.success('信息更新成功', '提示', {timeOut: 1000})
+            }
+        })
+        $('#skillModal').modal('hide')
+    })
+    // --------- 技能相关方法结束 ------------------
 
     function initTable() {
         $('#emp-table').bootstrapTable('destroy')
@@ -521,6 +641,7 @@
                     var result = ''
                     result += '<button detail-id=' + id + ' class="btn btn-info btn-sm detail-btn">详情</button> '
                     result += '<button edit-id=' + id + ' class="btn btn-primary btn-sm edit-btn">编辑</button> '
+                    result += '<button emp-id=' + id + ' class="btn btn-success btn-sm skill-btn">技能</button> '
                     result += '<button reset-id=' + id + ' reset-name=' + empName + ' class="btn btn-danger btn-sm reset-btn">重置密码</button>'
                     return result
                 }
