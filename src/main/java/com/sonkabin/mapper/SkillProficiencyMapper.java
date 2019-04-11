@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SkillProficiencyMapper extends BaseMapper<SkillProficiency> {
 
+    SkillProficiency selectByEmpId(Integer empId);
+
+    void updateByEmpId(SkillProficiency sp);
 }

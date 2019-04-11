@@ -16,14 +16,14 @@ import com.sonkabin.service.ProjectService;
 import com.sonkabin.utils.Message;
 import com.sonkabin.utils.MyUtil;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -98,6 +98,10 @@ public class ProjectServiceImpl implements ProjectService {
         return Message.success();
     }
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private DirectExchange directExchange;
     @Transactional
     @Override
     public Message finishProject(Integer id) {
@@ -130,6 +134,18 @@ public class ProjectServiceImpl implements ProjectService {
         }
         // 4.插入成员贡献数据
         projectHistoryMapper.insertBatch(project, humanConfigs);
+        // 5.发送封装好的消息到消息队列，由工作进程处理
+        StringBuffer buffer = new StringBuffer(project.getFrontEndSkill());
+        buffer.append(",");
+        buffer.append(project.getBackEndSkill());
+        buffer.append(",");
+        buffer.append(project.getDbSkill());
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("skills", buffer.toString());
+        humanConfigs.forEach(hc -> {
+            msg.put("empId", hc.getEmpId());
+            rabbitTemplate.convertAndSend(directExchange.getName(), "proficiency.update", msg);
+        });
         return Message.success();
     }
 

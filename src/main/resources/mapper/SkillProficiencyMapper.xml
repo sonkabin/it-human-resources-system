@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sonkabin.mapper.SkillProficiencyMapper">
+    <update id="updateByEmpId">
+        UPDATE tb_skill_proficiency
+        SET proficiency = #{sp.proficiency}
+        WHERE emp_id = #{sp.empId}
+    </update>
 
+    <select id="selectByEmpId" resultType="com.sonkabin.entity.SkillProficiency">
+        SELECT id, emp_id, proficiency FROM tb_skill_proficiency
+        WHERE emp_id = #{empId}
+    </select>
 </mapper>
