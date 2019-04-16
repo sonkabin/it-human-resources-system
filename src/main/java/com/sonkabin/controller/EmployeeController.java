@@ -85,7 +85,7 @@ public class EmployeeController {
     }
 
     /**
-     * f：控制员工查询自己的技能信息的页面跳转
+     * function：控制员工查询自己的技能信息的页面跳转
      */
     @GetMapping("/skills")
     public String getSkillsInfo (HttpSession session, Model model) {

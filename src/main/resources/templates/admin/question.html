@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>IT企业人力资源管理系统</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"
+          th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css"
+          th:href="@{/vendor/font-awesome/css/font-awesome.min.css}">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css" th:href="@{/css/fontastic.css}">
+
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet" th:href="@{/css/style.default.css}">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css" th:href="@{/css/custom.css}">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" th:href="@{/css/bootstrap-datetimepicker.min.css}">
+    <link rel="stylesheet" href="css/toastr.min.css" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+
+
+<div class="page">
+    <!-- 引入抽取的topbar -->
+    <div th:replace="~{commons/bar::topbar}"></div>
+
+    <div class="page-content d-flex align-items-stretch">
+        <!-- 引入抽取的sidebar -->
+        <div th:replace="~{commons/bar::sidebar(activeUrl='question.html')}"></div>
+        <div class="content-inner">
+            <!-- Page Header-->
+            <header class="page-header">
+                <div class="container-fluid">
+                    <h2 class="no-margin-bottom">Dashboard</h2>
+                </div>
+            </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder container-fluid">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
+                    <li class="breadcrumb-item active">试题管理</li>
+                </ul>
+            </div>
+
+            <section class="tables">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">试题列表</h3>
+                                </div>
+                                <br>
+                                <div>
+                                    <!-- search-from -->
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="question-domain" class="form-control-label offset-sm-1">技能领域</label>
+                                            <!--<input id="question-domain" type="text" class="col-sm-8 form-control">-->
+                                            <select class="col-sm-6 form-control" id="question-domain"></select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" id="search-btn">搜索</button>
+                                        </div>
+                                        &nbsp;
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary" onclick="reset()"
+                                                    id="search-reset">重置
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="toolbar" class="btn-group">
+                                    <button id="question-add-btn" type="button" class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增试题
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="question-table"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 新增和修改试题模态框 -->
+            <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="questionModalLabel">新增试题</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="add-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">问题描述</label>
+                                    <textarea rows="5" type="text" class="form-control col-sm-8" name="content"></textarea>
+                                </div>
+                                <div class="form-group row" id="choices">
+                                    <label class="col-sm-2 col-form-label">选项</label>
+                                    <div class="form-group row col-sm-10 offset-sm-2">
+                                        <input type="text" class="form-control col-sm-8 choice">
+                                        <label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger choice-close">删除</button></label>
+                                    </div>
+                                    <a id="add-new-choice-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_choice('')">添加选项</a>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">正确答案索引</label>
+                                    <input name="answer" type="text" class="form-control col-sm-8" placeholder="0代表第一个为正确答案，1代表第二个为正确答案，依次类推">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">所属领域</label>
+                                    <!--<input name="domain" type="text" class="form-control col-sm-8">-->
+                                    <select class="col-sm-8 form-control" name="domain"></select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 引入footer -->
+            <div th:replace="~{commons/bar::footer}" }></div>
+        </div>
+    </div>
+</div>
+<!-- JavaScript files-->
+<script src="vendor/jquery/jquery.min.js" th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script src="vendor/popper.js/umd/popper.min.js" th:src="@{/vendor/popper.js/umd/popper.min.js}"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script src="vendor/jquery.cookie/jquery.cookie.js" th:src="@{/vendor/jquery.cookie/jquery.cookie.js}"></script>
+<script src="vendor/chart.js/Chart.min.js" th:src="@{/vendor/chart.js/Chart.min.js}"></script>
+<script src="vendor/jquery-validation/jquery.validate.min.js"
+        th:src="@{/vendor/jquery-validation/jquery.validate.min.js}"></script>
+<script src="js/charts-home.js" th:src="@{/js/charts-home.js}"></script>
+<script src="js/bootstrap-table.min.js" th:src="@{/js/bootstrap-table.min.js}"></script>
+<script src="js/bootstrap-table-zh-CN.min.js" th:src="@{/js/bootstrap-table-zh-CN.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.min.js" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script src="js/bootstrap-datetimepicker.zh-CN.js" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script src="js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+<!-- Main File-->
+<script src="js/front.js" th:src="@{/js/front.js}"></script>
+<script type="text/javascript">
+    var skills
+    $(function(){
+        initSkill()
+        initTable()
+    })
+    // 搜索
+    $('#search-btn').click(function () {
+        initTable()
+    })
+    // 搜索栏重置
+    $('#search-reset').click(function () {
+        initTable()
+    })
+
+    // 新增试题
+    $('#question-add-btn').click(function () {
+        $('#questionModalLabel').text('新增试题')
+        $('#save-btn').text('保存')
+        var skillSelect = $('#myModal select[name="domain"]')
+        build_skill_select(skillSelect)
+        $('#myModal').modal()
+    })
+    $('#myModal').on('hidden.bs.modal', function () {
+        $('#add-form')[0].reset() // 重置表单
+        $('#myModal textarea[name=content]').text('')
+        // 由于选项是由js动态添加或删除，故需要清空问题的选项
+        var choices = $('#choices')
+        choices.empty()
+        choices.append('<label class="col-sm-3 col-form-label">选项</label>')
+        choices.append('<a id="add-new-choice-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_choice(\'\')">添加选项</a>')
+        add_new_choice('')
+    })
+    function add_new_choice(content) {
+        var aNode = $('#add-new-choice-btn')
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+        var choice = $('<input type="text" class="form-control col-sm-8 choice">').val(content)
+        var btn = $('<label class="col-form-label col-sm-1"><button type="button" class="btn btn-sm btn-danger choice-close">删除</button></label>')
+        div.append(choice).append(btn)
+        aNode.before(div)
+    }
+    $(document).on('click', '.choice-close', function () {
+        var pNode = $(this).parent().parent()
+        pNode.remove()
+    })
+    $(document).on('click', '.edit-btn', function () {
+        var id = $(this).attr('question-id')
+        $.ajax({
+            url: baseUrl + '/question/' + id,
+            method: 'GET',
+            success: function (result) {
+                var question = result.info.question
+                $('#myModal textarea[name=content]').text(question.content)
+                $('#myModal input[name=answer]').val(question.answer)
+                var skillSelect = $('#myModal select[name="domain"]')
+                build_skill_select(skillSelect)
+                $(skillSelect).val([question.domain])
+                // 选项
+                var choices = question.choices.split(';')
+                $('#choices').empty()
+                $('#choices').append('<label class="col-sm-3 col-form-label">选项</label>')
+                $('#choices').append('<a id="add-new-choice-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_choice(\'\')">添加选项</a>')
+                for (var i in choices) {
+                    add_new_choice(choices[i])
+                }
+                $('#myModal').modal()
+            }
+        })
+        $('#questionModalLabel').text('修改试题')
+        $('#save-btn').text('更新')
+        $('#save-btn').attr('edit-id', id)
+    })
+
+    $('#save-btn').click(function () {
+        // 收集选项信息
+        var choices = ''
+        var inputChoices = $('.choice')
+        for (var i = 0; i < inputChoices.length; i++) {
+            choices += $(inputChoices[i]).val() + ';'
+        }
+        // 移除最后一个分号
+        choices = choices.substr(0, choices.length - 1)
+        var method, url, msg
+        if ($(this)[0].innerHTML === '保存'){
+            url = baseUrl + '/question'
+            method = 'POST'
+            msg = '保存'
+        } else {
+            url = baseUrl + '/question/' + $(this).attr('edit-id')
+            method = 'PUT'
+            msg = '更新'
+        }
+        $.ajax({
+            url: url,
+            method: method,
+            data: $('#add-form').serialize() +'&'+$.param({'choices': choices}),
+            success: function (result) {
+                if (result.info.error != null) {
+                    toastr.error(result.info.error, '错误', {timeOut: 2000})
+                    return
+                }
+                toastr.success(msg + '问题成功', '提示', {timeOut: 1000})
+                initTable()
+            }
+        })
+        $('#myModal').modal('hide')
+    })
+
+    $(document).on('click', '.del-btn', function () {
+        if (confirm('确定要删除该问题吗?')) {
+            $.ajax({
+                url: baseUrl + '/question/' + $(this).attr('question-id'),
+                method: 'DELETE',
+                success: function (result) {
+                    if (result.info.error != null) {
+                        toastr.error(result.info.error, '错误', {timeOut: 2000})
+                        return
+                    }
+                    toastr.success('删除成功', '提示', {timeOut: 1000})
+                    initTable()
+                }
+            })
+        }
+    })
+
+    function initTable() {
+        $('#question-table').bootstrapTable('destroy')
+        $('#question-table').bootstrapTable({
+            url: baseUrl + '/questions',
+            method: 'GET',
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 10, // 每页的记录行数
+            pageList: [10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                    domain: $('#question-domain').val()
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'content',
+                title: '问题描述'
+            }, {
+                field: 'answer',
+                title: '正确答案',
+                formatter: function (value, row) {
+                    var choices = row.choices
+                    return choices.split(';')[value]
+                }
+            }, {
+                field: 'domain',
+                title: '所属领域',
+                sortable: true
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                },
+                sortable: true
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value, row) {
+                    // console.log(row)
+                    var id = value
+                    var result = ''
+                    result += '<button class="btn btn-primary btn-sm edit-btn" question-id='+ id + '>编辑</button> '
+                    result += '&nbsp;'
+                    result += '<button class="btn btn-danger btn-sm del-btn" question-id='+ id + '>删除</button> '
+                    return result
+                }
+            }
+            ]
+        })
+    }
+
+    // 初始化技能名
+    function initSkill() {
+        $.ajax({
+            url: baseUrl + '/skills/list', // 妥协的URL
+            method: 'GET',
+            success: function (result) {
+                skills = result.info.skills
+                var select = $('#question-domain')
+                select.append($('<option></option>').val('').append('全部'))
+                build_skill_select(select)
+            }
+        })
+    }
+
+    function build_skill_select (select) {
+        for (var i = 0; i < skills.length; i++) {
+            var option = $('<option></option>').val(skills[i]).append(skills[i])
+            select.append(option)
+        }
+    }
+
+</script>
+<script th:src="@{/custom/custom.js}"></script>
+</body>
+</html>

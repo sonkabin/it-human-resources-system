@@ -70,16 +70,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         // 模糊查询
         LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
-        if (!StringUtils.isEmpty(employeeDTO.getEmpId())) {
-            wrapper.like(Employee::getEmpId, employeeDTO.getEmpId());
-        }
-        if (!StringUtils.isEmpty(employeeDTO.getEmpName())) {
-            wrapper.like(Employee::getEmpName, employeeDTO.getEmpName());
-        }
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpId()),Employee::getEmpId, employeeDTO.getEmpId());
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpName()), Employee::getEmpName, employeeDTO.getEmpName());
         IPage<Employee> result = employeeMapper.selectPage(page, wrapper);
-        Message msg = Message.success().put("total", result.getTotal());
-        msg.put("rows", result.getRecords());
-        return msg;
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
     }
 
     @Override

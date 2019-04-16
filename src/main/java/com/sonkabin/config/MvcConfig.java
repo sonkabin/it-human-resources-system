@@ -22,6 +22,7 @@ public class MvcConfig {
                 registry.addViewController("/manageEmp.html").setViewName("admin/emp");
                 registry.addViewController("/manageTrain.html").setViewName("admin/train");
                 registry.addViewController("/manageRecruit.html").setViewName("admin/recruit");
+                registry.addViewController("/manageQuestion.html").setViewName("admin/question");
                 registry.addViewController("/managePermission.html").setViewName("admin/permission");
                 registry.addViewController("/manageMessage.html").setViewName("admin/message");
                 registry.addViewController("/manageAccount.html").setViewName("admin/account");

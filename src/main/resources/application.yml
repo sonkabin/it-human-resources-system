@@ -34,7 +34,7 @@ spring:
   thymeleaf:
     cache: false
   profiles:
-    active: work-queues,dev
+    active: dev,work-queues
 
   rabbitmq:
     host: 192.168.43.22
