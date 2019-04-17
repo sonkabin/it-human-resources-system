@@ -2,6 +2,9 @@ package com.sonkabin.mapper;
 
 import com.sonkabin.entity.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface QuestionMapper extends BaseMapper<Question> {
 
+    List<Question> getQuestions(@Param("domain") String domain);
+
+    List<Integer> selectAnswers(@Param("list") List<Integer> paperIdList);
 }

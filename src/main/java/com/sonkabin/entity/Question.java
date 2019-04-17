@@ -5,10 +5,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author sonkabin
@@ -102,5 +103,24 @@ public class Question implements Serializable {
         ", gmtCreate=" + gmtCreate +
         ", gmtModified=" + gmtModified +
         "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id) &&
+                Objects.equals(content, question.content) &&
+                Objects.equals(choices, question.choices) &&
+                Objects.equals(answer, question.answer) &&
+                Objects.equals(domain, question.domain) &&
+                Objects.equals(gmtCreate, question.gmtCreate) &&
+                Objects.equals(gmtModified, question.gmtModified);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, content, choices, answer, domain, gmtCreate, gmtModified);
     }
 }

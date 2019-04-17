@@ -67,14 +67,63 @@
 
                                     </form>
                                 </div>
-                                <!--<div class="card-footer">-->
-                                    <!--<button class="btn btn-primary" id="save-btn">保存</button>-->
-                                <!--</div>-->
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" id="save-btn">保存</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <!-- 测评模态框 -->
+            <div id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">技能等级测评</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">问题描述</label>
+                                    <textarea id="question-desc" rows="5" type="text" class="form-control col-sm-8" readonly>Jquery是什么?</textarea>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">选项</label>
+                                </div>
+                                <div id="choices">
+                                    <div class="form-group row">
+                                        <div class="form-check offset-sm-2">
+                                            <input class="form-check-input radio-template" type="radio" name="status" value="1">
+                                            <label class="form-check-label">javascript库</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="form-check offset-sm-2">
+                                            <input class="form-check-input radio-template" type="radio" name="status" value="1">
+                                            <label class="form-check-label">javascript库</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div>
+                                <button type="button" class="btn btn-success" id="prev-btn">上一题</button>
+                                <button type="button" class="btn btn-success" style="float: right;" id="next-btn">下一题</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="skill-form" method="post">
+                <input type="hidden" name="_method" value="put">
+                <input type="hidden" name="ids" id="ids">
+                <input type="hidden" name="domain" id="domain">
+                <input type="hidden" name="answers" id="answers">
+            </form>
 
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
@@ -114,18 +163,20 @@
                 var array = skills[i].split(":")
                 var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
                 var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-                var sel = build_skill_name(skillNames)
-                sel.val(array[0])
+                var input1 = $('<input class="col-sm-2 form-control skill-name" readonly>').val(array[0])
                 var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
-                var select = build_skill_select()
-                // var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
-                select.val([array[1]])
-                div.append(label).append(sel).append(label2).append(select)
-                // div.append(label).append(sel).append(label2).append(select).append(btn)
+                var input2 = $('<input class="col-sm-1 form-control level" readonly>').val(array[1])
+                var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+                div.append(label).append(input1).append(label2).append(input2)
+                // 未测评的技能，显示测评按钮
+                if (array[1] == 0) {
+                    div.append($('<button type="button" class="btn btn-sm btn-primary evaluation-btn">').text('测评'))
+                }
+                div.append(btn)
                 $('#skills').append(div)
             }
         }
-        // $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
+        $('#skills').append('<a id="add-new-skill-btn" class="offset-sm-2" href="javascript:void(0);" onclick="add_new_skill()">添加技能信息</a>')
     })
 
 </script>
@@ -138,58 +189,155 @@
         })
         return select
     }
-    function build_skill_select () {
-        var select = $('<select class="col-sm-1 form-control level"></select>')
-        for (var i = 1; i < 10; i++) {
-            var option = $('<option></option>').val(i).append(i)
-            select.append(option)
-        }
-        return select
-    }
-
-    // function add_new_skill() {
-    //     var aNode = $('#add-new-skill-btn')
-    //     var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
-    //     var label = $('<label class="col-form-label col-sm-1">技能名</label>')
-    //     // var input = $('<input type="text" class="form-control col-sm-2 skill-name">')
-    //     var sel = build_skill_name(skillNames)
-    //     var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
-    //     var select = build_skill_select()
-    //     var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
-    //     div.append(label).append(sel).append(label2).append(select).append(btn)
-    //     aNode.before(div)
+    // function build_skill_select () {
+    //     var select = $('<select class="col-sm-1 form-control level"></select>')
+    //     for (var i = 1; i < 10; i++) {
+    //         var option = $('<option></option>').val(i).append(i)
+    //         select.append(option)
+    //     }
+    //     return select
     // }
 
-    // $(document).on('click', '.skill-close', function () {
-    //     var pNode = $(this).parent()
-    //     pNode.remove()
-    // })
+    function add_new_skill() {
+        var aNode = $('#add-new-skill-btn')
+        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+        var label = $('<label class="col-form-label col-sm-1">技能名</label>')
+        var sel = build_skill_name(skillNames)
+        var label2 = $('<label class="col-form-label col-sm-1">等级</label>')
+        var skillLevelInput = $('<input class="col-sm-1 form-control level" readonly>').val(0)
+        var evaluationBtn = $('<button type="button" class="btn btn-sm btn-primary evaluation-btn">').text('测评')
+        var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
+        div.append(label).append(sel).append(label2).append(skillLevelInput).append(evaluationBtn).append(btn)
+        aNode.before(div)
+    }
 
-    // $('#save-btn').click(function () {
-    //     var id = $('#edit-id').val()
-    //     var skills = ''
-    //     var skillNames = $('.skill-name')
-    //     var levels = $('.level option:checked')
-    //     for (var i = 0; i < levels.length; i++) {
-    //         var skillName = $(skillNames[i]).val()
-    //         if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入第一个选择的能力等级
-    //             var level = $(levels[i]).val()
-    //             skills += skillName + ':' + level + ';'
-    //         }
-    //     }
-    //     // 移除最后一个分号
-    //     skills = skills.substr(0, skills.length - 1)
-    //     // console.log(skills)
-    //     $.ajax({
-    //         url: baseUrl + '/emp/' + id,
-    //         method: 'PUT',
-    //         data: $('#edit-form').serialize() + '&' + $.param({'skills':skills}),
-    //         success: function () {
-    //             toastr.success('信息更新成功', '提示', {timeOut: 1000})
-    //         }
-    //     })
-    //
-    // })
+    $(document).on('click', '.skill-close', function () {
+        var pNode = $(this).parent()
+        pNode.remove()
+    })
+
+    $('#save-btn').click(function () {
+        var id = $('#edit-id').val()
+        var skills = ''
+        var skillNames = $('.skill-name')
+        // var levels = $('.level option:checked')
+        var levels = $('.level')
+        for (var i = 0; i < levels.length; i++) {
+            var skillName = $(skillNames[i]).val()
+            if (skills.indexOf(skillName) == -1) { // 移除重复的且只加入首次出现的能力等级
+                var level = $(levels[i]).val()
+                skills += skillName + ':' + level + ';'
+            }
+        }
+        // 移除最后一个分号
+        skills = skills.substr(0, skills.length - 1)
+        $.ajax({
+            url: baseUrl + '/emp/' + id,
+            method: 'PUT',
+            data: $('#edit-form').serialize() + '&' + $.param({'skills':skills}),
+            success: function () {
+                toastr.success('信息更新成功', '提示', {timeOut: 1000})
+            }
+        })
+    })
+
+    var domain = ''
+    // 维护一个全局的试题变量，试题索引，回答
+    var paper, index, record, ids = ''
+    $(document).on('click', '.evaluation-btn', function () {
+        domain = $(this).parent().find('.skill-name').val()
+        $.ajax({
+            url: baseUrl + '/exam',
+            method: 'GET',
+            data: {
+                'domain': domain
+            },
+            success: function (result) {
+                if (result.info.warn != null) {
+                    toastr.warning(result.info.warn, '警告', {timeOut: 2000})
+                    // $('#skill-form').attr('action', '/skills').submit()
+                } else{
+                    paper = result.info.paper
+                    index = 0
+                    record = new Array()
+                    for (var i = 0; i < paper.length; i++) {
+                        record[i] = -1
+                    }
+                    paper.map(function(v, i){
+                        ids += v.id + ','
+                    })
+                    ids = ids.substr(0, ids.length - 1)
+                    console.log(ids)
+                    // 索引为0时，只显示下一题
+                    $('#question-desc').text(paper[index].content)
+                    build_choices(paper[index].choices.split(';'), record[index])
+                    $('#prev-btn').attr('style', 'visibility:hidden;')
+                    $('#myModal').modal()
+                }
+            }
+        })
+    })
+
+    $('#prev-btn').click(function () {
+        if (index <= 0) {  // 防止越界
+            return
+        }
+        var choice = $('.choice:checked').val()
+        if (choice != null) {
+            record[index] = choice
+        }
+        // console.log(record)
+
+        index--
+        if (index == 0) {
+            $(this).attr('style', 'visibility:hidden;')
+        }
+        $('#question-desc').text(paper[index].content)
+        build_choices(paper[index].choices.split(';'), record[index])
+
+    })
+    $('#next-btn').click(function () {
+        // 在进入下一题之前暂时保存选中的选项
+        var choice = $('.choice:checked').val()
+        if (choice != null) {
+            record[index] = choice
+        }
+        // console.log(record)
+
+        // 下一题操作
+        if (index == 0) {
+            $('#prev-btn').attr('style', 'visibility:visibility;')
+        }
+        index++
+        if (index == paper.length - 1) { // 最后一题
+            $(this).text('提交')
+        } else if (index == paper.length) { // 点击提交按钮
+            // 提交操作
+            var form = $('#skill-form')
+            form.attr('action', '/paper')
+            $('#ids').val(ids)
+            $('#domain').val(domain)
+            $('#answers').val(record)
+            form.submit()
+        } else{
+            $(this).text('下一题')
+        }
+        $('#question-desc').text(paper[index].content)
+        build_choices(paper[index].choices.split(';'), record[index])
+    })
+    function build_choices(choices, checked) {
+        $('#choices').empty()
+        for (var i = 0; i < choices.length; i++) {
+            var div = $('<div class="form-check offset-sm-2"></div>')
+            var radio = $('<input class="form-check-input radio-template choice" type="radio" name="radio">').val(i)
+            if (checked == i) {  // 若做过此题，则选中已选的选项
+                radio.prop('checked', true)
+            }
+            div.append(radio)
+            div.append($('<label class="form-check-label"></label>').text(choices[i]))
+            $('<div class="form-group row"></div>').append(div).appendTo('#choices')
+        }
+    }
 </script>
 </body>
 </html>

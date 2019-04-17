@@ -23,4 +23,8 @@ public interface QuestionService{
     Message updateQuestion(Question question, Integer id);
 
     Message deleteQuestion(Integer id);
+
+    Message makeExamPaper(String domain);
+
+    Message submitPaper(String paperIds, String answers, String domain);
 }
