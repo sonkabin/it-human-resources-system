@@ -22,7 +22,6 @@ import java.util.List;
  * @since 2019-01-24
  */
 @Controller
-//@RequestMapping("/humanConfig")
 public class HumanConfigController {
     @Autowired
     private HumanConfigService humanConfigService;
@@ -57,6 +56,12 @@ public class HumanConfigController {
         return "employee/manager/dispatcher";
     }
 
+    /**
+     * 释放项目成员，不再占用成员的工作时间
+     * @param config
+     * @param contribute：成员做的贡献
+     * @return
+     */
     @ResponseBody
     @RequiresPermissions("config:update")
     @PutMapping("/humanConfig/release")

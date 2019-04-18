@@ -8,6 +8,8 @@ import com.sonkabin.service.HumanConfigService;
 import com.sonkabin.utils.Message;
 import com.sonkabin.utils.MessageUtil;
 import com.sonkabin.utils.MyUtil;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -251,9 +253,14 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         return Message.success().put("humanConfigs", humanConfigs);
     }
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+    @Autowired
+    private DirectExchange directExchange;
     @Transactional
     @Override
     public Message releaseHuman(HumanConfig config, String contribute) {
+        // 1. 更新人力资源配置表
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
         Integer projectId = config.getProjectId();
         LocalDateTime now = LocalDateTime.now();
@@ -261,6 +268,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         config.setGmtModified(now);
         config.setStatus(2);
         humanConfigMapper.update(config, wrapper);
+        // 2. 项目参与历史中插入一条记录
         Project project = projectMapper.selectById(projectId);
         ProjectHistory history = new ProjectHistory();
         history.setProjectId(projectId);
@@ -274,6 +282,16 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         history.setGmtCreate(now);
         history.setGmtModified(now);
         projectHistoryMapper.insert(history);
+        // 3. 发送封装好的消息到消息队列，由工作进程处理
+        StringBuffer buffer = new StringBuffer(project.getFrontEndSkill());
+        buffer.append(",");
+        buffer.append(project.getBackEndSkill());
+        buffer.append(",");
+        buffer.append(project.getDbSkill());
+        Map<String, Object> msg = new HashMap<>();
+        msg.put("skills", buffer.toString());
+        msg.put("empId", config.getEmpId());
+        rabbitTemplate.convertAndSend(directExchange.getName(), "proficiency.update", msg);
         return Message.success();
     }
 
@@ -359,7 +377,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     }
 
     /*
-    当某一端人员不足时，不会自动解决
+    当某一端人员不足时，将会发送系统通知消息给管理员
      */
     @Override
     public Message recalculate(RecalculateDTO recalculateDTO) {

@@ -38,7 +38,7 @@ spring:
 
   rabbitmq:
 #    host: 192.168.43.22 # 手机热点开启的虚拟机IP地址
-    host: 192.168.155.4 # 其他网络IP地址
+    host: 192.168.155.5 # 其他网络IP地址
     port: 5700
 
 mybatis-plus:

@@ -25,7 +25,7 @@ public class MessageUtil {
     }
 
     /**
-     *
+     * HumanConfigServiceImpl.java文件中使用
      * @param flag: 0表示缺少前端，1表示缺少后端，2表示两者都缺
      * @param num: 表示缺少的前端人员数量
      * @param num2: 表示缺少的后端人员数量

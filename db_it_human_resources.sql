@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 08/04/2019 14:00:35
+ Date: 18/04/2019 14:29:42
 */
 
 SET NAMES utf8mb4;
@@ -271,8 +271,8 @@ INSERT INTO `tb_project` VALUES (3, 'APP评论数据分析系统', '随着互联
 INSERT INTO `tb_project` VALUES (4, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 2, '2018-09-19', '2018-09-21', '2018-11-09', '2018-09-07 18:32:43', '2018-11-02 18:34:27');
 INSERT INTO `tb_project` VALUES (5, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 2, '2018-11-13', '2018-11-12', '2018-12-04', '2018-11-01 18:32:43', '2018-12-04 18:34:27');
 INSERT INTO `tb_project` VALUES (6, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 2, '任行', 1, '2019-01-24', '2019-01-25', '2019-04-04', '2019-01-23 01:48:37', '2019-01-25 01:48:37');
-INSERT INTO `tb_project` VALUES (7, 'IT教育课程考评系统', '随着互联网产业的高速发展，社会对计算机人才的需求不断增加，门槛不断变高，计算机专业就业开始出现问题。由于计算机人才掌握的技术不符合市场需求、网络面试题集杂乱无解析等，就业面试成了难关。在这样的现状下，IT行业应聘者非常需要一个完善的考评系统来检测自己的水平，模拟面试笔试，获取建议以扩大自身知识面、完善综合职业能力，提高就业竞争力，从而有自信应对IT行业就业现状。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 4, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, '2019-03-06', '2019-03-13', '2019-09-10', '2019-03-01 18:41:58', '2019-03-13 09:17:52');
-INSERT INTO `tb_project` VALUES (8, 'IT企业人力资源管理系统', '现今的大中型IT企业所涉及的业务领域非常广，项目包含的技术种类多，决定它要面临人力资源方面的挑战。一方面，企业很难准确地预测下个项目何时启动，以及需要什么样的人员配备，这使得提前培养和储备合适的人员很困难。很多时候公司为某类项目招聘或者培训了一批人员，结果项目却搁置了。另一方面，一旦项目合同签订，客户往往期望项目尽早启动，外包企业必须在短时间内为项目准备好人员。为了应对上述挑战，这些企业必须实现人力资源以及优化人力资源的配置和利用，其中重要的一环就是建立公司统一的人力资源管理系统。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,Vue.js', 2, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Redis,Oracle', 2, 2, '任行', 0, '2019-01-22', NULL, '2019-04-11', '2019-01-15 09:12:59', '2019-01-21 09:13:26');
+INSERT INTO `tb_project` VALUES (7, 'IT教育课程考评系统', '随着互联网产业的高速发展，社会对计算机人才的需求不断增加，门槛不断变高，计算机专业就业开始出现问题。由于计算机人才掌握的技术不符合市场需求、网络面试题集杂乱无解析等，就业面试成了难关。在这样的现状下，IT行业应聘者非常需要一个完善的考评系统来检测自己的水平，模拟面试笔试，获取建议以扩大自身知识面、完善综合职业能力，提高就业竞争力，从而有自信应对IT行业就业现状。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 4, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, '2019-05-20', NULL, '2019-09-10', '2019-03-01 18:41:58', '2019-03-13 09:17:52');
+INSERT INTO `tb_project` VALUES (8, 'IT企业人力资源管理系统', '现今的大中型IT企业所涉及的业务领域非常广，项目包含的技术种类多，决定它要面临人力资源方面的挑战。一方面，企业很难准确地预测下个项目何时启动，以及需要什么样的人员配备，这使得提前培养和储备合适的人员很困难。很多时候公司为某类项目招聘或者培训了一批人员，结果项目却搁置了。另一方面，一旦项目合同签订，客户往往期望项目尽早启动，外包企业必须在短时间内为项目准备好人员。为了应对上述挑战，这些企业必须实现人力资源以及优化人力资源的配置和利用，其中重要的一环就是建立公司统一的人力资源管理系统。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, '2019-07-01', NULL, '2020-01-07', '2019-06-30 09:12:59', '2019-07-03 09:13:26');
 
 -- ----------------------------
 -- Table structure for tb_project_history
@@ -339,6 +339,95 @@ INSERT INTO `tb_project_history` VALUES (34, 5, 'APP评论数据分析系统', '
 INSERT INTO `tb_project_history` VALUES (35, 5, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 9, '张小凡', '后端开发,后端测试', 3, '张三', '2019-03-25 10:04:45', '2019-03-25 10:04:55');
 
 -- ----------------------------
+-- Table structure for tb_question
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_question`;
+CREATE TABLE `tb_question`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+  `choices` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+  `answer` tinyint(2) NULL DEFAULT NULL,
+  `domain` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `gmt_create` datetime(0) NULL DEFAULT NULL,
+  `gmt_modified` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_question
+-- ----------------------------
+INSERT INTO `tb_question` VALUES (1, '以下关于 abstract 关键字的说法，正确的是', 'abstract 可以与final 并列修饰同一个类。;abstract 类中不可以有private的成员。;abstract 类中必须全部是abstract方法。;abstract 方法必须在abstract类或接口中。', 3, 'Java', '2019-04-13 14:26:24', '2019-04-13 14:26:27');
+INSERT INTO `tb_question` VALUES (2, '关于 Socket 通信编程，以下描述错误的是', '服务器端通过new ServerSocket()创建TCP连接对象;服务器端通过TCP连接对象调用accept()方法创建通信的Socket对象;客户端通过new Socket()方法创建通信的Socket对象;客户端通过new ServerSocket()创建TCP连接对象', 3, 'Java', '2019-04-13 14:28:37', '2019-04-13 14:28:39');
+INSERT INTO `tb_question` VALUES (3, '命令javac-d参数的用途是', '指定编译后类层次的根目录;指定编译时需要依赖类的路径;指定编译时的编码;没有这一个参数', 0, 'Java', '2019-04-13 14:39:27', '2019-04-13 14:39:28');
+INSERT INTO `tb_question` VALUES (4, '下面哪个行为被打断不会导致InterruptedException', 'Thread.join;Thread.sleep;Object.wait;CyclicBarrier.await;Thread.suspend', 4, 'Java', '2019-04-13 14:42:32', '2019-04-13 14:42:35');
+INSERT INTO `tb_question` VALUES (5, 'volatile关键字的说法错误的是', '能保证线程安全;volatile关键字用在多线程同步中，可保证读取的可见性;JVM保证从主内存加载到线程工作内存的值是最新的;volatile能禁止进行指令重排序', 0, 'Java', '2019-04-13 14:44:10', '2019-04-13 14:44:12');
+INSERT INTO `tb_question` VALUES (6, '下列哪种说法是正确的', '实例方法可直接调用超类的实例方法;实例方法可直接调用超类的类方法;实例方法可直接调用本类的类方法;实例方法可直接调用其他类的实例方法', 2, 'Java', '2019-04-13 15:01:24', '2019-04-13 15:01:25');
+INSERT INTO `tb_question` VALUES (7, 'java中，StringBuilder和StringBuffer的区别，下面说法错误的是', 'StringBuffer是线程安全的;StringBuilder是非线程安全的;StringBuffer对 String 类型进行改变的时候其实都等同于生成了一个新的 String 对象，然后将指针指向新的 String 对象。;效率比较String<StringBuffer<StringBuilder，但是在 String S1 = “This is only a” + “ simple” + “ test”时，String效率最高。', 2, 'Java', '2019-04-13 15:03:59', '2019-04-13 15:04:00');
+INSERT INTO `tb_question` VALUES (8, '下列有关Thread的描述，哪个是正确的', '启动一个线程的方法是：thread. run();结束一个线程的通常做法是：thread. stop();将一个线程标记成daemon线程，意味着当主线程结束，并且没有其它正在运行的非daemon线程时，该daemon线程也会自动结束。;让一个线程等待另一个线程的通知的方法是：thread. sleep()', 2, 'Java', '2019-04-13 15:07:31', '2019-04-13 15:07:34');
+INSERT INTO `tb_question` VALUES (9, '语句：char foo=\'中\'，是否正确？（假设源文件以GB2312编码存储，并且以javac – encoding GB2312命令编译）', '正确;错误', 0, 'Java', '2019-04-13 15:09:51', '2019-04-13 15:09:53');
+INSERT INTO `tb_question` VALUES (10, '在java7中，下列不能做switch()的参数类型是', 'int型;枚举类型;字符串;浮点型', 3, 'Java', '2019-04-13 15:10:53', '2019-04-13 15:10:55');
+INSERT INTO `tb_question` VALUES (11, 'instanceof运算符能够用来判断一个对象是否为:', '一个类的实例;一个实现指定接口的类的实例;全部正确;一个子类的实例', 2, 'Java', '2019-04-13 15:15:56', '2019-04-13 15:15:58');
+INSERT INTO `tb_question` VALUES (12, '下面有关java内存模型的描述，说法错误的是', 'JMM通过控制主内存与每个线程的本地内存之间的交互，来为java程序员提供内存可见性保证;“synchronized” — 保证在块开始时都同步主内存的值到工作内存，而块结束时将变量同步回主内存;“volatile” — 保证修饰后在对变量读写前都会与主内存更新。;如果在一个线程构造了一个不可变对象之后（对象仅包含final字段），就可以保证了这个对象被其他线程正确的查看', 3, 'Java', '2019-04-13 15:17:17', '2019-04-13 15:17:19');
+INSERT INTO `tb_question` VALUES (13, '下面有关java的一些细节问题，描述错误的是', '构造方法不需要同步化;一个子类不可以覆盖掉父类的同步方法;定义在接口中的方法默认是public的;容器保存的是对象的引用', 1, 'Java', '2019-04-13 15:18:49', '2019-04-13 15:18:51');
+INSERT INTO `tb_question` VALUES (14, 'java用（）机制实现了进程之间的同步执行', '监视器;虚拟机;多个CPU;异步调用', 0, 'Java', '2019-04-13 15:19:42', '2019-04-13 15:19:43');
+INSERT INTO `tb_question` VALUES (15, '变量a是一个64位有符号的整数，初始值用16进制表示为：0Xf000000000000000； 变量b是一个64位有符号的整数，初始值用16进制表示为：0x7FFFFFFFFFFFFFFF。 则a-b的结果用10进制表示为多少？（）', '1;-(2^62+2^61+2^60+1);2^62+2^61+2^60+1;2^59+(2^55+2^54+…+2^2+2^1+2^0)', 2, 'Java', '2019-04-13 15:20:48', '2019-04-13 15:20:49');
+INSERT INTO `tb_question` VALUES (16, '下列关于Java并发的说法中正确的是', 'CopyOnWriteArrayList适用于写多读少的并发场景;ReadWriteLock适用于读多写少的并发场景;ConcurrentHashMap的写操作不需要加锁，读操作需要加锁;只要在定义int类型的成员变量i的时候加上volatile关键字，那么多线程并发执行i++这样的操作的时候就是线程安全的了', 1, 'Java', '2019-04-13 15:23:55', '2019-04-13 15:23:57');
+INSERT INTO `tb_question` VALUES (17, '设int x=1,float y=2,则表达式x/y的值是', '0;1;2;以上都不是', 3, 'Java', '2019-04-13 15:24:48', '2019-04-13 15:24:49');
+INSERT INTO `tb_question` VALUES (18, '以下哪项不属于java类加载过程', '生成java.lang.Class对象;int类型对象成员变量赋予默认值;执行static块代码;类方法解析', 1, 'Java', '2019-04-13 15:26:41', '2019-04-13 15:26:42');
+INSERT INTO `tb_question` VALUES (19, 'Java数据库连接库JDBC用到哪种设计模式', '生成器;桥接模式;抽象工厂;单例模式', 1, 'Java', '2019-04-13 15:29:37', '2019-04-13 15:29:38');
+INSERT INTO `tb_question` VALUES (20, '在java7中,下列哪个说法是正确的:', 'ConcurrentHashMap使用synchronized关键字保证线程安全;HashMap实现了Collection接口;Arrays.asList方法返回java.util.ArrayList对象;SimpleDateFormat对象是线程不安全的', 3, 'Java', '2019-04-13 15:30:34', '2019-04-13 15:30:36');
+INSERT INTO `tb_question` VALUES (21, '关于ApplicationContext接口，下列说法错误的是', '它是beanfactory的子接口;ApplicationContext是基于beanfactory而建立的，ApplicationContext继承了beanFactory的功能;fileSystemXmlApplicationContext是其子接口;ApplicationContext提供了对资源文件进行访问的支持', 2, 'Spring', '2019-04-13 15:36:37', '2019-04-13 15:36:38');
+INSERT INTO `tb_question` VALUES (22, '关于AOP错误的是', 'AOP将散落在系统中的“方面”代码集中实现;AOP有助于提高系统可维护性;AOP已经表现出将要替代面向对象的趋势;AOP是一种设计模式，Spring提供了一种实现', 2, 'Spring', '2019-04-13 15:40:12', '2019-04-13 15:40:13');
+INSERT INTO `tb_question` VALUES (23, '下面有关SPRING的事务传播特性，说法错误的是', 'PROPAGATION_SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行;PROPAGATION_REQUIRED：支持当前事务，如果当前没有事务，就抛出异常;PROPAGATION_REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起;PROPAGATION_NESTED：支持当前事务，新增Savepoint点，与当前事务同步提交或回滚', 1, 'Spring', '2019-04-13 15:41:21', '2019-04-13 15:41:22');
+INSERT INTO `tb_question` VALUES (24, '下面哪一项对Servlet描述错误', 'Servlet是一个特殊的Java类，它必须直接或间接实现Servlet接口;Servlet接口定义了Servelt的生命周期方法;当多个客户请求一个Servlet时，服务器为每一个客户启动一个进程;Servlet客户线程调用service方法响应客户的请求', 2, 'Spring', '2019-04-13 15:43:05', '2019-04-13 15:43:06');
+INSERT INTO `tb_question` VALUES (25, '在Servlet里，能实现重定向的方法有', '运用javax.servlet.http.HttpServletRequest接口的sendRedirect方法;运用javax.servlet.http.HttpServletResponse接口的sendRedirect方法;运用javax.servlet.RequestDispatcher接口的forward方法;运用javax.servlet.ResponseDispatcher接口的forward方法', 1, 'Spring', '2019-04-13 15:43:43', '2019-04-13 15:43:44');
+INSERT INTO `tb_question` VALUES (26, '下面关于spring mvc 和struts2的描述，错误的是', 'spring mvc的入口是filter，而struts2是servlet;spring mvc是基于方法的设计，而struts2是基于类的设计;struts2有以自己的interceptor机制，spring mvc用的是独立的AOP方式;spring mvc的方法之间基本上独立的，独享request response数据，struts2所有Action变量是共享的', 0, 'Spring', '2019-04-13 15:44:24', '2019-04-13 15:44:25');
+INSERT INTO `tb_question` VALUES (27, 'Servlet接口的方法有哪些', 'doGet方法;doPost方法;init方法;forward方法', 2, 'Spring', '2019-04-13 15:45:01', '2019-04-13 15:45:02');
+INSERT INTO `tb_question` VALUES (28, 'spring的PROPAGATION_REQUIRES_NEW事务，下面哪些说法是正确的', '内部事务回滚会导致外部事务回滚;内部事务回滚了，外部事务仍然可以提交;外部事务回滚了，内部事务也跟着回滚;外部事务回滚了，内部事务仍然可以提交', 1, 'Spring', '2019-04-13 15:45:54', '2019-04-13 15:45:55');
+INSERT INTO `tb_question` VALUES (29, '关于Spring MVC的核心控制器DispatcherServlet的作用，以下说法错误的是（ ）', '它负责处理HTTP请求;加载配置文件;实现业务操作;初始化上下应用对象ApplicationContext', 2, 'Spring', '2019-04-13 15:49:41', '2019-04-13 15:49:43');
+INSERT INTO `tb_question` VALUES (30, '关于spring说法错误的是', 'spring是一个轻量级JAVA EE的框架集合;spring是“依赖注入”模式的实现;使用spring可以实现声明事务;spring提供了AOP方式的日志系统', 3, 'Spring', '2019-04-13 15:54:51', '2019-04-13 15:54:52');
+INSERT INTO `tb_question` VALUES (31, '网络服务的daemon是:', 'netd;httpd;inetd;lpd', 0, 'Linux', '2019-04-13 16:28:47', '2019-04-13 16:28:48');
+INSERT INTO `tb_question` VALUES (32, '\r\n每5分钟运行一次crond任务exam，下面哪项正确', '*/12 * * * * exam;5/* * * * * exam;* * */12 * * exam;*/5 * * * * exam', 3, 'Linux', '2019-04-13 16:29:29', '2019-04-13 16:29:30');
+INSERT INTO `tb_question` VALUES (33, '假如你需要找出/etc/my.conf文件属于哪个包(package),你可以执行', 'rpm -requires/etc/my.conf;rpm -q/etc/my.conf;rpm -q|grep /etc/my.conf;rpm -qf /etc/my.conf', 3, 'Linux', '2019-04-13 16:30:06', '2019-04-13 16:30:07');
+INSERT INTO `tb_question` VALUES (34, '终止一个前台进程可能用到的命令和操作', 'kill;ctrl+c;shut down;halt', 1, 'Linux', '2019-04-13 16:30:47', '2019-04-13 16:30:48');
+INSERT INTO `tb_question` VALUES (35, '为了查看不断更新的日志文件，可以使用的指令是', 'cat -n;vi;more;tail -f', 2, 'Linux', '2019-04-13 16:32:10', '2019-04-13 16:32:11');
+INSERT INTO `tb_question` VALUES (36, '在重新启动Linux系统的同时把内存中的信息写入硬盘，应使用（）命令实现', '#shutdown -r now;#halt;#reboot;#init3', 0, 'Linux', '2019-04-13 16:32:45', '2019-04-13 16:32:46');
+INSERT INTO `tb_question` VALUES (37, '以下哪一个命令只查找源代码、二进制文件和帮助文件，而不是所以类型的文件？此命令查找的目录是由环境变量$PATH指定的', 'whereis;whatis;which;apropos', 0, 'Linux', '2019-04-13 16:33:22', '2019-04-13 16:33:23');
+INSERT INTO `tb_question` VALUES (38, '你在服务器的D盘中启用磁盘配额，为每个用户分配10GB的磁盘空间。你选择“拒绝将磁盘空间分配给超过配额限制的用户”选项，某个用户说他不能把Microsoft Word 2000文档保存到他们部门的共享文件夹下。你怎样才能确保用户始终能超过10GB的数据保存到主目录中？', '在D盘配额配置中清除“拒绝将磁盘空间给超过配额限制的用户”选项;以管理员身份登录服务器，并获得所有共享组文件夹中文件的所有权;在服务器上创建一个新卷，把共享组文件夹移动到新的卷中;增加D卷上的配额限定，准许额外的空间给共享文件', 0, 'Linux', '2019-04-13 16:34:21', '2019-04-13 16:34:22');
+INSERT INTO `tb_question` VALUES (39, '执行指令find / -name “test.c”,按ctrl+z后的提示有[1] 166,可以继续执行的方式有', 'kill 166;Ctrl+h;fg 1;bg 1', 2, 'Linux', '2019-04-13 16:35:22', '2019-04-13 16:35:23');
+INSERT INTO `tb_question` VALUES (40, 'crontab文件由6个域组成，每个域之间用空格分隔，下列哪个排列方式是正确的？', 'MIN HOUR DAY MONTH YEAR COMMAND;MIN HOUR DAY MONTH DAYOFWEEK COMMAND;COMMAND HOUR DAY MONTH DAYOFWEEK;COMMAND YEAR MONTH DAY HOUR MIN', 1, 'Linux', '2019-04-13 16:37:28', '2019-04-13 16:37:29');
+INSERT INTO `tb_question` VALUES (41, '下面选项关于linux下查看cpu,内存,swap,硬盘信息的命令描述错误的是？', 'cat  /proc/cpuinfo 查看CPU相关参数的linux系统命令;cat  /proc/meminfo 查看linux系统内存信息的linux系统命令;du -h: 查看硬盘信息;cat /proc/swaps ：查看所有swap分区的信息', 2, 'Linux', '2019-04-13 16:38:12', '2019-04-13 16:38:13');
+INSERT INTO `tb_question` VALUES (42, '目录在linux文件系统中是以怎样的形式存在的？', '文件夹;文件;inode;软链接', 1, 'Linux', '2019-04-13 16:39:09', '2019-04-13 16:39:10');
+INSERT INTO `tb_question` VALUES (43, '如果您想列出当前目录以及子目录下所有扩展名为“.txt”的文件，那么您可以使用的命令是（）', 'ls -d.txt;ls *.txt;find -name“*.txt”;find“.txt”', 2, 'Linux', '2019-04-13 16:40:49', '2019-04-13 16:40:50');
+INSERT INTO `tb_question` VALUES (44, 'vivek希望将他的login ID从vivek改为viv，应该执行下列哪个命令？', 'usermod -l viv vivek;usermod -l vivek viv;usermod -m viv vivek;usermod -m vivek viv', 0, 'Linux', '2019-04-13 16:41:17', '2019-04-13 16:41:18');
+INSERT INTO `tb_question` VALUES (45, '当前目录下有a和b两个文件，执行命令“ls>c”，请问文件c里面的内容是什么？', 'a;b;ab;abc', 3, 'Linux', '2019-04-13 16:41:58', '2019-04-13 16:41:59');
+INSERT INTO `tb_question` VALUES (46, '下面有关孤儿进程和僵尸进程的描述，说法错误的是？', '孤儿进程：一个父进程退出，而它的一个或多个子进程还在运行，那么那些子进程将成为孤儿进程。;僵尸进程：一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中。这种进程称之为僵死进程。;孤儿进程将被init进程(进程号为1)所收养，并由init进程对它们完成状态收集工作。;孤儿进程和僵尸进程都可能使系统不能产生新的进程，都应该避免', 3, 'Linux', '2019-04-13 16:42:31', '2019-04-13 16:42:32');
+INSERT INTO `tb_question` VALUES (47, '\r\n一个文件名字为rr.Z，可以用来解压缩的命令是：', 'tar;gzip;compress;uncompress', 3, 'Linux', '2019-04-13 16:43:14', '2019-04-13 16:43:15');
+INSERT INTO `tb_question` VALUES (48, '下面关于Linux文件系统的inode描述错误的是：', 'inode和文件是一一对应的;inode描述了文件大小和指向数据块的指针;通过inode可获得文件占用的块数;通过inode可实现文件的逻辑结构和物理结构的转换', 0, 'Linux', '2019-04-13 16:44:48', '2019-04-13 16:44:49');
+INSERT INTO `tb_question` VALUES (49, '命令:06 03 * * 3 lp /usr/local/message | mail -s \"server message\" root在（ ）自动执行：', '每周三06:03分;每周六03:03分;每周三03:06分;每周六03:06分', 2, 'Linux', '2019-04-13 16:46:11', '2019-04-13 16:46:12');
+INSERT INTO `tb_question` VALUES (50, '下列选项中，会导致用户进程从用户态切换到内核的操作是? I. 整数除以零 II. sin( )函数调用   III. read系统调用', '仅 I、II;仅 I、III;仅 II 、III;I、II和III', 1, 'Linux', '2019-04-13 16:47:11', '2019-04-13 16:47:12');
+INSERT INTO `tb_question` VALUES (51, '在Hibernate的HQL查询中，setFirstResults(3)方法中参数值3指的是', '从第3条记录开始;从第4条记录开始;查询3条记录;查询4条记录', 1, 'Hibernate', '2019-04-13 17:03:59', '2019-04-13 17:04:03');
+INSERT INTO `tb_question` VALUES (52, '在Hibernate中，如果数据库是MySql或者SQLServer，则generator属性值不可以使用', 'hilo;native;sequence;indentity', 2, 'Hibernate', '2019-04-13 16:52:39', '2019-04-13 16:52:40');
+INSERT INTO `tb_question` VALUES (53, '在Hibernate中，如果数据库是Oracle或者DB2，则generator属性值不可以使用', 'hilo;native;sequence;indentity', 3, 'Hibernate', '2019-04-13 16:53:07', '2019-04-13 16:53:08');
+INSERT INTO `tb_question` VALUES (54, '在Hibernate中，下列哪个选项不属于Session的方法', 'load;save;open;delete', 2, 'Hibernate', '2019-04-13 16:54:25', '2019-04-13 16:54:26');
+INSERT INTO `tb_question` VALUES (55, '在Hibernate中， generator属性值如果是native，则表示', '由Hibernate自动以自增的方式生成标识符，每次增量为1;由Hibernate自动以自增的方式生成标识符，每次增量为自定义;根据底层数据库对自动生成标识符的支持来选择;由Java应用程序负责生成标识符', 2, 'Hibernate', '2019-04-13 16:55:03', '2019-04-13 16:55:04');
+INSERT INTO `tb_question` VALUES (56, ' 在Hibernate中，inverse属性值为（    ）时，会标识被控方', 'all;false;true;none', 2, 'Hibernate', '2019-04-13 16:55:54', '2019-04-13 16:55:55');
+INSERT INTO `tb_question` VALUES (57, '在Hibernate中，如果需要标识主控方，则inverse属性值应为', 'all;false;true;none', 1, 'Hibernate', '2019-04-13 16:56:16', '2019-04-13 16:56:17');
+INSERT INTO `tb_question` VALUES (58, '在Hibernate中，从性能方面考虑，inverse属性值通常设置为', 'all;false;true;none', 1, 'Hibernate', '2019-04-13 16:56:34', '2019-04-13 16:56:35');
+INSERT INTO `tb_question` VALUES (59, '在Hibernate中，<set>元素有一个cascade属性，如果希望Hibernate级联保存集合中的对象，则cascade属性应该取什么值', 'none;save;save-update;delete', 2, 'Hibernate', '2019-04-13 16:57:42', '2019-04-13 16:57:43');
+INSERT INTO `tb_question` VALUES (60, '下面哪一项不属于优化Hibernate所鼓励的', '使用单向一对多关联，不使用双向一对多;不用一对一，用多对一取代;配置对象缓存，不使用集合缓存;继承类使用显式多态', 0, 'Hibernate', '2019-04-13 15:29:37', '2019-04-13 15:29:38');
+INSERT INTO `tb_question` VALUES (61, 'golang虽然没有显式的提供继承语法，但是通过匿名组合实现了继承。这一说法是否正确。', 'true;false', 0, 'Go', '2019-04-16 17:42:01', '2019-04-16 17:42:02');
+INSERT INTO `tb_question` VALUES (62, 'channel本身必然是同时支持读写的，所以不存在单向channel。这一说法是否正确。', 'true;false', 1, 'Go', '2019-04-16 17:42:26', '2019-04-16 17:42:27');
+INSERT INTO `tb_question` VALUES (63, '指针是基础类型,这一说法是否正确。', 'true;false', 1, 'Go', '2019-04-16 17:42:48', '2019-04-16 17:42:49');
+INSERT INTO `tb_question` VALUES (64, '关于map，下面说法正确的是（）', 'map反序列化时json.unmarshal的入参必须为map的地址;在函数调用中传递map，则子函数中对map元素的增加不会导致父函数中map的修改;在函数调用中传递map，则子函数中对map元素的修改不会导致父函数中map的修改;不能使用内置函数delete删除map的元素', 0, 'Go', '2019-04-16 17:43:21', '2019-04-16 17:43:22');
+INSERT INTO `tb_question` VALUES (65, '\r\n数组是一个值类型,这一说法是否正确。', 'true;false', 0, 'Go', '2019-04-16 17:44:30', '2019-04-16 17:44:31');
+INSERT INTO `tb_question` VALUES (66, 'import后面的最后一个元素是包名（）', 'true;false', 1, 'Go', '2019-04-16 17:44:55', '2019-04-16 17:44:56');
+INSERT INTO `tb_question` VALUES (67, '通过成员变量或函数首字母的大小写来决定其作用域,这一说法是否正确。', 'true;false', 0, 'Go', '2019-04-16 17:46:42', '2019-04-16 17:46:44');
+INSERT INTO `tb_question` VALUES (68, 'golang中没有构造函数的概念，对象的创建通常交由一个全局的创建函数来完成，以NewXXX来命名。这一说法是否正确。', 'true;false', 0, 'Go', '2019-04-16 17:47:04', '2019-04-16 17:47:05');
+INSERT INTO `tb_question` VALUES (69, '内置函数delete可以删除数组切片内的元素,这一说法是否正确。', 'true;false', 1, 'Go', '2019-04-16 17:48:55', '2019-04-16 17:48:57');
+INSERT INTO `tb_question` VALUES (70, '函数执行时，如果由于panic导致了异常，则延迟函数不会执行。这一说法是否正确。', 'true;false', 1, 'Go', '2019-04-16 17:47:43', '2019-04-16 17:47:45');
+
+-- ----------------------------
 -- Table structure for tb_recruit
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_recruit`;
@@ -383,7 +472,7 @@ CREATE TABLE `tb_report`  (
   `avg_work_time` float(11, 0) NULL DEFAULT NULL,
   `avg_project` float(11, 0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tb_role
@@ -503,6 +592,19 @@ INSERT INTO `tb_skill` VALUES (36, 'git', '后端', '2019-01-08 19:45:35', '2019
 INSERT INTO `tb_skill` VALUES (37, 'docker', '后端', '2019-01-08 19:45:35', '2019-01-08 19:45:40');
 
 -- ----------------------------
+-- Table structure for tb_skill_proficiency
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_skill_proficiency`;
+CREATE TABLE `tb_skill_proficiency`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `emp_id` int(11) NULL DEFAULT NULL,
+  `proficiency` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
+  `gmt_create` datetime(0) NULL DEFAULT NULL,
+  `gmt_modified` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for tb_train
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_train`;
@@ -530,7 +632,7 @@ INSERT INTO `tb_train` VALUES (4, 'Java虚拟机', '2019-03-01:14-16:Java虚拟�
 INSERT INTO `tb_train` VALUES (5, 'Java虚拟机', '2019-03-01:14-16:Java虚拟机基本知识;2019-03-08:14-16:Java虚拟机高级部分1;2019-03-16:14-16:Java虚拟机高级部分2;2019-03-22:14-16:Java虚拟机调优和错误解决', '架构', 'R大', '任行;张三;李六;王二;何小茜;张小凡;李琪琪;李一;张凡;李二;李三;李九;李五;李八;王四;方小园', '2019-02-24 09:00:00', 2, '2019-02-09 09:31:41', '2019-02-28 09:31:45');
 INSERT INTO `tb_train` VALUES (6, '设计模式培训', '2019-02-22:14-16:六大常用模式介绍与实现;2019-02-28:14-16:其他模式介绍与实现', '编码', 'K大', '李六;王二;王五;何小茜;张小凡;李琪琪;李一', '2019-01-26 16:00:00', 2, '2019-01-22 16:37:08', '2019-02-28 16:37:10');
 INSERT INTO `tb_train` VALUES (7, 'Java虚拟机', '2019-03-01:14-16:Java虚拟机基本知识;2019-03-08:14-16:Java虚拟机高级部分1;2019-03-16:14-16:Java虚拟机高级部分2;2019-03-22:14-16:Java虚拟机调优和错误解决', '架构', 'R大', '任行;李六;王二;何小茜;张小凡;李琪琪;李一;张凡;李二;李三;李九;李五;李八;王四;方小园', '2019-02-13 09:00:00', 2, '2019-02-09 09:31:41', '2019-02-13 09:31:45');
-INSERT INTO `tb_train` VALUES (8, 'JS模块化', '2019-02-13:10-11:AMD规范;2019-02-18:10-11:ES6规范;2019-02-25:10-11:commonjs', '前端', 'Y大', '任行;李六;王二;王五;何小茜;张小凡;李琪琪;李一;张凡;李二;李三;李九;李五;李八;王四;方小园;张三', '2019-02-12 10:00:00', 0, '2019-02-11 02:08:44', '2019-02-12 02:42:49');
+INSERT INTO `tb_train` VALUES (8, 'JS模块化', '2019-05-20:10-11:AMD规范;2019-05-24:10-11:ES6规范;2019-05-28:10-11:commonjs', '前端', 'Y大', '任行;李六;王二;王五;何小茜;张小凡;李琪琪;李一;张凡;李二;李三;李九;李五;李八;王四;方小园;张三', '2019-05-12 10:00:00', 0, '2019-02-11 02:08:44', '2019-02-12 02:42:49');
 
 -- ----------------------------
 -- Table structure for tb_train_demand
@@ -550,9 +652,9 @@ CREATE TABLE `tb_train_demand`  (
 -- ----------------------------
 -- Records of tb_train_demand
 -- ----------------------------
-INSERT INTO `tb_train_demand` VALUES (1, 2, '任行', '中间件', 'Zookeeper,Kafka', '2019-01-25 14:54:56', '2019-01-26 14:59:05');
-INSERT INTO `tb_train_demand` VALUES (2, 3, '张三', '大数据', 'Hadoop,Hive,HBase,Spark,Zookeeper', '2019-01-26 14:59:27', '2019-01-26 15:00:12');
-INSERT INTO `tb_train_demand` VALUES (3, 5, '王五', '前端', 'TypeScript,yarn', '2019-01-29 15:03:25', '2019-01-29 15:03:27');
-INSERT INTO `tb_train_demand` VALUES (4, 3, '张三', '中间件', 'Zookeeper,Kafka', '2019-02-20 14:54:56', '2019-02-24 13:21:44');
+INSERT INTO `tb_train_demand` VALUES (1, 2, '任行', '中间件', 'Zookeeper,Kafka', '2019-03-25 14:54:56', '2019-03-26 14:59:05');
+INSERT INTO `tb_train_demand` VALUES (2, 3, '张三', '大数据', 'Hadoop,Hive,HBase,Spark,Zookeeper', '2019-03-26 14:59:27', '2019-03-26 15:00:12');
+INSERT INTO `tb_train_demand` VALUES (3, 5, '王五', '前端', 'TypeScript,yarn', '2019-03-29 15:03:25', '2019-03-29 15:03:27');
+INSERT INTO `tb_train_demand` VALUES (4, 3, '张三', '中间件', 'Zookeeper,Kafka', '2019-04-20 14:54:56', '2019-04-24 13:21:44');
 
 SET FOREIGN_KEY_CHECKS = 1;

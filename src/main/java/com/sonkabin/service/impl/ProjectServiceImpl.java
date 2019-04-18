@@ -180,9 +180,11 @@ public class ProjectServiceImpl implements ProjectService {
         Employee employee = MyUtil.getSessionEmployee("loginEmp");
         LambdaQueryWrapper<ProjectHistory> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ProjectHistory::getEmpId, employee.getId());
-        //todo  需要只比较日期，不比较时间
+        //  需要只比较日期，不比较时间
         wrapper.ge(projectHistoryDTO.getStartDate() != null, ProjectHistory::getGmtCreate, projectHistoryDTO.getStartDate());
-        wrapper.le(projectHistoryDTO.getEndDate() != null, ProjectHistory::getGmtModified, projectHistoryDTO.getEndDate().plusDays(1));
+        if (projectHistoryDTO.getEndDate() != null) {
+            wrapper.le(ProjectHistory::getGmtModified, projectHistoryDTO.getEndDate().plusDays(1));
+        }
         IPage<ProjectHistory> result = projectHistoryMapper.selectPage(page, wrapper);
         return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
     }
