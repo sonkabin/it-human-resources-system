@@ -104,5 +104,12 @@ public class ProjectController {
         return projectService.getHistoryProjects(projectHistoryDTO);
     }
     // ----------------- 员工结束     ---------------------------
+
+    // 报表信息
+    @ResponseBody
+    @GetMapping("/projects/report")
+    public Message getProjectReport () {
+        return projectService.getProjectReport();
+    }
 }
 

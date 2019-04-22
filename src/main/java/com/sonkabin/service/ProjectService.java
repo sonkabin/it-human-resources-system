@@ -37,4 +37,6 @@ public interface ProjectService{
     Message getInvolveProjects();
 
     Message getHistoryProjects(ProjectHistoryDTO projectHistoryDTO);
+
+    Message getProjectReport();
 }

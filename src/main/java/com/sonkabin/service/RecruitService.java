@@ -26,4 +26,6 @@ public interface RecruitService{
     Message rejectRecruit(Integer id);
 
     Recruit getRecruitById(Integer id);
+
+    Message getApplicantsReport();
 }

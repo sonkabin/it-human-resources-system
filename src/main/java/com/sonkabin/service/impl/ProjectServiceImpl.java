@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -163,12 +164,13 @@ public class ProjectServiceImpl implements ProjectService {
         humanConfigLambdaQueryWrapper.eq(HumanConfig::getEmpId, employee.getId()).eq(HumanConfig::getStatus, 1);
         List<HumanConfig> humanConfigs = humanConfigMapper.selectList(humanConfigLambdaQueryWrapper);
         List<Integer> ids = new LinkedList<>();
-        humanConfigs.forEach( h -> {
-            ids.add(h.getProjectId());
-        });
+        humanConfigs.forEach( h -> ids.add(h.getProjectId()));
         LambdaQueryWrapper<Project> projectLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        projectLambdaQueryWrapper.in(Project::getId, ids);
-        List<Project> projects = projectMapper.selectList(projectLambdaQueryWrapper);
+        List<Project> projects = new ArrayList<>();
+        if (ids.size() > 0) {
+            projectLambdaQueryWrapper.in(Project::getId, ids).and(i->i.eq(Project::getStatus, 1));
+            projects = projectMapper.selectList(projectLambdaQueryWrapper);
+        }
         return Message.success().put("humanConfigs", humanConfigs).put("projects", projects);
     }
 
@@ -187,5 +189,56 @@ public class ProjectServiceImpl implements ProjectService {
         }
         IPage<ProjectHistory> result = projectHistoryMapper.selectPage(page, wrapper);
         return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+    }
+
+    @Override
+    public Message getProjectReport() {
+        List<Project> projects = projectMapper.selectList(null);
+        LocalDateTime now = LocalDateTime.now();
+        int[] first = new int[3];
+        int[] second = new int[3];
+        int[] third = new int[3];
+        // 未开始的项目
+        projects.stream().filter(project -> project.getStatus() == 0).forEach(project -> {
+            LocalDateTime gmtCreate = project.getGmtCreate();
+            packReport(first, gmtCreate);
+        });
+
+        // 进行中的项目
+        projects.stream().filter(project -> project.getStatus() == 1).forEach(project -> {
+            LocalDate startDate = project.getStartDate();
+            LocalDate date = now.toLocalDate();
+            if (startDate.isAfter(date.minusMonths(3))) {
+                second[0]++;
+                second[1]++;
+                second[2]++;
+            } else if (startDate.isAfter(date.minusMonths(6))) {
+                second[1]++;
+                second[2]++;
+            } else if (startDate.isAfter(date.minusYears(1))) {
+                second[2]++;
+            }
+        });
+
+        // 已结束的项目
+        projects.stream().filter(project -> project.getStatus() == 2).forEach(project -> {
+            LocalDateTime gmtModified = project.getGmtModified();
+            packReport(third, gmtModified);
+        });
+        return Message.success().put("first", first).put("second", second).put("third", third);
+    }
+
+    private void packReport(int[] a, LocalDateTime time) {
+        LocalDateTime now = LocalDateTime.now();
+        if (time.isAfter(now.minusMonths(3))) {
+            a[0]++;
+            a[1]++;
+            a[2]++;
+        } else if (time.isAfter(now.minusMonths(6))) {
+            a[1]++;
+            a[2]++;
+        } else if (time.isAfter(now.minusYears(1))) {
+            a[2]++;
+        }
     }
 }

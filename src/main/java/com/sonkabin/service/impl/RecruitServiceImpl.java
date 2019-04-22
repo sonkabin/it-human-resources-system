@@ -98,4 +98,9 @@ public class RecruitServiceImpl implements RecruitService {
     public Recruit getRecruitById(Integer id) {
         return recruitMapper.selectById(id);
     }
+
+    @Override
+    public Message getApplicantsReport() {
+        return Message.success();
+    }
 }

@@ -67,5 +67,12 @@ public class RecruitController {
         ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
         return responseEntity;
     }
+
+    // todo 报表
+    @ResponseBody
+    @GetMapping("/applicants/report")
+    public Message getApplicantsReport () {
+        return recruitService.getApplicantsReport();
+    }
 }
 
