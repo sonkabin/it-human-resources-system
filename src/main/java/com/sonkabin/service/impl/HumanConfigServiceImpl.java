@@ -84,6 +84,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         return Message.success().put("project", project).put("employees", employees).put("portions", empPortions).put("candidates", candidates).put("candidatePortions",candidatePortions);
     }
 
+
     private void calculateEmployeeWithSort(List<Employee> employees, int size, int[] portions, int[] available, int[] indexes) {
         for (int i = 0; i < size; i++) {
             available[i] = 0;
@@ -519,6 +520,25 @@ public class HumanConfigServiceImpl implements HumanConfigService {
                 messageMapper.insert(message);
             });
         }
+    }
+
+
+    @Override
+    public Message getInvolveProjects(Integer empId) {
+        LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(HumanConfig::getEmpId, empId).and(i -> i.eq(HumanConfig::getStatus, 1));
+        List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
+        List<Project> projects = new ArrayList<>();
+        // 员工有参与项目
+        if (humanConfigs.size() > 0) {
+            // 根据项目id查询对应的项目
+            List<Integer> temp = new ArrayList<>();
+            humanConfigs.forEach(e -> temp.add(e.getProjectId()));
+            LambdaQueryWrapper<Project> projectLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            projectLambdaQueryWrapper.in(Project::getId, temp);
+            projects = projectMapper.selectList(projectLambdaQueryWrapper);
+        }
+        return Message.success().put("config", humanConfigs).put("projects", projects);
     }
 
 }

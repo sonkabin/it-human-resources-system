@@ -7,6 +7,7 @@ public class EmployeeDTO {
     private String empId;
     private String empName;
     private String sort;
+    private Integer role;
 
     public long getRows() {
         return rows;
@@ -54,5 +55,13 @@ public class EmployeeDTO {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 }

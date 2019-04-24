@@ -94,8 +94,8 @@ public class ProjectController {
     // ----------------- 员工开始     ---------------------------
     @ResponseBody
     @GetMapping("/current/projects")
-    public Message getInvolveProjects () {
-        return projectService.getInvolveProjects();
+    public Message getCurrentProjects() {
+        return projectService.getCurrentProjects();
     }
 
     @ResponseBody
@@ -103,6 +103,7 @@ public class ProjectController {
     public Message getHistoryProjects (ProjectHistoryDTO projectHistoryDTO) {
         return projectService.getHistoryProjects(projectHistoryDTO);
     }
+
     // ----------------- 员工结束     ---------------------------
 
     // 报表信息

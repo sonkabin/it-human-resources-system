@@ -19,6 +19,8 @@ public interface EmployeeService{
 
     Message getEmps(EmployeeDTO employeeDTO);
 
+    Message getEmployeesManageByHR(EmployeeDTO employeeDTO);
+
     Message setPassword(Integer id, String oldPwd, String newPwd);
 
     Message saveEmployee(Employee employee);

@@ -29,7 +29,7 @@ public class LoginController {
         } else if (id == 1 || id == 2) { // 员工和项目经理跳转到同一页面，项目模块需要单独处理
             return "redirect:/employee.html";
         }
-        return "";
+        return "redirect:/hr.html";
     }
 
 }

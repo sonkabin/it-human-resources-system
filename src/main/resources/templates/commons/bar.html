@@ -83,7 +83,7 @@
 <!-- Admin Side Navbar -->
 <nav class="side-navbar" th:fragment="sidebar">
     <!-- Sidebar Header-->
-    <div class="sidebar-header d-flex align-items-center">
+    <div class="sidebar-header d-flex align-items-center" th:fragment="header">
         <div class="title">
             <h1 class="h4">欢迎您</h1>
             <h3>[[${session.loginEmp.empName}]]</h3>
@@ -92,13 +92,43 @@
     <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>
     <ul class="list-unstyled">
         <li class="active" th:class="${activeUrl=='index.html'? 'active' : ''}"><a href="/admin.html"> <i class="icon-home"></i>主页 </a></li>
-        <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/manageEmp.html"> <i class="fa fa-user"></i>员工管理 </a></li>
-        <li th:class="${activeUrl=='train.html' ? 'active' : ''}"><a href="/manageTrain.html"> <i class="icon-padnote"></i>培训管理 </a></li>
-        <li th:class="${activeUrl=='recruit.html' ? 'active' : ''}"><a href="/manageRecruit.html"> <i class="icon-list"></i>招聘管理 </a></li>
-        <li th:class="${activeUrl=='question.html' ? 'active' : ''}"><a href="/manageQuestion.html"> <i class="fa fa-book"></i>试题管理 </a></li>
-        <li th:class="${activeUrl=='permission.html' ? 'active' : ''}"><a href="/managePermission.html"> <i class="fa fa-lock"></i>权限管理 </a></li>
+        <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/admin-employee-manage.html"> <i class="fa fa-user"></i>员工管理 </a></li>
+        <li th:class="${activeUrl=='permission.html' ? 'active' : ''}"><a href="/admin-permission-manage.html"> <i class="fa fa-lock"></i>权限管理 </a></li>
+        <li th:class="${activeUrl=='message.html' ? 'active' : ''}"><a href="/admin-message-manage.html"> <i class="fa fa-info-circle"></i>消息管理 </a></li>
+        <li>
+            <a href="#adminDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>个人中心</a>
+            <ul id="adminDropdown" class="collapse list-unstyled ">
+                <li th:class="${activeUrl=='personManage.html' ? 'active' : ''}"><a href="#" th:href="@{/person}">个人资料管理</a></li>
+                <li th:class="${activeUrl=='account.html' ? 'active' : ''}"><a href="/admin-account-manage.html"> 账号设置 </a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<!-- HR Side Navbar -->
+<nav class="side-navbar" th:fragment="hr-sidebar">
+    <!-- Sidebar Header-->
+    <div class="sidebar-header d-flex align-items-center">
+        <div class="title">
+            <h1 class="h4">欢迎您</h1>
+            <h3>[[${session.loginEmp.empName}]]</h3>
+        </div>
+    </div>
+    <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>
+    <ul class="list-unstyled">
+        <li class="active" th:class="${activeUrl=='index.html'? 'active' : ''}"><a href="#"> <i class="icon-home"></i>主页 </a></li>
+        <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/hr-employee-manage.html"> <i class="fa fa-user"></i>员工管理 </a></li>
+        <li th:class="${activeUrl=='train.html' ? 'active' : ''}"><a href="/hr-train-manage.html"> <i class="icon-padnote"></i>培训管理 </a></li>
+        <li th:class="${activeUrl=='recruit.html' ? 'active' : ''}"><a href="/hr-recruit-manage.html"> <i class="icon-list"></i>招聘管理 </a></li>
+        <li th:class="${activeUrl=='question.html' ? 'active' : ''}"><a href="/hr-question-manage.html"> <i class="fa fa-book"></i>试题管理 </a></li>
         <li th:class="${activeUrl=='message.html' ? 'active' : ''}"><a href="/manageMessage.html"> <i class="fa fa-info-circle"></i>消息管理 </a></li>
-        <li th:class="${activeUrl=='account.html' ? 'active' : ''}"><a href="/manageAccount.html"> <i class="fa fa-circle-thin"></i>账号设置 </a></li>
+        <li>
+            <a href="#hrDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>个人中心</a>
+            <ul id="hrDropdown" class="collapse list-unstyled ">
+                <li th:class="${activeUrl=='personManage.html' ? 'active' : ''}"><a href="#" th:href="@{/person}">个人资料管理</a></li>
+                <li th:class="${activeUrl=='account.html' ? 'active' : ''}"><a href="/hr-account-manage.html"> 账号设置 </a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 

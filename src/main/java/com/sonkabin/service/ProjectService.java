@@ -34,7 +34,7 @@ public interface ProjectService{
 
     Message updateHumanContributeDetail(List<ProjectHistory> projectHistories);
 
-    Message getInvolveProjects();
+    Message getCurrentProjects();
 
     Message getHistoryProjects(ProjectHistoryDTO projectHistoryDTO);
 

@@ -137,6 +137,37 @@
                 </div>
             </div>
 
+            <div id="involveModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="empAddModalLabel"
+                 aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >成员已参与项目</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                <div class="col-sm-11">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>项目名</th>
+                                                <th>占用工作时间比例</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="involve-projects"></tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
         </div>
@@ -220,6 +251,27 @@
         })
     })
 
+    $(document).on('click', '.involve-btn', function () {
+        $('#involve-projects').empty()
+        $.ajax({
+            url: baseUrl + '/humanConfig/involve/' + $(this).attr('emp-id'),
+            method: 'GET',
+            success: function (result) {
+                console.log(result)
+                var projects = result.info.projects
+                var config = result.info.config
+                if (projects.length > 0) {
+                    for (var i = 0; i < projects.length; i++) {
+                        var projectNameTd = $('<td></td>').append(projects[i].projectName)
+                        var configTd = $('<td></td>').append(config[i].portion)
+                        $('<tr></tr>').append(projectNameTd).append(configTd).appendTo('#involve-projects')
+                    }
+                }
+            }
+        })
+        $('#involveModal').modal()
+    })
+
     $('#save-btn').click(function () {
         // console.log($('#transfer').find('.transferLeft').find('li').find('span').text())
         if (confirm('确定要以当前人员配置启动项目吗?')) {
@@ -250,7 +302,6 @@
                         toastr.error(result.info.error, '错误', {timeOut: 2000})
                         return
                     }
-                    // 我醉了....
                     window.location.href = baseUrl + '/humanConfigs/' + projectId
                 }
             })

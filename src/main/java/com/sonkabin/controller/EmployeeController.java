@@ -36,6 +36,13 @@ public class EmployeeController {
     }
 
     @ResponseBody
+    @RequiresPermissions("employee:query")
+    @GetMapping("/hr/emps")
+    public Message getEmployeesManageByHR(EmployeeDTO employeeDTO){
+        return employeeService.getEmployeesManageByHR(employeeDTO);
+    }
+
+    @ResponseBody
     @RequiresPermissions("employee:add")
     @PostMapping("/emp")
     public Message saveEmployee (Employee employee) {
@@ -81,7 +88,13 @@ public class EmployeeController {
         Employee employee = (Employee) session.getAttribute("loginEmp");
         Message msg = employeeService.getEmpById(employee.getId());
         model.addAttribute("employee", msg.getInfo().get("employee"));
-        return "employee/personManage";
+        if (employee.getRoleId() == 4) {
+            return "hr/person";
+        } else if (employee.getRoleId() == 3) {
+            return "admin/person";
+        } else {
+            return "employee/personManage";
+        }
     }
 
     /**

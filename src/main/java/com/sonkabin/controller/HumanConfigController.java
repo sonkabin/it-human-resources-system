@@ -90,6 +90,13 @@ public class HumanConfigController {
         return humanConfigService.recalculate(recalculateDTO);
     }
 
+    // 获取员工参与项目的工作时间比例和项目名
+    @ResponseBody
+    @GetMapping("/humanConfig/involve/{empId}")
+    public Message getInvolveProjects(@PathVariable("empId") Integer empId) {
+        return humanConfigService.getInvolveProjects(empId);
+    }
+
 
 }
 

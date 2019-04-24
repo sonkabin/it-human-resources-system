@@ -1,5 +1,6 @@
 package com.sonkabin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -57,7 +58,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Message getEmps(EmployeeDTO employeeDTO) {
-        // 分页设置
+        // 模糊查询
+        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpId()),Employee::getEmpId, employeeDTO.getEmpId());
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpName()), Employee::getEmpName, employeeDTO.getEmpName());
+        wrapper.eq(employeeDTO.getRole() != -1, Employee::getRoleId, employeeDTO.getRole());
+        IPage<Employee> result = selectPage(employeeDTO, wrapper);
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+    }
+
+    @Override
+    public Message getEmployeesManageByHR(EmployeeDTO employeeDTO) {
+        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpId()),Employee::getEmpId, employeeDTO.getEmpId());
+        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpName()), Employee::getEmpName, employeeDTO.getEmpName());
+        wrapper.ne(Employee::getRoleId, 3); // 管理员不由HR管理
+        wrapper.eq(employeeDTO.getRole() != -1, Employee::getRoleId, employeeDTO.getRole());
+        wrapper.orderByAsc(Employee::getId);
+        IPage<Employee> result = selectPage(employeeDTO, wrapper);
+        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+    }
+
+    private IPage<Employee> selectPage(EmployeeDTO employeeDTO, Wrapper<Employee> wrapper) {
         Page<Employee> page = new Page<>();
         page.setSize(employeeDTO.getRows());
         page.setCurrent(employeeDTO.getPage());
@@ -68,12 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 page.setDesc(employeeDTO.getSort());
             }
         }
-        // 模糊查询
-        LambdaQueryWrapper<Employee> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpId()),Employee::getEmpId, employeeDTO.getEmpId());
-        wrapper.like(!StringUtils.isEmpty(employeeDTO.getEmpName()), Employee::getEmpName, employeeDTO.getEmpName());
-        IPage<Employee> result = employeeMapper.selectPage(page, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return employeeMapper.selectPage(page, wrapper);
     }
 
     @Override
@@ -102,13 +119,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         LocalDateTime now = LocalDateTime.now();
         employee.setGmtCreate(now);
         employee.setGmtModified(now);
-        // 计算年龄
-        LocalDate birth = employee.getBirth();
-        int age = now.getYear() - birth.getYear() + 1;
-        employee.setAge(age);
+        if (employee.getBirth() != null) {
+            // 计算年龄]
+            int age = now.getYear() - employee.getBirth().getYear() + 1;
+            employee.setAge(age);
+        }
         // 计算密码
         String pwd = MD5Util.calculatePwd("123456", employee.getEmpId());
         employee.setPassword(pwd);
+        employee.setStatus(1);
+        employee.setInservice(1);
         employeeMapper.insert(employee);
         return Message.success();
     }

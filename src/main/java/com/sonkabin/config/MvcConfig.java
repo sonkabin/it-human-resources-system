@@ -19,13 +19,18 @@ public class MvcConfig {
 
                 // 管理员视图
                 registry.addViewController("/admin.html").setViewName("admin/index");
-                registry.addViewController("/manageEmp.html").setViewName("admin/emp");
-                registry.addViewController("/manageTrain.html").setViewName("admin/train");
-                registry.addViewController("/manageRecruit.html").setViewName("admin/recruit");
-                registry.addViewController("/manageQuestion.html").setViewName("admin/question");
-                registry.addViewController("/managePermission.html").setViewName("admin/permission");
-                registry.addViewController("/manageMessage.html").setViewName("admin/message");
-                registry.addViewController("/manageAccount.html").setViewName("admin/account");
+                registry.addViewController("/admin-employee-manage.html").setViewName("admin/emp");
+                registry.addViewController("/admin-permission-manage.html").setViewName("admin/permission");
+                registry.addViewController("/admin-message-manage.html").setViewName("admin/message");
+                registry.addViewController("/admin-account-manage.html").setViewName("admin/account");
+
+                // HR视图
+                registry.addViewController("/hr.html").setViewName("hr/index");
+                registry.addViewController("/hr-employee-manage.html").setViewName("hr/emp");
+                registry.addViewController("/hr-train-manage.html").setViewName("hr/train");
+                registry.addViewController("/hr-recruit-manage.html").setViewName("hr/recruit");
+                registry.addViewController("/hr-question-manage.html").setViewName("hr/question");
+                registry.addViewController("/hr-account-manage.html").setViewName("hr/account");
 
                 // 员工视图
                 registry.addViewController("/employee.html").setViewName("employee/index");

@@ -158,7 +158,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     // ----------------- 员工开始     ---------------------------
     @Override
-    public Message getInvolveProjects() {
+    public Message getCurrentProjects() {
         Employee employee = MyUtil.getSessionEmployee("loginEmp");
         LambdaQueryWrapper<HumanConfig> humanConfigLambdaQueryWrapper = new LambdaQueryWrapper<>();
         humanConfigLambdaQueryWrapper.eq(HumanConfig::getEmpId, employee.getId()).eq(HumanConfig::getStatus, 1);
@@ -227,6 +227,7 @@ public class ProjectServiceImpl implements ProjectService {
         });
         return Message.success().put("first", first).put("second", second).put("third", third);
     }
+
 
     private void packReport(int[] a, LocalDateTime time) {
         LocalDateTime now = LocalDateTime.now();

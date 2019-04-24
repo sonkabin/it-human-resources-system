@@ -33,7 +33,7 @@
 
     <div class="page-content d-flex align-items-stretch">
         <!-- 引入抽取的sidebar -->
-        <div th:replace="~{commons/bar::employee-sidebar(activeUrl='personManage.html')}"></div>
+        <div th:replace="~{commons/bar::hr-sidebar(activeUrl='personManage.html')}"></div>
         <div class="content-inner">
             <!-- Page Header-->
             <header class="page-header">
@@ -45,7 +45,7 @@
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/employee.html">主页</a></li>
-                    <li class="breadcrumb-item">个人信息管理</li>
+                    <li class="breadcrumb-item">个人中心</li>
                     <li class="breadcrumb-item active">个人资料管理</li>
                 </ul>
             </div>
@@ -97,13 +97,13 @@
                                         </div>
                                         <div class="form-group row" id="education">
                                             <label class="col-sm-2  col-form-label" >教育信息</label>
+                                            <input name="education" type="text" class="col-sm-9 form-control">
 
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-2  col-form-label">角色</label>
-                                            <input type="text" class="col-sm-9 form-control-plaintext" readonly
-                                                   th:value="${employee.roleId == 1 ? '员工' : '项目经理'}">
+                                            <input type="text" class="col-sm-9 form-control-plaintext" readonly value="HR">
                                         </div>
                                     </form>
                                 </div>
@@ -143,9 +143,8 @@
     var education = [[${employee.education}]]
     //把这段代码放在这里（在这里面依旧可以用$）;
     jQuery(document).ready(function($){
-        if (education != null && education != '') {
+        if (education != null) {
             var edus = education.split(';')
-            console.log(edus.length)
             $('#education').empty()
             $('#education').append('<label class="col-sm-2  col-form-label" >教育信息</label>')
             for (var i in edus) {

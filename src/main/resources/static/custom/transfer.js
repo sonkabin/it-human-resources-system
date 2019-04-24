@@ -52,8 +52,9 @@
             opts.data.left.length>0 ?
                 opts.data.left.map(function(v,i){
                     $t.find('.transferLeft>ul').append('<li emp-id="'+i+'"><div class="form-inline"><input emp-id="'+v.id+'" type="checkbox"/><span>'+v.value
-                        +'</span><input type="text" name="portion" class="form-control" placeholder="可分配工作时间比例" value=" ' + v.portion +
-                        '"><button emp-id="'+v.id+'"class="btn btn-sm btn-default skill-btn" type="button">技能</button></div></li>');
+                        +'</span><input type="text" name="portion" class="form-control" value=" ' + v.portion +
+                        '"><label class="alert alert-primary btn-sm">可分配工作时间比例为<em>' +  v.portion + '</em></label>&nbsp;<button emp-id="'+v.id+'"class="btn btn-sm btn-default skill-btn" type="button">技能</button>&nbsp;' +
+                        '<button emp-id="'+v.id+'"class="btn btn-sm btn-info involve-btn" type="button">参与的项目</button></div></li>');
                     // $t.find('.transferLeft>ul').append('<li emp-id="'+i+'"><input emp-id="'+v.id+'" type="checkbox"/>'+v.value</li>');
             })
                 :
@@ -62,8 +63,9 @@
             opts.data.right.length>0 ?
                 opts.data.right.map(function(v,i){
                     $t.find('.transferRight>ul').append('<li emp-id="'+i+'"><div class="form-inline"><input emp-id="'+v.id+'" type="checkbox"/><span>'+v.value
-                        +'</span><input type="text" name="portion" class="form-control" placeholder="可分配工作时间比例" value=" ' + v.portion +
-                        '"><button emp-id="'+v.id+'"class="btn btn-sm btn-default skill-btn" type="button">技能</button></div></li>');
+                        +'</span><input type="text" name="portion" class="form-control" value=" ' + v.portion +
+                        '"><label class="alert alert-primary btn-sm">可分配工作时间比例为<em>' +  v.portion + '</em></label>&nbsp;<button emp-id="'+v.id+'"class="btn btn-sm btn-default skill-btn" type="button">技能</button>&nbsp;' +
+                        '<button emp-id="'+v.id+'"class="btn btn-sm btn-info involve-btn" type="button">参与的项目</button></div></li>');
                     // $t.find('.transferRight>ul').append('<li emp-id="'+i+'"><input emp-id="'+v.id+'" type="checkbox"/>'+v.value+'</li>');
             })
                 :

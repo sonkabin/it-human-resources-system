@@ -32,4 +32,6 @@ public interface HumanConfigService{
     Message recalculate(RecalculateDTO recalculateDTO);
 
     Message calculateHumans(Integer projectId);
+
+    Message getInvolveProjects(Integer empId);
 }
