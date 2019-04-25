@@ -15,4 +15,6 @@ public class MyConstant {
      */
     public static final String PAGE_ROWS = "rows";
 
+    public static final String SPEED_PROJECT_APPLY_REASON = "需要加快项目进度，项目人手不足，故申请";
+
 }

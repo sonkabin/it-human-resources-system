@@ -370,9 +370,20 @@
                     }
                 }
 
-                // todo 项目信息
-
-
+                // 项目信息
+                var histories = result.info.histories
+                var projectInfoNode = $('#projects-information')
+                projectInfoNode.empty()
+                projectInfoNode.append('<label class="col-sm-2 col-form-label">参与项目历史</label>')
+                var thead = $('<thead></thead>').append($('<tr></tr>').append('<th>项目名</th>').append('<th>项目贡献</th>'))
+                var tbody = $('<tbody></tbody>')
+                for (var i = 0; i < histories.length; i++) {
+                    var prpjectNameTd = $('<td></td>').append(histories[i].projectName)
+                    var contributeTd = $('<td></td>').append(histories[i].contribute)
+                    $('<tr></tr>').append(prpjectNameTd).append(contributeTd).appendTo(tbody)
+                }
+                var table = $('<table class="table table-striped table-hover"></table>').append(thead).append(tbody)
+                $('<div class="col-sm-9"></div>').append(table).appendTo(projectInfoNode)
                 $('#detailModal').modal()
             }
         })

@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 18/04/2019 14:29:42
+ Date: 25/04/2019 14:31:04
 */
 
 SET NAMES utf8mb4;
@@ -49,10 +49,10 @@ CREATE TABLE `tb_employee`  (
 -- ----------------------------
 -- Records of tb_employee
 -- ----------------------------
-INSERT INTO `tb_employee` VALUES (1, '1001', 'sonkabin', '955766906007172822e851119fca4bd6', 1, 26, '1994-07-05', '15858111111', 'sonkabin@gmail.com', '339005199407064312', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:xx大学', 1, 1, 'Java:8;MySQL:4;Linux:3;Spring:3;MyBatis:3;Hibernate:3;SpringBoot:3', 3, '2018-01-01 19:18:18', '2019-01-22 07:18:58');
-INSERT INTO `tb_employee` VALUES (2, '1002', '任行', '0f932f33dd242e50b88d959807b66462', 1, 24, '1996-09-18', '15833333333', 'renxing@qq.com', '339005199609224789', 'G:/static/avatars/avatar1002', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:9;MySQL:8;Spring:8;MyBatis:7;Hibernate:6;SpringBoot:7;SpringData:6;Maven:6;SpringMVC:8;Netty:6;Tomcat:7;Gradle:4;Ngnix:6;Linux:7;git:6;docker:7;Shiro:7;SpringSecurity:5;Oracle:5;Redis:8;SQL Server:4', 2, '2018-01-03 12:22:52', '2019-01-23 02:21:16');
-INSERT INTO `tb_employee` VALUES (3, '1003', '张三', '8e12514181ffb7a0511bb1f9af2140ae', 1, 30, '1990-07-27', '15858118888', 'zhangsan@163.com', '33900419907319874', 'G:/static/avatars/avatar1003', '本科:cc大学;硕士:qq大学;博士及以上:oo大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;docker:1;Maven:3', 2, '2018-01-04 18:47:45', '2019-02-16 05:14:01');
-INSERT INTO `tb_employee` VALUES (4, '1004', '李四', '2e163295e866cb8c3175a8301e45289a', 0, 30, '1990-06-30', '15858158888', 'lisi@163.com', '339005199007048795', 'G:/static/avatars/avatar1004', '本科:xx大学;硕士:cc大学', 1, 1, 'Vue.js:7;jQuery:8;HTML5:8;node.js:5;React.js:6;webpack:5;Bootstrap:7;CSS3:7;LESS:7;git:5;MongoDB:5;AngularJS:6', 1, '2018-01-20 09:51:20', '2019-01-22 10:55:01');
+INSERT INTO `tb_employee` VALUES (1, '1001', 'sonkabin', '955766906007172822e851119fca4bd6', 1, 26, '1994-07-05', '15858111111', 'sonkabin@gmail.com', '339005199407064312', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:xx大学', 1, 1, '', 3, '2018-01-01 19:18:18', '2019-01-22 07:18:58');
+INSERT INTO `tb_employee` VALUES (2, '1002', '任行', '0f932f33dd242e50b88d959807b66462', 1, 24, '1996-09-18', '15833333333', 'renxing@qq.com', '339005199609224789', 'G:/static/avatars/avatar1002', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:9;MySQL:8;Spring:8;MyBatis:7;Hibernate:6;SpringBoot:7;SpringData:6;Maven:6;SpringMVC:8;Netty:6;Tomcat:7;Gradle:4;Ngnix:6;Linux:7;git:6;docker:7;Shiro:7;SpringSecurity:5;Oracle:5;Redis:8;SQL Server:4', 2, '2018-01-03 12:22:52', '2019-04-24 15:32:30');
+INSERT INTO `tb_employee` VALUES (3, '1003', '张三', '8e12514181ffb7a0511bb1f9af2140ae', 1, 30, '1990-07-23', '15858118888', 'zhangsan@163.com', '33900419907319874', 'G:/static/avatars/avatar1003', '本科:cc大学;硕士:qq大学;博士及以上:oo大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;docker:1;Maven:3', 2, '2018-01-04 18:47:45', '2019-04-24 15:46:46');
+INSERT INTO `tb_employee` VALUES (4, '1004', '李四', '2e163295e866cb8c3175a8301e45289a', 0, 30, '1990-06-30', '15858158888', 'lisi@163.com', '339005199007048795', 'G:/static/avatars/avatar1004', '本科:xx大学;硕士:cc大学', 1, 1, '', 4, '2018-01-20 09:51:20', '2019-01-22 10:55:01');
 INSERT INTO `tb_employee` VALUES (5, '1005', '王五', '3899f181107fc446ecef3b0b1d9d0891', 0, 28, '1992-12-24', '15858178987', 'wangwu@126.com', '339005199212287896', 'G:/static/avatars/avatar1005', '本科:xx大学;硕士:cc大学', 1, 1, 'Vue.js:7;jQuery:8;HTML5:8;node.js:5;React.js:6;webpack:5;Bootstrap:7;CSS3:7;LESS:7;git:5;MongoDB:5;AngularJS:6', 1, '2018-01-20 09:53:37', '2019-01-23 02:12:50');
 INSERT INTO `tb_employee` VALUES (6, '1006', '赵六', 'c0123e0cbc5ef6ba5a7e1eecb0100eba', 0, 35, '1985-02-28', '17858789874', 'zhaoliu@qq.com', '339005198503037841', 'G:/static/avatars/avatar1006', '本科:xx大学;硕士:cc大学', 1, 1, 'Vue.js:7;jQuery:8;HTML5:8;node.js:5;React.js:6;webpack:5;Bootstrap:7;CSS3:7;LESS:7;git:5;MongoDB:5;AngularJS:6', 1, '2018-01-20 09:55:02', '2019-01-22 10:55:11');
 INSERT INTO `tb_employee` VALUES (7, '1007', '田七', '4ddcf6ada96e50d433e92b018246db7b', 1, 33, '1987-04-20', '1785878631', 'tianqi@qq.com', '339005198704239874', 'G:/static/avatars/avatar1007', '本科:xx大学;硕士:cc大学', 1, 1, 'Vue.js:7;jQuery:8;HTML5:8;node.js:5;React.js:6;webpack:5;Bootstrap:7;CSS3:7;LESS:7;git:5;MongoDB:5;AngularJS:6', 1, '2018-01-20 09:55:54', '2019-01-22 10:55:13');
@@ -84,7 +84,9 @@ CREATE TABLE `tb_human_config`  (
   `emp_id` int(11) NULL DEFAULT NULL COMMENT '员工编号（外键）',
   `emp_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `portion` tinyint(2) NULL DEFAULT NULL COMMENT '此项目工作时间比例',
-  `status` tinyint(2) NULL DEFAULT NULL COMMENT '进行中的项目为1，已结束的项目为2',
+  `release_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '将员工从该项目中释放的理由',
+  `status` tinyint(2) NULL DEFAULT NULL COMMENT '员工参与此项目的状态，为1表示参与项目中，为2表示已退出项目',
+  `apply_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '申请员工的理由',
   `gmt_create` datetime(0) NULL DEFAULT NULL,
   `gmt_modified` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -97,21 +99,24 @@ CREATE TABLE `tb_human_config`  (
 -- ----------------------------
 -- Records of tb_human_config
 -- ----------------------------
-INSERT INTO `tb_human_config` VALUES (1, 1, 2, '任行', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (2, 1, 3, '张三', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (3, 1, 5, '王五', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (4, 1, 6, '赵六', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (5, 1, 7, '田七', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (6, 1, 8, '张凡', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (7, 1, 9, '张小凡', 100, 2, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
-INSERT INTO `tb_human_config` VALUES (8, 6, 2, '任行', 100, 1, '2019-02-07 19:07:58', '2019-02-07 19:08:01');
-INSERT INTO `tb_human_config` VALUES (9, 6, 5, '王五', 10, 1, '2019-02-07 19:08:40', '2019-02-07 19:08:43');
-INSERT INTO `tb_human_config` VALUES (10, 6, 6, '赵六', 80, 1, '2019-02-07 19:09:13', '2019-02-07 19:09:15');
-INSERT INTO `tb_human_config` VALUES (11, 6, 8, '张凡', 20, 1, '2019-02-07 19:10:08', '2019-02-07 19:10:10');
-INSERT INTO `tb_human_config` VALUES (12, 6, 9, '张小凡', 100, 1, '2019-02-07 19:10:31', '2019-02-07 19:10:33');
-INSERT INTO `tb_human_config` VALUES (13, 6, 12, '方小园', 100, 1, '2019-02-07 19:11:03', '2019-02-07 19:11:05');
-INSERT INTO `tb_human_config` VALUES (14, 6, 13, '李一', 100, 1, '2019-02-07 19:11:35', '2019-02-07 19:11:37');
-INSERT INTO `tb_human_config` VALUES (15, 6, 14, '李二', 50, 1, '2019-02-07 19:11:55', '2019-02-07 19:11:57');
+INSERT INTO `tb_human_config` VALUES (1, 1, 2, '任行', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (2, 1, 3, '张三', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (3, 1, 5, '王五', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (4, 1, 6, '赵六', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (5, 1, 7, '田七', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (6, 1, 8, '张凡', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (7, 1, 9, '张小凡', 100, NULL, 2, NULL, '2018-02-24 15:52:21', '2018-03-24 15:52:28');
+INSERT INTO `tb_human_config` VALUES (8, 6, 2, '任行', 100, NULL, 1, NULL, '2019-02-07 19:07:58', '2019-02-07 19:08:01');
+INSERT INTO `tb_human_config` VALUES (9, 6, 5, '王五', 10, NULL, 1, NULL, '2019-02-07 19:08:40', '2019-02-07 19:08:43');
+INSERT INTO `tb_human_config` VALUES (10, 6, 6, '赵六', 80, NULL, 1, NULL, '2019-02-07 19:09:13', '2019-02-07 19:09:15');
+INSERT INTO `tb_human_config` VALUES (11, 6, 8, '张凡', 20, NULL, 1, NULL, '2019-02-07 19:10:08', '2019-02-07 19:10:10');
+INSERT INTO `tb_human_config` VALUES (12, 6, 9, '张小凡', 100, NULL, 1, NULL, '2019-02-07 19:10:31', '2019-02-07 19:10:33');
+INSERT INTO `tb_human_config` VALUES (13, 6, 12, '方小园', 100, NULL, 1, NULL, '2019-02-07 19:11:03', '2019-02-07 19:11:05');
+INSERT INTO `tb_human_config` VALUES (14, 6, 13, '李一', 100, NULL, 1, NULL, '2019-02-07 19:11:35', '2019-02-07 19:11:37');
+INSERT INTO `tb_human_config` VALUES (15, 6, 14, '李二', 50, NULL, 1, NULL, '2019-02-07 19:11:55', '2019-02-07 19:11:57');
+INSERT INTO `tb_human_config` VALUES (16, 6, 15, '李三', 60, '项目已临近尾声，项目当前拥有的成员过多，故释放该成员', 2, NULL, '2019-04-25 14:02:43', '2019-04-25 14:02:45');
+INSERT INTO `tb_human_config` VALUES (17, 6, 19, '李八', 100, '项目已临近尾声，项目当前拥有的成员过多，故释放该成员', 2, '需要加快项目进度，项目人手不足', '2019-04-25 14:14:31', '2019-04-25 14:14:33');
+INSERT INTO `tb_human_config` VALUES (18, 6, 23, '王三', 40, '项目已临近尾声，项目当前拥有的成员过多，故释放该成员', 2, NULL, '2019-04-25 14:15:07', '2019-04-25 14:15:09');
 
 -- ----------------------------
 -- Table structure for tb_job
@@ -453,8 +458,8 @@ CREATE TABLE `tb_recruit`  (
 -- ----------------------------
 -- Records of tb_recruit
 -- ----------------------------
-INSERT INTO `tb_recruit` VALUES (1, '何艾', '13777580611', 'heai@163.com', 'G:/static/resumes/resume0.md', 1, 1, 1, 'sonkabin', '2019-02-15 09:36:21', '2019-02-15 09:36:25');
-INSERT INTO `tb_recruit` VALUES (2, '王小明', '13777080611', 'xiaoming@163.com', 'G:/static/resumes/resume1.md', 1, 2, 1, 'sonkabin', '2019-02-15 09:36:21', '2019-02-15 09:36:25');
+INSERT INTO `tb_recruit` VALUES (1, '何艾', '13777580611', 'heai@163.com', 'G:/static/resumes/resume0.md', 1, 1, 4, '李四', '2019-02-15 09:36:21', '2019-02-15 09:36:25');
+INSERT INTO `tb_recruit` VALUES (2, '王小明', '13777080611', 'xiaoming@163.com', 'G:/static/resumes/resume1.md', 1, 2, 4, '李四', '2019-02-15 09:36:21', '2019-02-15 09:36:25');
 INSERT INTO `tb_recruit` VALUES (3, '董光', '13777980611', 'dguang@163.com', 'G:/static/resumes/resume2.md', 1, 0, NULL, NULL, '2019-02-15 09:36:21', '2019-02-15 09:36:25');
 INSERT INTO `tb_recruit` VALUES (4, '李秀丽', '13777710611', 'lixiuli@163.com', 'G:/static/resumes/resume3.md', 3, 0, NULL, NULL, '2019-02-15 09:36:21', '2019-02-15 09:36:25');
 INSERT INTO `tb_recruit` VALUES (5, '吴广', '13777710622', 'wuguang@126.com', 'G:/static/resumes/resume4.md', 3, 0, NULL, NULL, '2019-02-15 09:36:21', '2019-02-15 09:36:25');
@@ -484,7 +489,7 @@ CREATE TABLE `tb_role`  (
   `gmt_create` datetime(0) NULL DEFAULT NULL,
   `gmt_modified` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_role
@@ -492,6 +497,7 @@ CREATE TABLE `tb_role`  (
 INSERT INTO `tb_role` VALUES (1, '员工', '2019-01-12 19:18:38', '2019-01-12 19:18:41');
 INSERT INTO `tb_role` VALUES (2, '项目经理', '2019-01-12 19:19:16', '2019-01-12 19:19:18');
 INSERT INTO `tb_role` VALUES (3, '管理员', '2019-01-12 19:19:36', '2019-01-12 19:19:38');
+INSERT INTO `tb_role` VALUES (4, 'HR', '2019-01-12 19:19:36', '2019-01-12 19:19:36');
 
 -- ----------------------------
 -- Table structure for tb_role_permission
@@ -502,7 +508,7 @@ CREATE TABLE `tb_role_permission`  (
   `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id，尝试使用代码而不是外键来维护关系',
   `permission_id` int(11) NULL DEFAULT NULL COMMENT '权限id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_role_permission
@@ -515,15 +521,15 @@ INSERT INTO `tb_role_permission` VALUES (5, 3, 5);
 INSERT INTO `tb_role_permission` VALUES (6, 3, 6);
 INSERT INTO `tb_role_permission` VALUES (7, 3, 7);
 INSERT INTO `tb_role_permission` VALUES (8, 3, 8);
-INSERT INTO `tb_role_permission` VALUES (9, 3, 9);
-INSERT INTO `tb_role_permission` VALUES (10, 3, 10);
-INSERT INTO `tb_role_permission` VALUES (11, 3, 11);
-INSERT INTO `tb_role_permission` VALUES (12, 3, 12);
-INSERT INTO `tb_role_permission` VALUES (13, 3, 13);
-INSERT INTO `tb_role_permission` VALUES (14, 3, 14);
-INSERT INTO `tb_role_permission` VALUES (15, 3, 15);
-INSERT INTO `tb_role_permission` VALUES (16, 3, 16);
-INSERT INTO `tb_role_permission` VALUES (17, 3, 17);
+INSERT INTO `tb_role_permission` VALUES (9, 4, 9);
+INSERT INTO `tb_role_permission` VALUES (10, 4, 10);
+INSERT INTO `tb_role_permission` VALUES (11, 4, 11);
+INSERT INTO `tb_role_permission` VALUES (12, 4, 12);
+INSERT INTO `tb_role_permission` VALUES (13, 4, 13);
+INSERT INTO `tb_role_permission` VALUES (14, 4, 14);
+INSERT INTO `tb_role_permission` VALUES (15, 4, 15);
+INSERT INTO `tb_role_permission` VALUES (16, 4, 16);
+INSERT INTO `tb_role_permission` VALUES (17, 4, 17);
 INSERT INTO `tb_role_permission` VALUES (18, 1, 18);
 INSERT INTO `tb_role_permission` VALUES (19, 2, 18);
 INSERT INTO `tb_role_permission` VALUES (20, 2, 19);
@@ -536,6 +542,11 @@ INSERT INTO `tb_role_permission` VALUES (26, 2, 25);
 INSERT INTO `tb_role_permission` VALUES (27, 2, 26);
 INSERT INTO `tb_role_permission` VALUES (28, 2, 27);
 INSERT INTO `tb_role_permission` VALUES (29, 2, 28);
+INSERT INTO `tb_role_permission` VALUES (30, 4, 1);
+INSERT INTO `tb_role_permission` VALUES (31, 4, 2);
+INSERT INTO `tb_role_permission` VALUES (32, 4, 3);
+INSERT INTO `tb_role_permission` VALUES (33, 4, 4);
+INSERT INTO `tb_role_permission` VALUES (34, 1, 25);
 
 -- ----------------------------
 -- Table structure for tb_skill

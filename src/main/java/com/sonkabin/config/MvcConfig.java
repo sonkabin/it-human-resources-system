@@ -27,6 +27,7 @@ public class MvcConfig {
                 // HR视图
                 registry.addViewController("/hr.html").setViewName("hr/index");
                 registry.addViewController("/hr-employee-manage.html").setViewName("hr/emp");
+                registry.addViewController("/hr-project-manage.html").setViewName("hr/project");
                 registry.addViewController("/hr-train-manage.html").setViewName("hr/train");
                 registry.addViewController("/hr-recruit-manage.html").setViewName("hr/recruit");
                 registry.addViewController("/hr-question-manage.html").setViewName("hr/question");

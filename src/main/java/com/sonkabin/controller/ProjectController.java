@@ -103,8 +103,19 @@ public class ProjectController {
     public Message getHistoryProjects (ProjectHistoryDTO projectHistoryDTO) {
         return projectService.getHistoryProjects(projectHistoryDTO);
     }
-
     // ----------------- 员工结束     ---------------------------
+
+    // ----------------- HR开始     ---------------------------
+
+    /**
+     * 获得进行中的所有项目
+     */
+    @ResponseBody
+    @GetMapping("/running/projects")
+    public Message getRunningProjects () {
+        return projectService.getRunningProjects();
+    }
+    // ----------------- HR结束     ---------------------------
 
     // 报表信息
     @ResponseBody

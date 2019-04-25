@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -51,8 +52,10 @@ public class HumanConfigController {
 
     @GetMapping("/humanConfigs/{id}")
     public String getHumanConfigs (@PathVariable("id") Integer projectId, Model model) {
-        Message msg = humanConfigService.getHumanConfigs(projectId);
+        Message msg = humanConfigService.getHumanConfigs(projectId, true);
         model.addAttribute("info", msg.getInfo());
+        Set<HumanConfig> alterations = humanConfigService.getAlterationHumanConfigRecords(projectId);
+        model.addAttribute("alterations", alterations);
         return "employee/manager/dispatcher";
     }
 
@@ -97,6 +100,12 @@ public class HumanConfigController {
         return humanConfigService.getInvolveProjects(empId);
     }
 
+    // HR功能：获取项目的人员配置
+    @ResponseBody
+    @GetMapping("/hr/humanConfig/{id}")
+    public Message getHumanConfigs(@PathVariable("id") Integer projectId) {
+        return humanConfigService.getHumanConfigs(projectId, false);
+    }
 
 }
 

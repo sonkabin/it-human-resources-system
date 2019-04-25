@@ -117,7 +117,14 @@
     <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>
     <ul class="list-unstyled">
         <li class="active" th:class="${activeUrl=='index.html'? 'active' : ''}"><a href="#"> <i class="icon-home"></i>主页 </a></li>
-        <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/hr-employee-manage.html"> <i class="fa fa-user"></i>员工管理 </a></li>
+        <li>
+            <a href="#humanConfigDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-user"></i>人力资源管理</a>
+            <ul id="humanConfigDropdown" class="collapse list-unstyled ">
+                <li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/hr-employee-manage.html"> 员工管理 </a></li>
+                <li th:class="${activeUrl=='project.html' ? 'active' : ''}"><a href="/hr-project-manage.html">项目人员管理</a></li>
+            </ul>
+        </li>
+        <!--<li th:class="${activeUrl=='emp.html' ? 'active' : ''}"><a href="/hr-employee-manage.html"> <i class="fa fa-user"></i>员工管理 </a></li>-->
         <li th:class="${activeUrl=='train.html' ? 'active' : ''}"><a href="/hr-train-manage.html"> <i class="icon-padnote"></i>培训管理 </a></li>
         <li th:class="${activeUrl=='recruit.html' ? 'active' : ''}"><a href="/hr-recruit-manage.html"> <i class="icon-list"></i>招聘管理 </a></li>
         <li th:class="${activeUrl=='question.html' ? 'active' : ''}"><a href="/hr-question-manage.html"> <i class="fa fa-book"></i>试题管理 </a></li>

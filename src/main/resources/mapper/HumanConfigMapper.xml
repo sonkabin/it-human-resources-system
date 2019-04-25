@@ -14,10 +14,10 @@
     </select>
 
     <insert id="insertBatch" parameterType="list">
-        INSERT INTO tb_human_config(project_id, emp_id, emp_name, portion, status, gmt_create, gmt_modified)
+        INSERT INTO tb_human_config(project_id, emp_id, emp_name, portion, apply_reason, status, gmt_create, gmt_modified)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.projectId}, #{item.empId}, #{item.empName}, #{item.portion}, #{item.status}, #{item.gmtCreate}, #{item.gmtModified})
+            (#{item.projectId}, #{item.empId}, #{item.empName}, #{item.portion}, #{item.applyReason}, #{item.status}, #{item.gmtCreate}, #{item.gmtModified})
         </foreach>
     </insert>
 </mapper>

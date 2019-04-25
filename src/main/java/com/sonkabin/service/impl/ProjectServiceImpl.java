@@ -192,6 +192,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Message getRunningProjects() {
+        LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Project::getStatus, 1);
+        List<Project> projects = projectMapper.selectList(wrapper);
+        return Message.success().put("total", projects.size()).put("rows", projects);
+    }
+
+    @Override
     public Message getProjectReport() {
         List<Project> projects = projectMapper.selectList(null);
         LocalDateTime now = LocalDateTime.now();

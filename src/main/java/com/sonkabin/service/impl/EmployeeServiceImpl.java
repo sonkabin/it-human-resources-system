@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.EmployeeDTO;
 import com.sonkabin.entity.Employee;
+import com.sonkabin.entity.ProjectHistory;
 import com.sonkabin.entity.Role;
 import com.sonkabin.mapper.EmployeeMapper;
+import com.sonkabin.mapper.ProjectHistoryMapper;
 import com.sonkabin.mapper.RoleMapper;
 import com.sonkabin.service.EmployeeService;
 import com.sonkabin.utils.MD5Util;
@@ -133,10 +135,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Message.success();
     }
 
+    @Autowired
+    private ProjectHistoryMapper projectHistoryMapper;
     @Override
     public Message getEmpById(Integer id) {
         Employee employee = employeeMapper.selectById(id);
-        return Message.success().put("employee", employee);
+        // 获取参与过的项目
+        LambdaQueryWrapper<ProjectHistory> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ProjectHistory::getEmpId, id);
+        List<ProjectHistory> histories = projectHistoryMapper.selectList(wrapper);
+        return Message.success().put("employee", employee).put("histories", histories);
     }
 
     @Override

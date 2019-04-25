@@ -7,6 +7,7 @@ import com.sonkabin.mapper.*;
 import com.sonkabin.service.HumanConfigService;
 import com.sonkabin.utils.Message;
 import com.sonkabin.utils.MessageUtil;
+import com.sonkabin.utils.MyConstant;
 import com.sonkabin.utils.MyUtil;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -235,6 +236,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             config.setStatus(1);
             config.setGmtCreate(now);
             config.setGmtModified(now);
+            config.setApplyReason(MyConstant.SPEED_PROJECT_APPLY_REASON);
         });
         humanConfigMapper.insertBatch(configs);
         Integer projectId = configs.get(0).getProjectId();
@@ -247,9 +249,9 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     }
 
     @Override
-    public Message getHumanConfigs(Integer projectId) {
+    public Message getHumanConfigs(Integer projectId, boolean flag) {
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(HumanConfig::getProjectId, projectId).eq(HumanConfig::getStatus, 1);
+        wrapper.eq(HumanConfig::getProjectId, projectId).eq(flag, HumanConfig::getStatus, 1);
         List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
         return Message.success().put("humanConfigs", humanConfigs);
     }
@@ -298,10 +300,11 @@ public class HumanConfigServiceImpl implements HumanConfigService {
 
     @Override
     public Message getOtherEmployees(Integer projectId) {
+        // 项目当前的人员配置，包括已释放成员，因为已释放成员不允许再加入项目中
         LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(HumanConfig::getProjectId, projectId).eq(HumanConfig::getStatus, 1);
-        // 项目当前的人员配置
+        wrapper.eq(HumanConfig::getProjectId, projectId);
         List<HumanConfig> humanConfigs = humanConfigMapper.selectList(wrapper);
+        // 所有普通员工
         LambdaQueryWrapper<Employee> employeeLambdaQueryWrapper = new LambdaQueryWrapper<>();
         employeeLambdaQueryWrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
         employeeLambdaQueryWrapper.eq(Employee::getInservice, 1); // 离职的员工不用考虑
@@ -539,6 +542,17 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             projects = projectMapper.selectList(projectLambdaQueryWrapper);
         }
         return Message.success().put("config", humanConfigs).put("projects", projects);
+    }
+
+    @Override
+    public Set<HumanConfig> getAlterationHumanConfigRecords(Integer projectId) {
+        LambdaQueryWrapper<HumanConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(HumanConfig::getProjectId, projectId);
+        List<HumanConfig> alterations = humanConfigMapper.selectList(wrapper);
+        Set<HumanConfig> result = new HashSet<>();
+        alterations.stream().filter(hc -> !StringUtils.isEmpty(hc.getApplyReason())).forEach(result::add);
+        alterations.stream().filter(hc -> !StringUtils.isEmpty(hc.getReleaseReason())).forEach(result::add);
+        return result;
     }
 
 }

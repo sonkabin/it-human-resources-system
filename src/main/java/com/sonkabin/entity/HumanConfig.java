@@ -40,9 +40,19 @@ public class HumanConfig implements Serializable {
     private Integer portion;
 
     /**
-     * 项目状态
+     * 员工参与此项目的状态，为1表示参与项目中，为2表示已退出项目
      */
     private Integer status;
+
+    /**
+     * 申请员工的理由
+     */
+    private String applyReason;
+
+    /**
+     * 将员工从该项目中释放的理由
+     */
+    private String releaseReason;
 
     private LocalDateTime gmtCreate;
 
@@ -89,6 +99,22 @@ public class HumanConfig implements Serializable {
         this.status = status;
     }
 
+    public String getApplyReason() {
+        return applyReason;
+    }
+
+    public void setApplyReason(String applyReason) {
+        this.applyReason = applyReason;
+    }
+
+    public String getReleaseReason() {
+        return releaseReason;
+    }
+
+    public void setReleaseReason(String releaseReason) {
+        this.releaseReason = releaseReason;
+    }
+
     public LocalDateTime getGmtCreate() {
         return gmtCreate;
     }
@@ -116,13 +142,16 @@ public class HumanConfig implements Serializable {
     @Override
     public String toString() {
         return "HumanConfig{" +
-        "id=" + id +
-        ", projectId=" + projectId +
-        ", empId=" + empId +
-        ", portion=" + portion +
-        ", status=" + status +
-        ", gmtCreate=" + gmtCreate +
-        ", gmtModified=" + gmtModified +
-        "}";
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", empId=" + empId +
+                ", empName='" + empName + '\'' +
+                ", portion=" + portion +
+                ", status=" + status +
+                ", applyReason='" + applyReason + '\'' +
+                ", releaseReason='" + releaseReason + '\'' +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 }
