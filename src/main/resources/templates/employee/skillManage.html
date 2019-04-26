@@ -118,11 +118,35 @@
                 </div>
             </div>
 
-            <form id="skill-form" method="post">
-                <input type="hidden" name="_method" value="put">
-                <input type="hidden" name="ids" id="ids">
-                <input type="hidden" name="domain" id="domain">
-                <input type="hidden" name="answers" id="answers">
+            <!-- 测评结果模态框 -->
+            <div id="resultModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">技能等级测评结果</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal">
+                                您已完成技能等级测评，总共做题数为
+                                <span class="alert alert-info" role="alert" id="total">10</span>
+                                ，正确题数为
+                                <span class="alert alert-success" role="alert" id="correct">10</span>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" id="know-btn">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="skill-form" method="get">
+                <!--<input type="hidden" name="_method" value="put">-->
+                <!--<input type="hidden" name="ids" id="ids">-->
+                <!--<input type="hidden" name="domain" id="domain">-->
+                <!--<input type="hidden" name="answers" id="answers">-->
             </form>
 
             <!-- 引入footer -->
@@ -313,12 +337,30 @@
             $(this).text('提交')
         } else if (index == paper.length) { // 点击提交按钮
             // 提交操作
-            var form = $('#skill-form')
-            form.attr('action', '/paper')
-            $('#ids').val(ids)
-            $('#domain').val(domain)
-            $('#answers').val(record)
-            form.submit()
+            // var form = $('#skill-form')
+            // form.attr('action', '/paper')
+            // $('#ids').val(ids)
+            // $('#domain').val(domain)
+            // $('#answers').val(record)
+            // form.submit()
+            $.ajax({
+                url: baseUrl + '/paper',
+                method: 'PUT',
+                async: 'false',
+                data:{
+                    'ids': ids,
+                    'domain': domain,
+                    'answers': record.join(',')
+                },
+                success: function (result) {
+                    $('#myModal').modal('hide')
+                    var info = result.info
+                    $('#correct').text(info.correctNum)
+                    $('#total').text(info.total)
+                    $('#resultModal').modal()
+                }
+            })
+            return
         } else{
             $(this).text('下一题')
         }
@@ -338,6 +380,12 @@
             $('<div class="form-group row"></div>').append(div).appendTo('#choices')
         }
     }
+
+    $('#know-btn').click(function () {
+        var form = $('#skill-form')
+        form.attr('action', '/skills')
+        form.submit()
+    })
 </script>
 </body>
 </html>

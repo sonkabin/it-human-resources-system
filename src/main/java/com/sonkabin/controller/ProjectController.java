@@ -115,6 +115,15 @@ public class ProjectController {
     public Message getRunningProjects () {
         return projectService.getRunningProjects();
     }
+
+    /**
+     * 获得进行中的所有项目
+     */
+    @ResponseBody
+    @GetMapping("/finished/projects")
+    public Message getFinishedProjects (ProjectDTO projectDTO) {
+        return projectService.getFinishedProjects(projectDTO);
+    }
     // ----------------- HR结束     ---------------------------
 
     // 报表信息

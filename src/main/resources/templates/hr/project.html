@@ -67,7 +67,21 @@
                         </div>
 
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header d-flex align-items-center">
+                                    <h3 class="h4">已完成项目列表</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="finished-project-table"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
                 </div>
             </section>
 
@@ -103,6 +117,50 @@
                 </div>
             </div>
 
+            <!-- 项目成员贡献模态框 -->
+            <div id="contributeModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="empDetailModalLabel" class="modal-title" >项目成员贡献</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="contribute-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">项目名</label>
+                                    <input id="projectName" type="text" class="form-control-plaintext col-sm-9" readonly>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">项目背景</label>
+                                    <textarea id="background" rows="10" class="form-control-plaintext col-sm-9" readonly ></textarea>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="offset-sm-2 col-sm-2 col-form-label">参与项目人员</label>
+                                    <label class="offset-sm-1 col-sm-2 col-form-label">贡献</label>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">项目经理</label>
+                                    <div class="form-group row col-sm-10 offset-sm-2">
+                                        <input type="hidden" id="manager-id">
+                                        <input id="managerName" type="text" class="form-control-plaintext col-sm-3" readonly>
+                                        <textarea id="managerContribute" class="form-control col-sm-8" cols="2" readonly></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row" id="members">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 引入footer -->
             <div th:replace="~{commons/bar::footer}" }></div>
         </div>
@@ -127,6 +185,7 @@
 <script type="text/javascript">
     $(function(){
         initTable()
+        initFinishedProjectsTable()
     })
 
     $(document).on('click', '.view-btn', function () {
@@ -154,12 +213,44 @@
         $('#config-tbody').empty()
     })
 
+    $(document).on('click', '.contribute-btn', function () {
+        var id = $(this).attr('project-id')
+        $.ajax({
+            url: baseUrl + '/projectContribute/' + id,
+            method: 'GET',
+            success: function (result) {
+                var project = result.info.project
+                $('#projectName').val(project.projectName)
+                $('#background').val(project.background)
+                $('#managerName').val(project.managerName)
+                $('#manager-id').val(project.managerId)
+
+                // $('#member').val()
+                var humans = result.info.humans
+                $('#members').empty()
+                $('#members').append('<label class="col-sm-2 col-form-label">项目成员</label>')
+                $.each(humans, function (index, item) {
+                    if (item.empName == project.managerName) {
+                        $('#managerContribute').val(item.contribute)
+                    } else {
+                        var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
+                        var empInput = $('<input type="text" class="form-control-plaintext col-sm-3" readonly>').val(item.empName)
+                        var contribute = $('<textarea class="form-control col-sm-8" cols="2" readonly></textarea>').val(item.contribute)
+                        div.append(empInput).append(contribute)
+                        $('#members').append(div)
+                    }
+                })
+                $('#contributeModal').modal()
+            }
+        })
+
+    })
+
     function initTable() {
         $('#project-table').bootstrapTable('destroy')
         $('#project-table').bootstrapTable({
             url: baseUrl + '/running/projects',
             method: 'GET',
-            pagination: true, // 是否显示分页
             sortable: true, //是否启用排序
             sortOrder: "asc", //排序方式
 
@@ -224,6 +315,103 @@
                     var id = value
                     var result = ''
                     result += '<button class="btn btn-primary btn-sm view-btn" project-id='+ id + '>项目成员情况</button> '
+                    return result
+                }
+            }
+            ]
+        })
+    }
+
+    function initFinishedProjectsTable() {
+        $('#finished-project-table').bootstrapTable('destroy')
+        $('#finished-project-table').bootstrapTable({
+            url: 'http://localhost:8080/finished/projects',
+            method: 'GET',
+            pagination: true, // 是否显示分页
+            sortable: true, //是否启用排序
+            sortOrder: "asc", //排序方式
+
+            sidePagination: "server", // 服务端分页
+            pageNumber: 1, // 初始化加载第一页，默认第一页,并记录
+            pageSize: 10, // 每页的记录行数
+            pageList: [10, 20, 50], // 可供选择的每页的行数
+            showColumns: true, //是否显示所有的列（选择显示的列）
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2,  //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            //height: 500,  //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: true, //是否显示详细视图
+            detailView: false, //是否显示父子表
+
+            responseHandler: function (res) { // 处理响应数据
+                return res.info
+            },
+
+            //得到查询的参数
+            queryParams: function (params) {
+                //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                var temp = {
+                    rows: params.limit,                         //页面大小
+                    page: (params.offset / params.limit) + 1,   //页码
+                    sort: params.sort,      //排序列名
+                    sortOrder: params.order, //（desc，asc）
+
+                };
+                return temp;
+            },
+            columns: [{
+                field: 'projectName',
+                title: '项目名'
+            }, {
+                field: 'background',
+                title: '项目背景'
+            }, {
+                field: 'frontEndSkill',
+                title: '前端所需技术',
+            }, {
+                field: 'frontEndNum',
+                title: '前端所需人数'
+            }, {
+                field: 'backEndSkill',
+                title: '后端所需技术',
+            }, {
+                field: 'backEndNum',
+                title: '后端所需人数'
+            }, {
+                field: 'dbSkill',
+                title: '数据库所需技术',
+            }, {
+                field: 'dbNum',
+                title: '数据库所需人数'
+            }, {
+                field: 'predictStart',
+                title: '预计开始日期'
+            }, {
+                field: 'startDate',
+                title: '开始日期'
+            },  {
+                field: 'predictEnd',
+                title: '预计结束日期'
+            }, {
+                field: 'gmtCreate',
+                title: '创建时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'gmtModified',
+                title: '修改时间',
+                formatter: function (value) {
+                    return LocalDateTimeFormatter(value)
+                }
+            }, {
+                field: 'id',
+                title: '操作',
+                formatter: function (value) {
+                    // console.log(value)
+                    var result = '<button class="btn btn-info btn-sm contribute-btn" project-id=' + value + '>项目成员贡献</button> '
                     return result
                 }
             }

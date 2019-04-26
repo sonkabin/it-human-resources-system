@@ -14,6 +14,7 @@ import com.sonkabin.mapper.ProjectHistoryMapper;
 import com.sonkabin.mapper.ProjectMapper;
 import com.sonkabin.service.ProjectService;
 import com.sonkabin.utils.Message;
+import com.sonkabin.utils.MyConstant;
 import com.sonkabin.utils.MyUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.amqp.core.DirectExchange;
@@ -56,7 +57,7 @@ public class ProjectServiceImpl implements ProjectService {
         // 获取某个项目经理的项目，而不是所有项目
         wrapper.eq(Project::getManagerId, employee.getId());
         IPage<Project> result = projectMapper.selectPage(page, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL,result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override
@@ -188,7 +189,7 @@ public class ProjectServiceImpl implements ProjectService {
             wrapper.le(ProjectHistory::getGmtModified, projectHistoryDTO.getEndDate().plusDays(1));
         }
         IPage<ProjectHistory> result = projectHistoryMapper.selectPage(page, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override
@@ -196,7 +197,18 @@ public class ProjectServiceImpl implements ProjectService {
         LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Project::getStatus, 1);
         List<Project> projects = projectMapper.selectList(wrapper);
-        return Message.success().put("total", projects.size()).put("rows", projects);
+        return Message.success().put(MyConstant.PAGE_TOTAL, projects.size()).put(MyConstant.PAGE_ROWS, projects);
+    }
+
+    @Override
+    public Message getFinishedProjects(ProjectDTO projectDTO) {
+        LambdaQueryWrapper<Project> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Project::getStatus, 2);
+        Page<Project> page = new Page<>();
+        page.setSize(projectDTO.getRows());
+        page.setCurrent(projectDTO.getPage());
+        IPage<Project> result = projectMapper.selectPage(page, wrapper);
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override

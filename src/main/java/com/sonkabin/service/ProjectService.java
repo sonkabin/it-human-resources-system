@@ -41,4 +41,6 @@ public interface ProjectService{
     Message getRunningProjects();
 
     Message getProjectReport();
+
+    Message getFinishedProjects(ProjectDTO projectDTO);
 }

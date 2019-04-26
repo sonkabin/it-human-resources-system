@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 26/04/2019 15:20:21
+ Date: 26/04/2019 15:49:14
 */
 
 SET NAMES utf8mb4;
@@ -60,7 +60,7 @@ INSERT INTO `tb_employee` VALUES (8, '1008', '张凡', 'f350d6f4f2bf1c3e30301870
 INSERT INTO `tb_employee` VALUES (9, '1009', '张小凡', 'bc34b40c7d0a0fe9917a220080294425', 1, 29, '1991-08-31', '15858119998', 'zhangxiaofan@gmail.com', '339005199109033654', 'G:/static/avatars/avatar1009', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:50', '2019-01-22 10:55:17');
 INSERT INTO `tb_employee` VALUES (10, '1010', '李琪琪', '0bd6391ce6b2bab001e2b0b348d28324', 0, 27, '1993-05-28', '15878954123', 'liqiqi@qq.com', '339005199305313654', 'G:/static/avatars/avatar1010', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:06:01', '2019-01-22 10:55:19');
 INSERT INTO `tb_employee` VALUES (11, '1011', '何小茜', 'be9079046cdaca2a7ea777fa3b1ab76f', 0, 26, '1994-04-12', '15888883695', 'hexiaoqian@qq.com', '339005199404159513', 'G:/static/avatars/avatar1011', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:07:12', '2019-01-22 10:55:22');
-INSERT INTO `tb_employee` VALUES (12, '1012', '方小园', '2c752a7bd9ee373b8c710a453924a38a', 0, 24, '1996-10-07', '15887453333', 'xiaoyuan@126.com', '339005199610105874', 'G:/static/avatars/avatar1012', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:08:37', '2019-04-02 13:20:20');
+INSERT INTO `tb_employee` VALUES (12, '1012', '方小园', '2c752a7bd9ee373b8c710a453924a38a', 0, 24, '1996-10-07', '15887453333', 'xiaoyuan@126.com', '339005199610105874', 'G:/static/avatars/avatar1012', '本科:xx大学;硕士:cc大学', 0, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:08:37', '2019-04-02 13:20:20');
 INSERT INTO `tb_employee` VALUES (13, '1013', '李一', 'b8d1545b8d6dc40494fa34785f7f8d49', 1, 29, '1991-08-30', '15858119991', 'liyi@gmail.com', '339005199109034852', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:31');
 INSERT INTO `tb_employee` VALUES (14, '1014', '李二', '7d74de417f300b10c6e9d3b0afba7d92', 1, 29, '1991-08-30', '15858119992', 'lier@gmail.com', '339005199109034853', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:34');
 INSERT INTO `tb_employee` VALUES (15, '1015', '李三', '9ca8181226387ddd3e590f3773233c0e', 1, 29, '1991-08-30', '15858119993', 'lisan@gmail.com', '339005199109034854', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:36');
@@ -193,7 +193,12 @@ CREATE TABLE `tb_message`  (
   `gmt_create` datetime(0) NULL DEFAULT NULL,
   `gmt_modified` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_message
+-- ----------------------------
+INSERT INTO `tb_message` VALUES (1, '您的项目[APP评论数据分析系统]中成员[方小圆]离职，请尽快进行人员配置，保证项目按时交付，谢谢！', 'HR', 2, '任行', 0, '2019-04-26 15:32:19', '2019-04-26 15:32:24');
 
 -- ----------------------------
 -- Table structure for tb_permission

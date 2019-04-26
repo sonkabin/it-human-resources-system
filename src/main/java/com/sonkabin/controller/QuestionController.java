@@ -26,7 +26,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    // ----管理员试题管理开始-----
+    // ----HR试题管理开始-----
     @ResponseBody
     @GetMapping("/questions")
     public Message listQuestions(QuestionDTO questionDTO) {
@@ -56,7 +56,7 @@ public class QuestionController {
     public Message deleteQuestion(@PathVariable("id") Integer id) {
         return questionService.deleteQuestion(id);
     }
-    // ----管理员试题管理结束-----
+    // ----HR试题管理结束-----
 
     // ---员工试题操作开始---
     /**
@@ -77,11 +77,11 @@ public class QuestionController {
      * @param domain：试题所属领域
      * @return
      */
+    @ResponseBody
     @PutMapping("/paper")
-    public String submitPaper(@RequestParam("ids") String paperIds, @RequestParam("answers") String answers,
+    public Message submitPaper(@RequestParam("ids") String paperIds, @RequestParam("answers") String answers,
                               @RequestParam("domain") String domain) {
-        questionService.submitPaper(paperIds, answers, domain);
-        return "redirect:/skills";
+        return questionService.submitPaper(paperIds, answers, domain);
     }
 
 }

@@ -157,7 +157,7 @@ public class QuestionServiceImpl implements QuestionService {
         buffer.append(level);
         employee.setSkills(buffer.toString());
         employeeMapper.updateById(employee);
-        return Message.success();
+        return Message.success().put("correctNum", correctCount).put("total", correctAnswers.size());
     }
 
 }
