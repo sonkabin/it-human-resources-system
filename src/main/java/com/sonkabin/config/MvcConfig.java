@@ -21,7 +21,6 @@ public class MvcConfig {
                 registry.addViewController("/admin.html").setViewName("admin/index");
                 registry.addViewController("/admin-employee-manage.html").setViewName("admin/emp");
                 registry.addViewController("/admin-permission-manage.html").setViewName("admin/permission");
-                registry.addViewController("/admin-message-manage.html").setViewName("admin/message");
                 registry.addViewController("/admin-account-manage.html").setViewName("admin/account");
 
                 // HR视图
@@ -31,6 +30,7 @@ public class MvcConfig {
                 registry.addViewController("/hr-train-manage.html").setViewName("hr/train");
                 registry.addViewController("/hr-recruit-manage.html").setViewName("hr/recruit");
                 registry.addViewController("/hr-question-manage.html").setViewName("hr/question");
+                registry.addViewController("/hr-message-manage.html").setViewName("hr/message");
                 registry.addViewController("/hr-account-manage.html").setViewName("hr/account");
 
                 // 员工视图

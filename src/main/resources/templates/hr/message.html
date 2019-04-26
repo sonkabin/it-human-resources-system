@@ -33,7 +33,7 @@
 
     <div class="page-content d-flex align-items-stretch">
         <!-- 引入抽取的sidebar -->
-        <div th:replace="~{commons/bar::sidebar(activeUrl='message.html')}"></div>
+        <div th:replace="~{commons/bar::hr-sidebar(activeUrl='message.html')}"></div>
         <div class="content-inner">
             <!-- Page Header-->
             <header class="page-header">
@@ -44,7 +44,7 @@
             <!-- Breadcrumb-->
             <div class="breadcrumb-holder container-fluid">
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/admin.html">主页</a></li>
+                    <li class="breadcrumb-item"><a href="/hr.html">主页</a></li>
                     <li class="breadcrumb-item active">消息管理</li>
                 </ul>
             </div>
@@ -409,7 +409,7 @@
     function initReceiveTable() {
         $('#receive-table').bootstrapTable('destroy')
         $('#receive-table').bootstrapTable({
-            url: 'http://localhost:8080/messages/receive',
+            url: 'http://localhost:8080/hr/messages/receive',
             method: 'GET',
             pagination: true, // 是否显示分页
             sortable: true, //是否启用排序

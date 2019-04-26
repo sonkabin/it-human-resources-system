@@ -39,9 +39,7 @@ public class MessageUtil {
         message.setSender("系统");
         message.setGmtCreate(now);
         message.setGmtModified(now);
-        // 接下来两行写死了，因为不想再多浪费时间了
-        message.setReceiverId(1);
-        message.setReceiverName("sonkabin");
+        message.setReceiverName("HR");
         if (flag == 0) {
             message.setContent("缺少工作经验1-2年的前端工程师" + num + "名");
             messages.add(message);

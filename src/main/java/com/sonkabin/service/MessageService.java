@@ -22,4 +22,6 @@ public interface MessageService{
     Message listReceiveMessages(MessageDTO messageDTO);
 
     Message markMessage(Integer id);
+
+    Message listHRReceiveMessages(MessageDTO messageDTO);
 }

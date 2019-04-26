@@ -45,6 +45,12 @@ public class MessageController {
     }
 
     @ResponseBody
+    @GetMapping("/hr/messages/receive")
+    public Message listHRReceiveMessages(MessageDTO messageDTO) {
+        return messageService.listHRReceiveMessages(messageDTO);
+    }
+
+    @ResponseBody
     @PutMapping("/message/{id}")
     public Message markMessage(@PathVariable("id") Integer id) {
         return messageService.markMessage(id);

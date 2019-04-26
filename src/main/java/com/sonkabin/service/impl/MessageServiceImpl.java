@@ -9,6 +9,7 @@ import com.sonkabin.mapper.MessageMapper;
 import com.sonkabin.service.MessageService;
 import com.sonkabin.utils.Message;
 import com.sonkabin.utils.MessageUtil;
+import com.sonkabin.utils.MyConstant;
 import com.sonkabin.utils.MyUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,14 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageMapper messageMapper;
 
+    private final String ROLE_HR = "HR";
     @Override
     public Message sendMessage(String empName, String projectName, Integer receiverId, String receiverName) {
         String content = MessageUtil.NotInserviceMessage(empName, projectName);
         com.sonkabin.entity.Message message = new com.sonkabin.entity.Message();
         message.setContent(content);
         message.setReceiverId(receiverId);
-        message.setSender("管理员");
+        message.setSender(ROLE_HR);
         message.setStatus(0);
         message.setReceiverName(receiverName);
         LocalDateTime now = LocalDateTime.now();
@@ -47,9 +49,9 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message listSendMessages(MessageDTO messageDTO) {
         LambdaQueryWrapper<com.sonkabin.entity.Message> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(com.sonkabin.entity.Message::getSender, "管理员");
+        wrapper.eq(com.sonkabin.entity.Message::getSender, ROLE_HR);
         IPage<?> result = selectPage(messageDTO, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override
@@ -63,7 +65,7 @@ public class MessageServiceImpl implements MessageService {
         LambdaQueryWrapper<com.sonkabin.entity.Message> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(com.sonkabin.entity.Message::getReceiverId, MyUtil.getSessionEmployee("loginEmp").getId());
         IPage<?> result = selectPage(messageDTO, wrapper);
-        return Message.success().put("total", result.getTotal()).put("rows", result.getRecords());
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     @Override
@@ -73,6 +75,14 @@ public class MessageServiceImpl implements MessageService {
         message.setId(id);
         messageMapper.updateById(message);
         return Message.success();
+    }
+
+    @Override
+    public Message listHRReceiveMessages(MessageDTO messageDTO) {
+        LambdaQueryWrapper<com.sonkabin.entity.Message> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(com.sonkabin.entity.Message::getReceiverName, ROLE_HR);
+        IPage<?> result = selectPage(messageDTO, wrapper);
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
     }
 
     private IPage<?> selectPage(MessageDTO messageDTO, Wrapper<com.sonkabin.entity.Message> wrapper) {
