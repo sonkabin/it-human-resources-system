@@ -192,9 +192,15 @@
                 var input2 = $('<input class="col-sm-1 form-control level" readonly>').val(array[1])
                 var btn = $('<button type="button" class="close skill-close" ><span>×</span></button>')
                 div.append(label).append(input1).append(label2).append(input2)
-                // 未测评的技能，显示测评按钮
                 if (array[1] == 0) {
+                    // 未测评的技能，显示测评按钮
                     div.append($('<button type="button" class="btn btn-sm btn-primary evaluation-btn">').text('测评'))
+                } else {
+                    // 显示技能经验详情按钮
+                    // var detailBtn = $('<button type="button" class="btn btn-sm btn-primary skill-experience-detail-btn">')
+                    // detailBtn.attr('skill-name', array[0])
+                    // detailBtn.attr('level', array[1])
+                    // div.append(detailBtn.text('技能经验详情'))
                 }
                 div.append(btn)
                 $('#skills').append(div)
@@ -238,6 +244,11 @@
     $(document).on('click', '.skill-close', function () {
         var pNode = $(this).parent()
         pNode.remove()
+    })
+
+    $(document).on('click', '.skill-experience-detail-btn', function () {
+        $(this).attr('skill-name')
+        $(this).attr('level')
     })
 
     $('#save-btn').click(function () {

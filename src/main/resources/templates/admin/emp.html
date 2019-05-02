@@ -291,7 +291,7 @@
                 build_roles(result.info.roles, $('#update-role'))
                 var employee = result.info.employee
                 $('#roleModal input[name=status]').val([employee.status])
-                $('#role-select').val([employee.role.id])
+                $('#update-role').val([employee.role.id])
                 $('#roleModal').modal()
             }
         })

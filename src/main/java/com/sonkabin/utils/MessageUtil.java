@@ -55,4 +55,8 @@ public class MessageUtil {
         }
         return messages;
     }
+
+    public static String joinProject (String projectName, String managerName) {
+        return "您已加入项目[" + projectName + "]，项目经理为[" + managerName + "]";
+    }
 }

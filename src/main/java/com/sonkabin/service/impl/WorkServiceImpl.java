@@ -25,7 +25,7 @@ public class WorkServiceImpl implements WorkService {
     @Override
     public void receiveSkillDevelopmentMessage(Map<String, Object> map) {
         String projectSkills = (String) map.get("skills"); // 所有技能以逗号分隔
-        Integer empId = (Integer) map.get("empId"); // 此empId为id的别名，而不是真正的empId
+        Integer empId = (Integer) map.get("empId"); // 此empId为id的别名
         // 若员工没有技能信息，是不可能参与到项目中的，故employeeSkills必不为null
         Employee employee = employeeMapper.selectSkill(empId);
         // 将员工技能封装为map

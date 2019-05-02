@@ -87,6 +87,7 @@
         <div class="title">
             <h1 class="h4">欢迎您</h1>
             <h3>[[${session.loginEmp.empName}]]</h3>
+            <h1 class="h4">当前角色: 管理员</h1>
         </div>
     </div>
     <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>
@@ -111,6 +112,7 @@
         <div class="title">
             <h1 class="h4">欢迎您</h1>
             <h3>[[${session.loginEmp.empName}]]</h3>
+			<h1 class="h4">当前角色: HR</h1>
         </div>
     </div>
     <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>
@@ -145,6 +147,7 @@
         <div class="title">
             <h1 class="h4">欢迎您</h1>
             <h3>[[${session.loginEmp.empName}]]</h3>
+            <h1 class="h4">当前角色: [[${session.loginEmp.roleId} == 1 ? '员工' : '项目经理']]</h1>
         </div>
     </div>
     <!-- Sidebar Navidation Menus--><span class="heading">主菜单</span>

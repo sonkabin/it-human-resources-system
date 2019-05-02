@@ -188,8 +188,9 @@
                                     <label class="col-sm-2 col-form-label">项目经理</label>
                                     <div class="form-group row col-sm-10 offset-sm-2">
                                         <input type="hidden" id="manager-id">
-                                        <input id="managerName" type="text" class="form-control-plaintext col-sm-3" readonly>
-                                        <textarea id="managerContribute" class="form-control col-sm-8" cols="2"></textarea>
+                                        <input id="managerName" type="text" class="form-control-plaintext col-sm-2" readonly>
+                                        <textarea id="managerContribute" class="form-control col-sm-6" cols="2"></textarea>
+                                        <button type="button" class="btn btn-sm btn-primary choose-contribute-btn">选择项目贡献</button>
                                     </div>
 
                                 </div>
@@ -199,6 +200,28 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success" id="update-btn">更新</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--选择贡献模态框-->
+            <div id="chooseContributeModal" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >请选择成员在项目中所做的贡献</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="choices">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="confirm-btn">确定</button>
                             <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
                         </div>
                     </div>
@@ -385,9 +408,10 @@
                     } else {
                         var div = $('<div class="form-group row col-sm-10 offset-sm-2"></div>')
                         var hidden = $('<input type="hidden" name="empId">').val(item.empId)
-                        var empInput = $('<input type="text" class="form-control-plaintext col-sm-3" readonly>').val(item.empName)
-                        var contributeInput = $('<textarea class="form-control col-sm-8" cols="2"></textarea>').val(item.contribute)
-                        div.append(hidden).append(empInput).append(contributeInput)
+                        var empInput = $('<input type="text" class="form-control-plaintext col-sm-2" readonly>').val(item.empName)
+                        var contributeInput = $('<textarea class="form-control col-sm-6" cols="2"></textarea>').val(item.contribute)
+                        var btn = $('<button type="button" class="btn btn-sm btn-primary choose-contribute-btn">选择项目贡献</button>')
+                        div.append(hidden).append(empInput).append(contributeInput).append(btn)
                         $('#members').append(div)
                     }
                 })
@@ -430,6 +454,42 @@
 
     $(document).on('click', '.config-btn', function () {
         $('#project').attr('action', '/calculate/' + $(this).attr('project-id')).submit()
+    })
+
+    $(document).on('click', '.choose-contribute-btn', function () {
+        // 获取textarea中的贡献
+        var textareaContributesNode = $(this).parent().find('textarea:eq(0)')
+        var textareaContributes = textareaContributesNode.val()
+        // console.log(textareaContributes)
+        var choicesNode = $('#choices')
+        choicesNode.empty()
+        var contributes = ['需求分析', '概要设计', '技术选型', '人员调度', '项目进度控制', '风险跟踪', '后台开发', '详细设计', '后端设计与开发', '后端任务分配',
+            '后端开发', '后端测试', '数据库语句调优', '前端设计与开发', '前端任务分配', '前端开发', '数据模拟', '接口测试', '页面设计']
+        for (var i = 0; i < contributes.length;i++) {
+            var checkboxNode = $('<input class="form-check-input contribute-checkbox" type="checkbox">').val(contributes[i])
+            if (textareaContributes.indexOf(contributes[i]) != -1) { // 选中textarea中的贡献
+                checkboxNode.prop('checked', true)
+            }
+            var checkBoxLabelNode = $('<label class="form-check-label"></label>').text(contributes[i])
+            $('<div class="form-group row offset-sm-1"></div>').append(checkboxNode).append(checkBoxLabelNode).appendTo(choicesNode)
+        }
+        $('#confirm-btn').click(function () {
+            // console.log(textareaContributesNode)
+            // 注意，这里的this是该按钮
+            // 遍历所有选中的checkbox
+            var checked = $('.contribute-checkbox:checked')
+            var result = ''
+            for (var i = 0; i < checked.length; i++) {
+                result += $(checked[i]).val() + ','
+            }
+            result = result.substr(0, result.length - 1)
+            textareaContributesNode.val(result)
+            $('#chooseContributeModal').modal('hide')
+        })
+        $('#chooseContributeModal').modal()
+    })
+    $('#chooseContributeModal').on('hidden.bs.modal', function () {
+        $("body").addClass("modal-open")
     })
 
     $(document).on('click', '.del-project-btn', function () {

@@ -46,7 +46,7 @@ public class MyUtil {
         int score = 0;
         Matcher m = r.matcher(skill);
         while (m.find()) {
-            // 能力等级*工作时间比例
+            // 能力等级对应的效能*工作时间比例
             score += getAbility(m.group(1)) * portion;
         }
         return score;

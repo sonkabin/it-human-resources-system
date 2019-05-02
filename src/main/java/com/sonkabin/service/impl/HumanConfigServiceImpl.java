@@ -85,6 +85,61 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         return Message.success().put("project", project).put("employees", employees).put("portions", empPortions).put("candidates", candidates).put("candidatePortions",candidatePortions);
     }
 
+    /**
+     * 计算项目所需的工作量
+     * 根据每人的能力和可用时间计算
+     * 技能等级 * 比例系数 * 时间百分比
+     * 1-1         2-2       3-3
+     * 4-4         5-6       6-9
+     * 7-14        8-19      9-24
+     * 项目肯定是越早完成越好，所以贪心算法是适用的
+     * 项目工作量=（预计结束时间-现在时间）* 人数 * 5级技能的能力
+     * @return 每项技能所需要的工作量
+     */
+    private Map<String, Integer> calculateWorkload(Project project) {
+        Map<String, Integer> map = new HashMap<>(32);
+        String frontEndSkill = project.getFrontEndSkill();
+        String[] fess = frontEndSkill.split(",");
+        for (String fes : fess) {
+            map.put(fes, MyUtil.getAbility("5") * project.getFrontEndNum());
+        }
+        String backEndSkill = project.getBackEndSkill();
+        String[] bess = backEndSkill.split(",");
+        for (String bes : bess) {
+            map.put(bes, MyUtil.getAbility("5") * project.getBackEndNum());
+        }
+        String dbSkill = project.getDbSkill();
+        String[] dbss = dbSkill.split(",");
+        for (String dbs : dbss) {
+            map.put(dbs, MyUtil.getAbility("5") * project.getDbNum());
+        }
+
+        // 移去项目经理的能力值
+        Employee manager = MyUtil.getSessionEmployee("loginEmp");
+        String managerSkills = manager.getSkills();
+        String[] managerSkill = managerSkills.split(";");
+        for (String i : managerSkill) {
+            String[] info = i.split(":");
+            String skillName = info[0]; // 技能名, info[1]为技能等级
+            if (map.containsKey(skillName)) {
+                // 项目经理还有其他工作，虽然项目上分配了100%的时间，但是实际只有40%时间用于编码工作
+                map.put(skillName, map.get(skillName) - (int)(MyUtil.getAbility(info[1]) * 0.4));
+            }
+        }
+        return map;
+    }
+
+    // 计算员工剩余工作时间比例
+    private void calculatePortions(List<Map<String, Object>> humanConf, int size, int[] portions, Integer[] empIndex) {
+        for (Map<String, Object> item : humanConf) {
+            Integer empId = (Integer) item.get("empId");
+            for (int i = 0; i < size; i++) {
+                if (empId.compareTo(empIndex[i]) == 0) {
+                    portions[i] =  100 - ((BigDecimal)item.get("empPortion")).intValue();
+                }
+            }
+        }
+    }
 
     private void calculateEmployeeWithSort(List<Employee> employees, int size, int[] portions, int[] available, int[] indexes) {
         for (int i = 0; i < size; i++) {
@@ -115,6 +170,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             indexes[maxIndex] = temp;
         }
     }
+
     private void calculateCandidates(Map<String, Integer> map, List<Employee> employees, int size, int[] portions, int[] indexes, List<Employee> candidates, List<Integer> candidatePortions) {
         int j = 0;
         while (map.size() > 0) {
@@ -153,61 +209,30 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         }
     }
 
-
-    /**
-     * 计算项目所需的工作量
-     * 根据每人的能力和可用时间计算
-     * 技能等级 * 比例系数 * 时间百分比
-     * 1-1         2-2       3-3
-     * 4-4         5-6       6-9
-     * 7-14        8-19      9-24
-     * 项目肯定是越早完成越好，所以贪心算法是适用的
-     * 项目工作量=（预计结束时间-现在时间）* 人数 * 5级技能的能力
-     * @return 每项技能所需要的工作量
-     */
-    private Map<String, Integer> calculateWorkload(Project project) {
-        Map<String, Integer> map = new HashMap<>(32);
-        String frontEndSkill = project.getFrontEndSkill();
-        String[] fess = frontEndSkill.split(",");
-        for (String fes : fess) {
-            map.put(fes, MyUtil.getAbility("5") * project.getFrontEndNum());
+    private int removeCandidates(List<Employee> employees, int[] portions, List<Employee> candidates) {
+        Iterator<Employee> iterator = employees.iterator();
+        // 若员工需要全部加入到候选者中，直接返回
+        if (employees.size() == candidates.size()) {
+            return -1;
         }
-        String backEndSkill = project.getBackEndSkill();
-        String[] bess = backEndSkill.split(",");
-        for (String bes : bess) {
-            map.put(bes, MyUtil.getAbility("5") * project.getBackEndNum());
-        }
-        String dbSkill = project.getDbSkill();
-        String[] dbss = dbSkill.split(",");
-        for (String dbs : dbss) {
-            map.put(dbs, MyUtil.getAbility("5") * project.getDbNum());
-        }
-        Employee manager = MyUtil.getSessionEmployee("loginEmp");
-        // 移去项目经理的能力值
-        String managerSkills = manager.getSkills();
-        String[] managerSkill = managerSkills.split(";");
-        for (String i : managerSkill) {
-            String[] info = i.split(":");
-            String skillName = info[0]; // 技能名, info[1]为技能等级
-            if (map.containsKey(skillName)) {
-                map.put(skillName, map.get(skillName) - (int)(MyUtil.getAbility(info[1]) * 0.4)); // 项目经理还有其他工作，虽然项目上分配了100%的时间，但是实际只有40%时间用于编码工作
+        int len = portions.length;
+        int[] copy = new int[len];
+        System.arraycopy(portions, 0, copy, 0, len);
+        int j = 0, k = 0;
+        while (iterator.hasNext()) {
+            int temp = copy[k++];
+            // 若候选人中包含员工或者工作时间比例小于等于0，需移除
+            if (candidates.contains(iterator.next()) || temp <= 0) {
+                iterator.remove();
+            } else {
+                portions[j++] = temp;
             }
         }
-        return map;
+        return j;
     }
 
-    // 计算员工剩余工作时间比例
-    private void calculatePortions(List<Map<String, Object>> humanConf, int size, int[] portions, Integer[] empIndex) {
-        for (Map<String, Object> item : humanConf) {
-            Integer empId = (Integer) item.get("empId");
-            for (int i = 0; i < size; i++) {
-                if (empId.compareTo(empIndex[i]) == 0) {
-                    portions[i] =  100 - ((BigDecimal)item.get("empPortion")).intValue();
-                }
-            }
-        }
-    }
-
+    @Autowired
+    private MessageMapper messageMapper;
     @Transactional
     @Override
     public Message startProject(List<HumanConfig> configs) {
@@ -219,12 +244,24 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         });
         humanConfigMapper.insertBatch(configs);
         Integer projectId = configs.get(0).getProjectId();
-        Project project = new Project();
-        project.setId(projectId);
+        Project project = projectMapper.selectById(projectId);
         project.setStatus(1);
         project.setGmtModified(now);
-        project.setStartDate(LocalDate.now());
+        project.setStartDate(now.toLocalDate());
         projectMapper.updateById(project);
+        // 发送消息给员工
+        String msg = MessageUtil.joinProject(project.getProjectName(), project.getManagerName());
+        configs.stream().filter(e -> e.getEmpId().compareTo(project.getManagerId()) != 0).forEach(e -> {
+            com.sonkabin.entity.Message message = new com.sonkabin.entity.Message();
+            message.setContent(msg);
+            message.setStatus(0);
+            message.setGmtCreate(now);
+            message.setGmtModified(now);
+            message.setSender("系统");
+            message.setReceiverId(e.getEmpId());
+            message.setReceiverName(e.getEmpName());
+            messageMapper.insert(message);
+        });
         return Message.success();
     }
 
@@ -485,30 +522,6 @@ public class HumanConfigServiceImpl implements HumanConfigService {
                 .put("candidates", candidates).put("candidatePortions", candidatePortions);
     }
 
-    private int removeCandidates(List<Employee> employees, int[] portions, List<Employee> candidates) {
-        Iterator<Employee> iterator = employees.iterator();
-        // 若员工需要全部加入到候选者中，直接返回
-        if (employees.size() == candidates.size()) {
-            return -1;
-        }
-        int len = portions.length;
-        int[] copy = new int[len];
-        System.arraycopy(portions, 0, copy, 0, len);
-        int j = 0, k = 0;
-        while (iterator.hasNext()) {
-            int temp = copy[k++];
-            // 若候选人中包含员工或者工作时间比例小于等于0，需移除
-            if (candidates.contains(iterator.next()) || temp <= 0) {
-                iterator.remove();
-            } else {
-                portions[j++] = temp;
-            }
-        }
-        return j;
-    }
-
-    @Autowired
-    private MessageMapper messageMapper;
     private void checkEmployeeNum(int num, int frontNum, int backNum) {
         List<com.sonkabin.entity.Message> messages = null;
         if (num > frontNum && num > backNum) {
