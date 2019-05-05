@@ -86,7 +86,7 @@ public class WorkServiceImpl implements WorkService {
         // 测试是否是后台运行的。
         // 测试成功，是后台运行的，不会使前台http请求长时间等待
 //        try {
-//            Thread.sleep(2000);
+//            Thread.sleep(5000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }

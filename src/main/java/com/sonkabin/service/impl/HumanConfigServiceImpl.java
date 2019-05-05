@@ -52,8 +52,6 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         wrapper.eq(Employee::getRoleId, 1); // 筛选角色为员工的employees
         wrapper.eq(Employee::getInservice, 1); // 离职的员工不用考虑
         List<Employee> employees = employeeMapper.selectList(wrapper);
-        // 查询员工工作时间比例
-        List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
         int size = employees.size();
         int[] portions = new int[size];
         Integer[] empIndex = new Integer[size];
@@ -62,6 +60,8 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             portions[i] = 100;
             empIndex[i] = employees.get(i).getId();
         }
+        // 查询员工当前工作时间比例
+        List<Map<String, Object>> humanConf = humanConfigMapper.selectPortion(employees);
 
         calculatePortions(humanConf, size, portions, empIndex);
 
@@ -98,31 +98,33 @@ public class HumanConfigServiceImpl implements HumanConfigService {
      */
     private Map<String, Integer> calculateWorkload(Project project) {
         Map<String, Integer> map = new HashMap<>(32);
+        // 计算前端所需技能的工作量
         String frontEndSkill = project.getFrontEndSkill();
-        String[] fess = frontEndSkill.split(",");
+        String[] fess = frontEndSkill.split(","); // 将每个技能存到数组中
         for (String fes : fess) {
             map.put(fes, MyUtil.getAbility("5") * project.getFrontEndNum());
         }
+        // 计算后端所需技能的工作量
         String backEndSkill = project.getBackEndSkill();
         String[] bess = backEndSkill.split(",");
         for (String bes : bess) {
             map.put(bes, MyUtil.getAbility("5") * project.getBackEndNum());
         }
+        // 计算数据库所需技能的工作量
         String dbSkill = project.getDbSkill();
         String[] dbss = dbSkill.split(",");
         for (String dbs : dbss) {
             map.put(dbs, MyUtil.getAbility("5") * project.getDbNum());
         }
-
         // 移去项目经理的能力值
-        Employee manager = MyUtil.getSessionEmployee("loginEmp");
+        Employee manager = MyUtil.getSessionEmployee("loginEmp"); // 获得登录用户，即当前在操作的项目经理
         String managerSkills = manager.getSkills();
         String[] managerSkill = managerSkills.split(";");
         for (String i : managerSkill) {
             String[] info = i.split(":");
             String skillName = info[0]; // 技能名, info[1]为技能等级
-            if (map.containsKey(skillName)) {
-                // 项目经理还有其他工作，虽然项目上分配了100%的时间，但是实际只有40%时间用于编码工作
+            if (map.containsKey(skillName)) { //
+                // 项目经理规则：项目经理还有其他工作，虽然项目上分配了100%的时间，但是实际只有40%时间用于编码工作
                 map.put(skillName, map.get(skillName) - (int)(MyUtil.getAbility(info[1]) * 0.4));
             }
         }
