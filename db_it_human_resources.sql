@@ -11,7 +11,7 @@
  Target Server Version : 80013
  File Encoding         : 65001
 
- Date: 30/04/2019 14:54:27
+ Date: 08/05/2019 20:13:08
 */
 
 SET NAMES utf8mb4;
@@ -73,6 +73,56 @@ INSERT INTO `tb_employee` VALUES (21, '1021', '王一', 'e2d750d1861f4435b977760
 INSERT INTO `tb_employee` VALUES (22, '1022', '王二', '1c5555ef145d112837caed8833d2cb3b', 1, 29, '1991-08-30', '15858119902', 'wanger@gmail.com', '339005199109034861', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:53');
 INSERT INTO `tb_employee` VALUES (23, '1023', '王三', 'cb8fdbca5a6d847022d10e126d782d5b', 1, 29, '1991-08-30', '15858119903', 'wangsan@gmail.com', '339005199109034862', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:54');
 INSERT INTO `tb_employee` VALUES (24, '1024', '王四', '6a73df3fb331633a07dcec6a6ed74fbc', 1, 29, '1991-08-30', '15858119904', 'wangsi@gmail.com', '339005199109034863', 'G:/static/avatars/avatar1001', '本科:xx大学;硕士:cc大学', 1, 1, 'Java:8;MySQL:5;Linux:3;Spring:4;MyBatis:4;Hibernate:3;SpringBoot:4;git:3;SpringMVC:5;Redis:2;docker:1;Tomcat:4;Maven:3', 1, '2018-01-20 10:04:11', '2019-01-23 02:44:56');
+
+-- ----------------------------
+-- Table structure for tb_employee_evaluation
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_employee_evaluation`;
+CREATE TABLE `tb_employee_evaluation`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `emp_id` int(11) NULL DEFAULT NULL,
+  `emp_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `project_id` int(11) NULL DEFAULT NULL,
+  `total_score` int(11) NULL DEFAULT NULL,
+  `total_num` int(11) NULL DEFAULT NULL,
+  `manager_score` int(1) NULL DEFAULT NULL COMMENT '项目经理给的评分，权重0.6，其他员工权重0.4',
+  `status` tinyint(2) NULL DEFAULT NULL COMMENT '0表示未评价，1表示已对其他人评价',
+  `gmt_create` datetime(0) NULL DEFAULT NULL,
+  `gmt_modified` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_employee_evaluation
+-- ----------------------------
+INSERT INTO `tb_employee_evaluation` VALUES (1, 2, '任行', 1, 46, 4, 12, 1, '2019-05-05 15:40:48', '2019-05-05 15:40:50');
+INSERT INTO `tb_employee_evaluation` VALUES (2, 5, '王五', 1, 47, 5, 10, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (3, 6, '赵六', 1, 39, 4, 10, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (4, 7, '田七', 1, 44, 4, 10, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (5, 8, '张凡', 1, 43, 4, 11, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (6, 9, '张小凡', 1, 45, 4, 11, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (7, 2, '任行', 2, 0, 0, 12, 0, '2019-05-05 15:40:48', '2019-05-05 15:40:50');
+INSERT INTO `tb_employee_evaluation` VALUES (8, 5, '王五', 2, 0, 0, 10, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (9, 6, '赵六', 2, 0, 0, 10, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (10, 7, '田七', 2, 0, 0, 10, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (11, 8, '张凡', 2, 0, 0, 11, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (12, 9, '张小凡', 2, 0, 0, 11, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (13, 2, '任行', 3, 52, 5, NULL, 1, '2019-05-05 15:40:48', '2019-05-05 15:40:50');
+INSERT INTO `tb_employee_evaluation` VALUES (14, 5, '王五', 3, 49, 5, NULL, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (15, 6, '赵六', 3, 47, 5, NULL, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (16, 7, '田七', 3, 51, 5, NULL, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (17, 8, '张凡', 3, 50, 5, NULL, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (18, 9, '张小凡', 3, 43, 5, NULL, 1, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (19, 15, '李三', 6, 0, 0, NULL, 0, '2019-05-05 15:40:48', '2019-05-05 15:40:50');
+INSERT INTO `tb_employee_evaluation` VALUES (20, 19, '李八', 6, 0, 0, NULL, 0, '2019-05-05 16:10:24', '2019-05-05 16:10:26');
+INSERT INTO `tb_employee_evaluation` VALUES (21, 5, '王五', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (22, 6, '赵六', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (23, 8, '张凡', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (24, 9, '张小凡', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (25, 12, '方小园', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (26, 13, '李一', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (27, 14, '李二', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
+INSERT INTO `tb_employee_evaluation` VALUES (28, 23, '王三', 6, 0, 0, NULL, 0, '2019-05-06 14:13:01', '2019-05-06 14:13:03');
 
 -- ----------------------------
 -- Table structure for tb_human_config
@@ -193,7 +243,7 @@ CREATE TABLE `tb_message`  (
   `gmt_create` datetime(0) NULL DEFAULT NULL,
   `gmt_modified` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_message
@@ -271,6 +321,7 @@ CREATE TABLE `tb_project`  (
   `db_num` int(2) NULL DEFAULT NULL,
   `manager_id` int(11) NULL DEFAULT NULL COMMENT '项目经理id',
   `manager_name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `manager_status` tinyint(2) NULL DEFAULT NULL COMMENT '项目经理是否评价',
   `status` tinyint(2) NULL DEFAULT NULL COMMENT '0表示未启动，1表示进行中，2表示已结束',
   `predict_start` date NULL DEFAULT NULL COMMENT '预计开始时间',
   `start_date` date NULL DEFAULT NULL COMMENT '开始时间',
@@ -285,12 +336,12 @@ CREATE TABLE `tb_project`  (
 -- ----------------------------
 -- Records of tb_project
 -- ----------------------------
-INSERT INTO `tb_project` VALUES (1, 'BIM三维模型展示系统', '随着互联网的发展，众多技术的更新迭代，建筑行业在互联网高速发展的背景下飞速发展，但是与同为第二产业的其他行业相比，2016年建筑行业产值利润率仅有3.48%。不仅如此，建筑行业中有相当一部分比例的成本花费在运行维护上。那么想要在运维上减少支出，运维所浪费的成本问题亟待解决，而运用BIM运维技术就是一种有效减少运维成本的方式。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 2, '2018-02-16', '2018-02-21', '2018-05-09', '2018-01-08 18:32:43', '2018-05-10 18:34:27');
-INSERT INTO `tb_project` VALUES (2, '企业在线学习平台', '随着全球技术知识增长的迅速，许多公司对于员工个人素质的提高和业务能力提升尤为重视，希望员工能利用好碎片化时间，充实自己的知识和技能。希望培训系统能够更好的适应培训的短小、快速的特点，做到精准题型、精准培训，在最少的时间内，获得最大的培训收益', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 2, '2018-05-12', '2018-05-13', '2018-07-03', '2018-05-08 18:32:43', '2018-05-10 18:34:27');
-INSERT INTO `tb_project` VALUES (3, '就业信息化系统', '目前就业网站虽然不在少数，发展的都比较完善，但是大部分网站都侧重于招聘信息的发布和检索，却很少考虑到用人单位、求职者的互动关系，导致一些就业信息不同步、就业信息准确性难以保障的问题。而且，求职者难以得到就业的形势、国家相关政策法规以及用人单位的热度和评价等信息。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 2, '2018-07-13', '2018-07-15', '2018-09-09', '2018-07-08 18:32:43', '2018-07-10 18:34:27');
-INSERT INTO `tb_project` VALUES (6, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 2, '任行', 1, '2019-01-24', '2019-01-25', '2019-05-25', '2019-01-23 01:48:37', '2019-01-25 01:48:37');
-INSERT INTO `tb_project` VALUES (7, 'IT教育课程考评系统', '随着互联网产业的高速发展，社会对计算机人才的需求不断增加，门槛不断变高，计算机专业就业开始出现问题。由于计算机人才掌握的技术不符合市场需求、网络面试题集杂乱无解析等，就业面试成了难关。在这样的现状下，IT行业应聘者非常需要一个完善的考评系统来检测自己的水平，模拟面试笔试，获取建议以扩大自身知识面、完善综合职业能力，提高就业竞争力，从而有自信应对IT行业就业现状。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 4, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, '2019-05-20', NULL, '2019-09-10', '2019-03-01 18:41:58', '2019-03-13 09:17:52');
-INSERT INTO `tb_project` VALUES (8, 'IT企业人力资源管理系统', '现今的大中型IT企业所涉及的业务领域非常广，项目包含的技术种类多，决定它要面临人力资源方面的挑战。一方面，企业很难准确地预测下个项目何时启动，以及需要什么样的人员配备，这使得提前培养和储备合适的人员很困难。很多时候公司为某类项目招聘或者培训了一批人员，结果项目却搁置了。另一方面，一旦项目合同签订，客户往往期望项目尽早启动，外包企业必须在短时间内为项目准备好人员。为了应对上述挑战，这些企业必须实现人力资源以及优化人力资源的配置和利用，其中重要的一环就是建立公司统一的人力资源管理系统。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, '2019-07-01', NULL, '2020-01-07', '2019-06-30 09:12:59', '2019-07-03 09:13:26');
+INSERT INTO `tb_project` VALUES (1, 'BIM三维模型展示系统', '随着互联网的发展，众多技术的更新迭代，建筑行业在互联网高速发展的背景下飞速发展，但是与同为第二产业的其他行业相比，2016年建筑行业产值利润率仅有3.48%。不仅如此，建筑行业中有相当一部分比例的成本花费在运行维护上。那么想要在运维上减少支出，运维所浪费的成本问题亟待解决，而运用BIM运维技术就是一种有效减少运维成本的方式。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 1, 2, '2018-02-16', '2018-02-21', '2018-05-09', '2018-01-08 18:32:43', '2018-05-10 18:34:27');
+INSERT INTO `tb_project` VALUES (2, '企业在线学习平台', '随着全球技术知识增长的迅速，许多公司对于员工个人素质的提高和业务能力提升尤为重视，希望员工能利用好碎片化时间，充实自己的知识和技能。希望培训系统能够更好的适应培训的短小、快速的特点，做到精准题型、精准培训，在最少的时间内，获得最大的培训收益', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 1, 2, '2018-05-12', '2018-05-13', '2018-07-03', '2018-05-08 18:32:43', '2018-05-10 18:34:27');
+INSERT INTO `tb_project` VALUES (3, '就业信息化系统', '目前就业网站虽然不在少数，发展的都比较完善，但是大部分网站都侧重于招聘信息的发布和检索，却很少考虑到用人单位、求职者的互动关系，导致一些就业信息不同步、就业信息准确性难以保障的问题。而且，求职者难以得到就业的形势、国家相关政策法规以及用人单位的热度和评价等信息。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 3, '张三', 0, 2, '2018-07-13', '2018-07-15', '2018-09-09', '2018-07-08 18:32:43', '2018-07-10 18:34:27');
+INSERT INTO `tb_project` VALUES (6, 'APP评论数据分析系统', '随着互联网+智能手机端的发展，针对公司企业反映的难以获取APP产品用户对产品的反馈信息，使用倾向以及喜好程度等突出问题，现有的评论数据处理体系已不适应当前的发展需求，因此急需利用“互联网”思维建设APP评论数据分析系统，以进一步提升企业公司或开发团队对产品评论的综合管理效率，实现对APP产品科学有效管理的目标。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,React.js', 3, 'Java,Maven,MyBatis,Spring,SpringBoot,SpringSecurity,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,Redis,SQL Server', 2, 2, '任行', 0, 1, '2019-01-24', '2019-01-25', '2019-05-25', '2019-01-23 01:48:37', '2019-01-25 01:48:37');
+INSERT INTO `tb_project` VALUES (7, 'IT教育课程考评系统', '随着互联网产业的高速发展，社会对计算机人才的需求不断增加，门槛不断变高，计算机专业就业开始出现问题。由于计算机人才掌握的技术不符合市场需求、网络面试题集杂乱无解析等，就业面试成了难关。在这样的现状下，IT行业应聘者非常需要一个完善的考评系统来检测自己的水平，模拟面试笔试，获取建议以扩大自身知识面、完善综合职业能力，提高就业竞争力，从而有自信应对IT行业就业现状。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 4, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, 0, '2019-05-20', NULL, '2019-09-10', '2019-03-01 18:41:58', '2019-03-13 09:17:52');
+INSERT INTO `tb_project` VALUES (8, 'IT企业人力资源管理系统', '现今的大中型IT企业所涉及的业务领域非常广，项目包含的技术种类多，决定它要面临人力资源方面的挑战。一方面，企业很难准确地预测下个项目何时启动，以及需要什么样的人员配备，这使得提前培养和储备合适的人员很困难。很多时候公司为某类项目招聘或者培训了一批人员，结果项目却搁置了。另一方面，一旦项目合同签订，客户往往期望项目尽早启动，外包企业必须在短时间内为项目准备好人员。为了应对上述挑战，这些企业必须实现人力资源以及优化人力资源的配置和利用，其中重要的一环就是建立公司统一的人力资源管理系统。', 'jQuery,webpack,Bootstrap,HTML5,CSS3,LESS,node.js,AngularJS', 2, 'Java,Maven,Hibernate,Spring,SpringBoot,Shiro,SpringMVC,Tomcat,Linux,git,docker', 3, 'MySQL,Oracle,MongoDB,SQL Server,memcached', 2, 3, '张三', 0, 0, '2019-07-01', NULL, '2020-01-07', '2019-06-30 09:12:59', '2019-07-03 09:13:26');
 
 -- ----------------------------
 -- Table structure for tb_project_history

@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sonkabin.dto.ProjectDTO;
 import com.sonkabin.dto.ProjectHistoryDTO;
-import com.sonkabin.entity.Employee;
-import com.sonkabin.entity.HumanConfig;
-import com.sonkabin.entity.Project;
-import com.sonkabin.entity.ProjectHistory;
+import com.sonkabin.entity.*;
+import com.sonkabin.mapper.EmployeeEvaluationMapper;
 import com.sonkabin.mapper.HumanConfigMapper;
 import com.sonkabin.mapper.ProjectHistoryMapper;
 import com.sonkabin.mapper.ProjectMapper;
@@ -63,6 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Message saveProject(Project project) {
         project.setStatus(0);
+        project.setManagerStatus(0);
         project.setGmtCreate(LocalDateTime.now());
         project.setGmtModified(LocalDateTime.now());
         Employee employee = MyUtil.getSessionEmployee("loginEmp");
@@ -168,6 +167,7 @@ public class ProjectServiceImpl implements ProjectService {
         humanConfigs.forEach( h -> ids.add(h.getProjectId()));
         LambdaQueryWrapper<Project> projectLambdaQueryWrapper = new LambdaQueryWrapper<>();
         List<Project> projects = new ArrayList<>();
+        List<EmployeeEvaluation> evaluations = new ArrayList<>();
         if (ids.size() > 0) {
             projectLambdaQueryWrapper.in(Project::getId, ids).and(i->i.eq(Project::getStatus, 1));
             projects = projectMapper.selectList(projectLambdaQueryWrapper);
@@ -175,6 +175,8 @@ public class ProjectServiceImpl implements ProjectService {
         return Message.success().put("humanConfigs", humanConfigs).put("projects", projects);
     }
 
+    @Autowired
+    private EmployeeEvaluationMapper employeeEvaluationMapper;
     @Override
     public Message getHistoryProjects(ProjectHistoryDTO projectHistoryDTO) {
         Page<ProjectHistory> page = new Page<>();
@@ -189,7 +191,14 @@ public class ProjectServiceImpl implements ProjectService {
             wrapper.le(ProjectHistory::getGmtModified, projectHistoryDTO.getEndDate().plusDays(1));
         }
         IPage<ProjectHistory> result = projectHistoryMapper.selectPage(page, wrapper);
-        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords());
+        List<Integer> projectIds = new ArrayList<>();
+        List<EmployeeEvaluation> evaluations = new ArrayList<>();
+        if (result.getRecords().size() != 0) {
+            result.getRecords().forEach(e -> projectIds.add(e.getProjectId()));
+            // 根据projectId和empId查询员工评价表
+            evaluations = employeeEvaluationMapper.selectMyList(projectIds, employee.getId());
+        }
+        return Message.success().put(MyConstant.PAGE_TOTAL, result.getTotal()).put(MyConstant.PAGE_ROWS, result.getRecords()).put("evaluations", evaluations);
     }
 
     @Override

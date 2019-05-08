@@ -228,6 +228,49 @@
                 </div>
             </div>
 
+            <div id="evaluationModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog  modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" >项目成员表现评价</h4>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" id="evaluation-form">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label">李二</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                        <label class="form-check-label" for="inlineRadio1">不满意</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                                        <label class="form-check-label">较不满意</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1" checked>
+                                        <label class="form-check-label">一般</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                                        <label class="form-check-label">较满意</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" value="option1">
+                                        <label class="form-check-label">满意</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" id="evaluation-save-btn">保存</button>
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">关闭</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <form id="project" method="get"></form>
 
             <!-- 引入footer -->
@@ -573,6 +616,67 @@
         }
     })
 
+    // 评价项目成员
+    $(document).on('click', '.evaluation-btn', function () {
+        var projectId = $(this).attr('project-id')
+        $.ajax({
+            url: baseUrl + '/evaluation/' + projectId,
+            method: 'GET',
+            success: function (result) {
+                var evaluations = result.info.evaluations
+                var description = ['不满意', '较不满意', '一般', '较满意', '满意']
+                var form = $('#evaluation-form')
+                form.empty()
+                for (var i = 0; i < evaluations.length; i++) {
+                    var nameLabel = $('<label class="col-sm-2 col-form-label"></label>').text(evaluations[i].empName)
+                    var div = $('<div class="form-group row"></div>')
+                    div.append(nameLabel).append($('<input type="hidden" class="emp-id">').val(evaluations[i].empId))
+                    for (var j = 0; j < description.length; j++) {
+                        var inlineDiv = $('<div class="form-check form-check-inline"></div>')
+                        var radio = $('<input class="form-check-input score" type="radio">').attr('name', 'radio' + i).val(8+j)
+                        if (j == 2) {
+                            radio.prop('checked', true)
+                        }
+                        inlineDiv.append(radio)
+                        inlineDiv.append($('<label class="form-check-label"></label>').text(description[j]))
+                        div.append(inlineDiv)
+                    }
+                    form.append(div)
+                }
+                $('#evaluationModal').modal()
+            }
+        })
+        $('#evaluation-save-btn').attr('project-id', projectId)
+    })
+
+    $('#evaluation-save-btn').click(function () {
+        // 收集员工id和评分
+        var ids = $('.emp-id')
+        var score = $('.score:checked')
+        var empIds = ''
+        var scores = ''
+        for (var i = 0; i < ids.length; i++) {
+            empIds += $(ids[i]).val() + ','
+            scores += $(score[i]).val() + ','
+        }
+        empIds = empIds.substr(0, empIds.length - 1)
+        scores = scores.substr(0, scores.length - 1)
+        // console.log(empIds, scores)
+        $.ajax({
+            url: baseUrl + '/manager/evaluation/' + $(this).attr('project-id'),
+            method: 'PUT',
+            data: {
+                'empIds': empIds,
+                'scores': scores
+            },
+            success: function () {
+                toastr.success('评价成功', '提示', {timeOut: 1000})
+                $('#evaluationModal').modal('hide')
+                initTable()
+            }
+        })
+    })
+
     function initTable() {
         $('#project-table').bootstrapTable('destroy')
         $('#project-table').bootstrapTable({
@@ -691,6 +795,10 @@
                         result += '<button class="btn btn-success btn-sm finish-btn" project-id='+ id + '>项目完成</button> '
                     } else {
                         result += '<button class="btn btn-info btn-sm contribute-btn" project-id=' + id + '>项目成员贡献</button> '
+                        console.log(row.managerStatus)
+                        if (!row.managerStatus) {
+                            result += '<button class="btn btn-primary btn-sm evaluation-btn" project-id=' + id + '>评价项目成员</button> '
+                        }
                     }
 
                     return result

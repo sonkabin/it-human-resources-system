@@ -51,6 +51,8 @@ public class Project implements Serializable {
 
     private String managerName;
 
+    private Integer managerStatus;
+
     /**
      * 0表示未启动，1表示进行中，2表示已结束
      */
@@ -157,6 +159,14 @@ public class Project implements Serializable {
 
     public void setManagerId(Integer managerId) {
         this.managerId = managerId;
+    }
+
+    public Integer getManagerStatus() {
+        return managerStatus;
+    }
+
+    public void setManagerStatus(Integer managerStatus) {
+        this.managerStatus = managerStatus;
     }
 
     public Integer getStatus() {

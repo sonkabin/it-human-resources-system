@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -235,6 +236,8 @@ public class HumanConfigServiceImpl implements HumanConfigService {
 
     @Autowired
     private MessageMapper messageMapper;
+    @Autowired
+    private EmployeeEvaluationMapper employeeEvaluationMapper;
     @Transactional
     @Override
     public Message startProject(List<HumanConfig> configs) {
@@ -264,6 +267,9 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             message.setReceiverName(e.getEmpName());
             messageMapper.insert(message);
         });
+        // 插入员工评价表，项目经理不需要
+        List<HumanConfig> collect = configs.stream().filter(e -> e.getEmpId().compareTo(project.getManagerId()) != 0).collect(Collectors.toList());
+        employeeEvaluationMapper.insertBatch(collect, projectId);
         return Message.success();
     }
 
