@@ -145,14 +145,20 @@ public class HumanConfigServiceImpl implements HumanConfigService {
     }
 
     private void calculateEmployeeWithSort(List<Employee> employees, int size, int[] portions, int[] available, int[] indexes) {
+        Map<Integer, Double> evaluationMap = calEmployeeEvaluation();
         for (int i = 0; i < size; i++) {
             available[i] = 0;
             indexes[i] = i; // 初始化索引
             if (portions[i] > 0) {
-                String skills = employees.get(i).getSkills();
-                // 新增的员工技能信息未填写完整，可能为null
+                Employee employee = employees.get(i);
+                String skills = employee.getSkills();
+                // 新增的员工技能信息未填写，则可能为null
                 if (!StringUtils.isEmpty(skills)) {
-                    available[i] = MyUtil.score(skills, portions[i]);
+                    Double evaluation = evaluationMap.get(employee.getId()); // 员工评价，比evaluation例为0.8-1.2浮动
+                    if (evaluation == null) { // 若没有任何评价，表示还未参与过项目，因此比例设为1.0
+                        evaluation = 1.0;
+                    }
+                    available[i] = (int) (MyUtil.score(skills, portions[i]) * evaluation);
                 }
             }
         }
@@ -172,6 +178,28 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             indexes[i] = indexes[maxIndex];
             indexes[maxIndex] = temp;
         }
+    }
+
+    @Autowired
+    private EmployeeEvaluationMapper employeeEvaluationMapper;
+    private Map<Integer, Double> calEmployeeEvaluation() {
+        Map<Integer, Double> evaluation = new HashMap<>();
+        List<Map<String, Object>> statistics = employeeEvaluationMapper.selectStatistics();
+        statistics.forEach(e -> {
+            double employeeScores = 10.0;
+            double managerScore = 10.0;
+            Integer empId = (Integer) e.get("empId");
+            BigDecimal employeeSc = (BigDecimal) e.get("employeeSc");
+            BigDecimal managerSc = (BigDecimal) e.get("managerSc");
+            if (employeeSc != null) {
+                employeeScores = employeeSc.doubleValue();
+            }
+            if (managerSc != null) {
+                managerScore = managerSc.doubleValue();
+            }
+            evaluation.put(empId, (employeeScores*0.4 + managerScore*0.6) * 1.0 / 10);
+        });
+        return evaluation;
     }
 
     private void calculateCandidates(Map<String, Integer> map, List<Employee> employees, int size, int[] portions, int[] indexes, List<Employee> candidates, List<Integer> candidatePortions) {
@@ -236,8 +264,6 @@ public class HumanConfigServiceImpl implements HumanConfigService {
 
     @Autowired
     private MessageMapper messageMapper;
-    @Autowired
-    private EmployeeEvaluationMapper employeeEvaluationMapper;
     @Transactional
     @Override
     public Message startProject(List<HumanConfig> configs) {
@@ -413,6 +439,7 @@ public class HumanConfigServiceImpl implements HumanConfigService {
         }
     }
 
+    @Transactional
     @Override
     public Message requireHuman(List<HumanConfig> configs) {
         LocalDateTime now = LocalDateTime.now();
@@ -422,6 +449,8 @@ public class HumanConfigServiceImpl implements HumanConfigService {
             config.setGmtModified(now);
         });
         humanConfigMapper.insertBatch(configs);
+        Integer projectId = configs.get(0).getProjectId();
+        employeeEvaluationMapper.insertBatch(configs, projectId);
         return Message.success();
     }
 

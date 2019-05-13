@@ -7,6 +7,7 @@ import com.sonkabin.entity.Project;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,4 +26,6 @@ public interface EmployeeEvaluationMapper extends BaseMapper<EmployeeEvaluation>
     void updateByProjectIdAndEmpId(@Param("projectId") Integer projectId, @Param("empId") int empId, @Param("score") int score);
 
     void updateManagerScore(@Param("projectId") Integer projectId, @Param("empId") int empId, @Param("score") int score);
+
+    List<Map<String, Object>> selectStatistics();
 }

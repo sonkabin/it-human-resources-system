@@ -13,10 +13,11 @@
     </select>
 
     <insert id="insertBatch">
-      INSERT INTO tb_employee_evaluation(emp_id, emp_name, project_id, total_score, total_num, status, gmt_create, gmt_modified)
+      INSERT INTO tb_employee_evaluation(emp_id, emp_name, project_id, total_score, total_num,manager_score, status, gmt_create, gmt_modified)
       VALUES
       <foreach collection="configs" item="item" separator=",">
-          (#{item.empId}, #{item.empName}, #{projectId}, 0, 0, 0, #{item.gmtModified}, #{item.gmtModified})
+          -- 默认插入项目经理评分为0
+          (#{item.empId}, #{item.empName}, #{projectId}, 0, 0,10, 0, #{item.gmtModified}, #{item.gmtModified})
       </foreach>
     </insert>
 
@@ -31,5 +32,11 @@
         SET manager_score = #{score}
         WHERE project_id = #{projectId} AND emp_id = #{empId}
     </update>
+
+    <select id="selectStatistics" resultType="java.util.Map">
+        SELECT emp_id AS empId, SUM(total_score)/SUM(total_num) AS employeeSc, SUM(manager_score)/COUNT(id) AS managerSc
+        FROM tb_employee_evaluation
+        GROUP BY emp_id
+    </select>
 
 </mapper>
